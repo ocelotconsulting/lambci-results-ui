@@ -1,7 +1,18 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 
-const router = express.Router()
+const root = express.Router()
+const buckets = express.Router()
 
-router.use('/*', (req, res) => res.status(404).send('Route not found'))
+root.use(bodyParser.json())
+root.use('/buckets', buckets)
 
-module.exports = router
+buckets.get('/', require('./getBuckets'))
+buckets.put('/:bucketId', require('./putBucket'))
+buckets.get('/:bucketId/projects', require('./getProjects'))
+buckets.get('/:bucketId/projects/:projectId/builds', require('./getBuilds'))
+buckets.get('/:bucketId/projects/:projectId/builds/:buildNumber/:fileName', require('./getBuildFile'))
+
+root.use('/*', ({method, originalUrl}, res) => res.status(404).send(`Cannot ${method} ${originalUrl}`))
+
+module.exports = root
