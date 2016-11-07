@@ -1,0 +1,3 @@
+export const GET_ALL_BUCKETS = 'GET_ALL_BUCKETS'
+export const SELECT_BUCKET = 'SELECT_BUCKET'
+export const GET_PROJECTS = 'GET_PROJECTS'

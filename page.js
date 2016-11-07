@@ -11,7 +11,7 @@ module.exports = `
 </head>
 <body>
   <div id="main"></div>
-    <script type="text/javascript" src="/bundle.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/bundle.js" charset="utf-8"></script>
 </body>
 </html>
 `
