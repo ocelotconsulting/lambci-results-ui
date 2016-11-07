@@ -1,21 +1,23 @@
-const s3 = require('./s3')
+const dynamoClient = require('./dynamoClient')
 const listS3Folder = require('./listS3Folder')
-const compact = require('lodash/compact')
+const map = require('lodash/map')
+const sortBy = require('lodash/sortBy')
 
-const buildsFolder = 'builds'
+module.exports = ({params: {bucketId, projectId}}, res, next) => {
+  const withFiles = build =>
+    listS3Folder(bucketId, `${projectId}/builds/${build.buildNum}`)
+    .then(({files}) => Object.assign(build, {files: map(files, 'name')}))
 
-const getBuild = (bucketId, projectId, folder) => {
-  const buildNumber = parseInt(folder, 10)
-  if (buildNumber) {
-    return listS3Folder(bucketId, `${projectId}/${buildsFolder}/${buildNumber}`)
-    .then(({files}) => files.length === 1 && {buildNumber, fileName: files[0].name, timestamp: files[0].lastModified})
-  } else {
-    return Promise.resolve()
-  }
-}
-
-module.exports = ({params: {bucketId, projectId}}, res, next) =>
-  listS3Folder(bucketId, `${projectId}/${buildsFolder}`)
-  .then(({folders}) => Promise.all(folders.map(folder => getBuild(bucketId, projectId, folder))).then(compact))
-  .then(builds => res.json(builds))
+  return dynamoClient.query({
+    TableName: 'lambci-builds',
+    KeyConditions: {
+      project: {
+        ComparisonOperator: 'EQ',
+        AttributeValueList: [projectId]
+      }
+    }
+  }).promise()
+  .then(({Items}) => Promise.all(Items.filter(({buildNum}) => buildNum > 0).map(withFiles)))
+  .then(items => res.json(sortBy(items, ({buildNum}) => -1 * buildNum)))
   .catch(next)
+}

@@ -1,5 +1,9 @@
+const AWS = require('aws-sdk')
 const express = require('express')
 const bodyParser = require('body-parser')
+const {region} = require('./config')
+
+AWS.config.update({region})
 
 const root = express.Router()
 const buckets = express.Router()

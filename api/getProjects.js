@@ -2,7 +2,7 @@ const s3 = require('./s3')
 const sortBy = require('lodash/sortBy')
 const flatten = require('lodash/flatten')
 const nth = require('lodash/nth')
-const moment = require('moment')
+const mostRecent = require('./mostRecent')
 const listS3Folder = require('./listS3Folder')
 
 const findProjects = (bucketId, parentFolder, remainingDepth = 2) =>
@@ -17,21 +17,21 @@ const findProjects = (bucketId, parentFolder, remainingDepth = 2) =>
 const getBuildNumber = key => parseInt(nth(key.split('/'), -2), 10)
 
 const addMetadata = (project, objects) => {
-  let lastBuildTime = null
+  let lastTimestamp = null
   let lastBuildNumber = null
 
   objects.forEach(({Key, LastModified}) => {
     const buildNumber = getBuildNumber(Key)
     if (buildNumber) {
       lastBuildNumber = Math.max(lastBuildNumber, buildNumber)
-      if (lastBuildNumber === buildNumber) lastBuildTime = LastModified
+      if (lastBuildNumber === buildNumber) lastTimestamp = LastModified
     }
   })
 
-  return Object.assign(project, {lastBuildNumber, lastBuildTime})
+  return Object.assign(project, {lastBuildNumber, lastTimestamp})
 }
 
-const sortProjects = projects => sortBy(projects, ({lastBuildTime = 0}) => moment(lastBuildTime).valueOf() * -1)
+const sortProjects = projects => sortBy(projects, mostRecent('lastTimestamp'))
 
 const findAll = bucketId => {
   const withMetadata = project =>

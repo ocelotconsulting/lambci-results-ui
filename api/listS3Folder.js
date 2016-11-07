@@ -1,7 +1,5 @@
 const s3 = require('./s3')
-const sortBy = require('lodash/sortBy')
 const last = require('lodash/last')
-const moment = require('moment')
 
 const lastSegment = path => last(path.split('/').filter(Boolean))
 
