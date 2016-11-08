@@ -5,7 +5,7 @@ const BuildTable = ({bucketId, projectId, githubProject, builds}) =>
   <table className='table table-striped'>
     <thead>
     <tr>
-      <th>#</th>
+      <th/>
       <th>Status</th>
       <th>Branch</th>
       <th>Time</th>
