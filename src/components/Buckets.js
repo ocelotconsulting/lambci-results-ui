@@ -1,8 +1,9 @@
-import React from 'react'
-import Spinner from './Spinner'
+import React, {PropTypes as T} from 'react'
+import {connect} from 'react-redux'
 import {Link} from 'react-router'
+import Spinner from './Spinner'
 
-export default ({allBuckets}) => {
+const Buckets = ({allBuckets}) => {
   if (!allBuckets) {
     return <Spinner/>
   } else if (allBuckets.length === 0) {
@@ -24,3 +25,15 @@ export default ({allBuckets}) => {
     )
   }
 }
+
+Buckets.displayName = 'Buckets'
+
+Buckets.propTypes = {
+  allBuckets: T.arrayOf(T.object)
+}
+
+const mapStateToProps = (state) => ({
+  allBuckets: state.buckets.all
+})
+
+export default connect(mapStateToProps, () => ({}))(Buckets)

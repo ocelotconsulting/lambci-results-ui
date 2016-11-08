@@ -9,17 +9,7 @@ app.use('/font-awesome', express.static('node_modules/font-awesome'))
 app.use('/images', express.static('images'))
 
 if (process.env.NODE_ENV !== 'production') {
-  console.log('DEV mode')
-  const webpack = require('webpack')
-  const devMiddleware = require('webpack-dev-middleware')
-  const middlewareOptions = {
-    stats: {
-      colors: true
-    },
-    noInfo: true
-  }
-  app.use(devMiddleware(webpack(require('./webpack.dev.config')), middlewareOptions))
-  app.use(require('less-middleware')('src', { dest: 'public' }))
+  require('./enableDevMode')(app)
 }
 
 app.use('/', express.static('public'))

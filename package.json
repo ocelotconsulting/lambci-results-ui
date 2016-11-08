@@ -4,7 +4,7 @@
   "description": "UI for viewing lambci results in S3",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development supervisor -w server.js,page.js,api node server",
+    "dev": "NODE_ENV=development supervisor -w server.js,page.js,enableDevMode.js,api node server",
     "build-less": "lessc --clean-css src/styles.less public/styles.css",
     "build": "npm run build-less && NODE_ENV=production webpack",
     "start": "NODE_ENV=production node server",
@@ -38,7 +38,8 @@
     "lodash": "~4.16.6",
     "moment": "~2.15.1",
     "react-bootstrap": "^0.30.5",
-    "react-router-bootstrap": "^0.23.1"
+    "react-router-bootstrap": "^0.23.1",
+    "underscore.string": "~3.3.4"
   },
   "devDependencies": {
     "babel-core": "~6.18.2",
@@ -74,6 +75,7 @@
     "react-redux": "~4.4.5",
     "react-router": "~2.8.1",
     "redux": "~3.6.0",
+    "redux-logger": "~2.7.4",
     "redux-thunk": "~2.1.0",
     "sinon": "~1.17.6",
     "sinon-as-promised": "~4.0.2",

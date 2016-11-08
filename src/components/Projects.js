@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {PropTypes as T} from 'react'
 import Spinner from './Spinner'
 import {Link} from 'react-router'
+import {connect} from 'react-redux'
 
-export default ({projects, params: {bucketId}}) => projects ? (
+const Projects = ({projects, params: {bucketId}}) => projects ? (
   <div className='container'>
     <h3>Projects</h3>
     <ul className='projects'>
@@ -16,3 +17,14 @@ export default ({projects, params: {bucketId}}) => projects ? (
     </ul>
   </div>
 ) : <Spinner/>
+
+Projects.displayName = 'Projects'
+
+Projects.propTypes = {
+  projects: T.arrayOf(T.object)
+}
+
+const mapStateToProps = ({buckets: {projects}}) => ({projects})
+
+export default connect(mapStateToProps, () => ({}))(Projects)
+

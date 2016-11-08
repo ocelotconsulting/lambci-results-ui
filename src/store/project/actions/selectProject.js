@@ -3,8 +3,11 @@ import createFetchAction from '../../createFetchAction'
 
 export default projectId =>
   (dispatch, getState) => {
-    const selectedBucketId = getState().buckets.selected
-    const url = `/api/buckets/${encodeURIComponent(selectedBucketId)}/${encodeURIComponent(projectId)}/builds`
-    dispatch({type: SELECT_PROJECT, projectId})
-    dispatch(createFetchAction(GET_BUILDS, url))
+    const {project, buckets} = getState()
+    if (project.selected !== projectId) {
+      const selectedBucketId = buckets.selected
+      const url = `/api/buckets/${encodeURIComponent(selectedBucketId)}/projects/${encodeURIComponent(projectId)}/builds`
+      dispatch({type: SELECT_PROJECT, projectId})
+      dispatch(createFetchAction(GET_BUILDS, url))
+    }
   }
