@@ -9,7 +9,6 @@ export default () =>
     .then(() => {
       const {all, selected} = getState().buckets
       const singleInstanceId = all && all.length == 1 && all[0].id
-      console.log(singleInstanceId, selected)
       if (singleInstanceId && singleInstanceId !== selected) {
         history.push(`/instances/${encode(all[0].id)}`)
       }

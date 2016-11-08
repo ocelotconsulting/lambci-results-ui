@@ -21,8 +21,8 @@ const App = ({onBucketSelected, onProjectSelected}) => (
 App.displayName = 'App'
 
 App.propTypes = {
-  onBucketSelected: T.func,
-  onProjectSelected: T.func
+  onBucketSelected: T.func.isRequired,
+  onProjectSelected: T.func.isRequired
 }
 
 const mapDispatchToProps = dispatch => {

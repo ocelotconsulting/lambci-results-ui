@@ -21,7 +21,7 @@ const port = parseInt(process.env.PORT, 10) || 3000
 // error handler
 // noinspection JSUnusedLocalSymbols
 app.use('/', (error, req, res, next) => {
-  if (error.stack) console.error(error.stack)
+  error.stack && console.error(error.stack)
   res.status(500).json(error)
 })
 

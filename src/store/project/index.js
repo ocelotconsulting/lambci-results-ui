@@ -1,11 +1,17 @@
 import {SELECT_PROJECT, GET_BUILDS} from './actions/types'
+import startsWith from 'underscore.string/startsWith'
 
 const initialState = {}
+
+const githubPrefix = 'gh/'
+
+const getGithubProject = projectId =>
+  startsWith(projectId, githubPrefix) ? projectId.slice(githubPrefix.length) : undefined
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case SELECT_PROJECT:
-      return {...state, selected: action.projectId}
+      return {...state, selected: action.projectId, githubProject: getGithubProject(action.projectId)}
     case GET_BUILDS:
       switch (action.status) {
         case 'start':

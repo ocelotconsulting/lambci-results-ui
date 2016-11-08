@@ -2,7 +2,7 @@ import React, {PropTypes as T} from 'react'
 import endsWith from 'underscore.string/endsWith'
 import encode from '../encode'
 
-const BuildLink = ({bucketId, projectId, buildNum, files}) => {
+const BuildColumn = ({bucketId, projectId, buildNum, files}) => {
   const fileName = files.find(f => endsWith(f, '.html'))
 
   const url = fileName &&
@@ -15,13 +15,13 @@ const BuildLink = ({bucketId, projectId, buildNum, files}) => {
   )
 }
 
-BuildLink.displayName = 'BuildLink'
+BuildColumn.displayName = 'BuildColumn'
 
-BuildLink.propTypes = {
-  bucketId: T.string,
-  projectId: T.string,
-  buildNum: T.number,
-  files: T.arrayOf(T.string)
+BuildColumn.propTypes = {
+  bucketId: T.string.isRequired,
+  projectId: T.string.isRequired,
+  buildNum: T.number.isRequired,
+  files: T.arrayOf(T.string).isRequired
 }
 
-export default BuildLink
+export default BuildColumn

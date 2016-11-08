@@ -17,7 +17,9 @@ const Projects = ({projects, params: {bucketId}}) => projects ? (
       ))}
     </ul>
   </div>
-) : <Spinner/>
+) : (
+  <Spinner/>
+)
 
 Projects.displayName = 'Projects'
 

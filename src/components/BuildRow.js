@@ -1,7 +1,9 @@
 import React, {PropTypes as T} from 'react'
 import moment from 'moment'
 import classnames from 'classnames'
-import BuildLink from './BuildLink'
+import BuildColumn from './BuildColumn'
+import CommitColumn from './CommitColumn'
+import UserColumn from './UserColumn'
 import compact from 'lodash/compact'
 
 // const todayFormat =
@@ -29,9 +31,11 @@ const renderTime = (startedAt, endedAt) => {
   return `${dateTimeString(end.toDate())} (${hourString}${minuteString}${seconds} second${pl(seconds)})`
 }
 
-const Build = ({bucketId, projectId, build: {buildNum, endedAt, startedAt, status, checkoutBranch, files}}) => (
+const BuildRow = ({bucketId, projectId, githubProject, build: {
+  buildNum, endedAt, startedAt, status, checkoutBranch, files, commit, user
+}}) => (
   <tr>
-    <BuildLink bucketId={bucketId} projectId={projectId} buildNum={buildNum} files={files}/>
+    <BuildColumn bucketId={bucketId} projectId={projectId} buildNum={buildNum} files={files}/>
     <td className={classnames('build-status', {success: status === 'success', danger: status === 'failure'})}>
       {status}
     </td>
@@ -41,15 +45,17 @@ const Build = ({bucketId, projectId, build: {buildNum, endedAt, startedAt, statu
     <td className='time'>
       {renderTime(startedAt, endedAt)}
     </td>
+    <CommitColumn githubProject={githubProject} commit={commit}/>
+    <UserColumn user={user} github={Boolean(user && githubProject)}/>
   </tr>
 )
 
-Build.displayName = 'Spinner'
+BuildRow.displayName = 'BuildRow'
 
-Build.propTypes = {
-  bucketId: T.string,
-  projectId: T.string,
-  build: T.object
+BuildRow.propTypes = {
+  bucketId: T.string.isRequired,
+  projectId: T.string.isRequired,
+  build: T.object.isRequired
 }
 
-export default Build
+export default BuildRow
