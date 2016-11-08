@@ -1,3 +1,4 @@
+const {dynamoTablePrefix} = require('./config')
 const dynamoClient = require('./dynamoClient')
 const listS3Folder = require('./listS3Folder')
 const map = require('lodash/map')
@@ -9,7 +10,7 @@ module.exports = ({params: {bucketId, projectId}}, res, next) => {
     .then(({files}) => Object.assign(build, {files: map(files, 'name')}))
 
   return dynamoClient.query({
-    TableName: 'lambci-builds',
+    TableName: `${dynamoTablePrefix}-builds`,
     KeyConditions: {
       project: {
         ComparisonOperator: 'EQ',
