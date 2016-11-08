@@ -3,6 +3,8 @@ import moment from 'moment'
 import classnames from 'classnames'
 import BuildLink from './BuildLink'
 
+// const todayFormat =
+
 const renderTime = (startedAt, endedAt) => {
   const end = moment(endedAt)
   const duration = moment.duration(end - moment(startedAt))
@@ -22,7 +24,7 @@ const renderTime = (startedAt, endedAt) => {
 const Build = ({bucketId, projectId, build: {buildNum, endedAt, startedAt, status, checkoutBranch, files}}) => (
   <tr>
     <BuildLink bucketId={bucketId} projectId={projectId} buildNum={buildNum} files={files}/>
-    <td className={classnames('build-status', {success: status === 'success', failure: status === 'failure'})}>
+    <td className={classnames('build-status', {success: status === 'success', danger: status === 'failure'})}>
       {status}
     </td>
     <td className='branch'>

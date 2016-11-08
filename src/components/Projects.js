@@ -2,6 +2,7 @@ import React, {PropTypes as T} from 'react'
 import Spinner from './Spinner'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
+import encode from '../encode'
 
 const Projects = ({projects, params: {bucketId}}) => projects ? (
   <div className='container'>
@@ -9,7 +10,7 @@ const Projects = ({projects, params: {bucketId}}) => projects ? (
     <ul className='projects'>
       {projects.map(({id}) => (
         <li key={id} className='project'>
-          <Link to={`/instances/${encodeURIComponent(bucketId)}/${encodeURIComponent(id)}`}>
+          <Link to={`/instances/${encode(bucketId)}/${encode(id)}`}>
             {id}
           </Link>
         </li>

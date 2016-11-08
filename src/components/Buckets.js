@@ -2,6 +2,7 @@ import React, {PropTypes as T} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router'
 import Spinner from './Spinner'
+import encode from '../encode'
 
 const Buckets = ({allBuckets}) => {
   if (!allBuckets) {
@@ -15,7 +16,7 @@ const Buckets = ({allBuckets}) => {
         <ul className='buckets'>
           {allBuckets.map(({id, name}) => (
             <li key={id} className='bucket'>
-              <Link to={`/instances/${encodeURIComponent(id)}`}>
+              <Link to={`/instances/${encode(id)}`}>
                 {name}
               </Link>
             </li>

@@ -1,10 +1,12 @@
 import React, {PropTypes as T} from 'react'
 import endsWith from 'underscore.string/endsWith'
+import encode from '../encode'
 
 const BuildLink = ({bucketId, projectId, buildNum, files}) => {
   const fileName = files.find(f => endsWith(f, '.html'))
 
-  const url = fileName && `/api/buckets/${encodeURIComponent(bucketId)}/projects/${encodeURIComponent(projectId)}/builds/${buildNum}/${fileName}`
+  const url = fileName &&
+    `/api/buckets/${encode(bucketId)}/projects/${encode(projectId)}/builds/${buildNum}/${fileName}`
 
   return (
     <td className='build-number-link'>

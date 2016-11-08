@@ -1,0 +1,1 @@
+export default uriComponent => encodeURIComponent(uriComponent)

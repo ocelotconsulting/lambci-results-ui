@@ -1,5 +1,8 @@
 import {GET_PROJECTS} from './types'
-import createFetchAction from '../../createFetchAction'
+import getAction from '../../getAction'
+import encode from '../../../encode'
 
 export default bucketId =>
-  createFetchAction(GET_PROJECTS, `/api/buckets/${encodeURIComponent(bucketId)}/projects`)
+  dispatch => {
+    getAction(dispatch, GET_PROJECTS, `/api/buckets/${encode(bucketId)}/projects`)
+  }
