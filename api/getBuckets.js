@@ -6,7 +6,7 @@ const getBucket = id => s3.getObject({Bucket: id, Key: configJsonKey}).promise()
   .then(({Body}) => Object.assign(JSON.parse(Body), {id}))
   .catch(error => error.statusCode === 404 ? {id, name: id} : Promise.reject(error))
 
-const nameRegex = /lambci-(.*)/
+const nameRegex = /^lambci-(.*)/
 
 const getMatchingBucketIds = buckets => map(buckets, 'Name').filter(id => nameRegex.exec(id))
 
