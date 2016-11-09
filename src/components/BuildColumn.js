@@ -8,9 +8,11 @@ const BuildColumn = ({bucketId, projectId, buildNum, files}) => {
   const url = fileName &&
     `/api/buckets/${encode(bucketId)}/projects/${encode(projectId)}/builds/${buildNum}/${fileName}`
 
+  const label = `#${buildNum}`
+
   return (
     <td className='build-number-link'>
-      {fileName && (<a href={url}>{`#${buildNum}`}</a>)}
+      {fileName ? (<a href={url}>{label}</a>) : label}
     </td>
   )
 }
