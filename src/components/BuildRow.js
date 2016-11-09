@@ -6,8 +6,6 @@ import CommitColumn from './CommitColumn'
 import UserColumn from './UserColumn'
 import compact from 'lodash/compact'
 
-// const todayFormat =
-
 const dateTimeString = (endDate) => {
   const midnightToday = moment().set({h: 0, m: 0, s: 0, ms: 0})
   const dateString = moment(endDate) < midnightToday && endDate.toLocaleDateString()
