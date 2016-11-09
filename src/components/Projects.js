@@ -1,21 +1,12 @@
 import React, {PropTypes as T} from 'react'
 import Spinner from './Spinner'
-import {Link} from 'react-router'
+import ProjectTable from './ProjectTable'
 import {connect} from 'react-redux'
-import encode from '../encode'
 
 const Projects = ({projects, params: {bucketId}}) => projects ? (
   <div className='container'>
     <h3>Projects</h3>
-    <ul className='projects'>
-      {projects.map(({id}) => (
-        <li key={id} className='project'>
-          <Link to={`/instances/${encode(bucketId)}/${encode(id)}`}>
-            {id}
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <ProjectTable bucketId={bucketId} projects={projects}/>
   </div>
 ) : (
   <Spinner/>
