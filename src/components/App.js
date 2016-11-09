@@ -4,15 +4,21 @@ import {connect} from 'react-redux'
 import Buckets from './Buckets'
 import Projects from './Projects'
 import Builds from './Builds'
+import ProjectConfig from './ProjectConfig'
 import selectBucket from '../store/buckets/actions/selectBucket'
 import selectProject from '../store/project/actions/selectProject'
+import getConfig from '../store/project/actions/getConfig'
+import getAllBuckets from '../store/buckets/actions/getAllBuckets'
 import history from '../history'
 
-const App = ({onBucketSelected, onProjectSelected}) => (
+const App = ({onBucketSelected, onProjectSelected, onConfigSelected, onLoadIndex}) => (
   <Router history={history}>
-    <Route path='/' component={Buckets}/>
+    <Route path='/' component={Buckets}
+           onEnter={() => onLoadIndex()}/>
     <Route path='/instances/:bucketId' component={Projects}
            onEnter={({params: {bucketId}}) => onBucketSelected(bucketId)}/>
+    <Route path='/instances/:bucketId/:projectId/config' component={ProjectConfig}
+           onEnter={({params: {projectId}}) => onConfigSelected(projectId)}/>
     <Route path='/instances/:bucketId/:projectId' component={Builds}
            onEnter={({params: {bucketId, projectId}}) => onProjectSelected(bucketId, projectId)}/>
   </Router>
@@ -35,7 +41,15 @@ const mapDispatchToProps = dispatch => {
     dispatch(selectProject(projectId))
   }
 
-  return {onBucketSelected, onProjectSelected}
+  const onConfigSelected = (projectId) => {
+    dispatch(getConfig(projectId))
+  }
+
+  const onLoadIndex = () => {
+    dispatch(getAllBuckets())
+  }
+
+  return {onBucketSelected, onProjectSelected, onConfigSelected, onLoadIndex}
 }
 
 export default connect(() => ({}), mapDispatchToProps)(App)
