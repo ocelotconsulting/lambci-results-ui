@@ -34,7 +34,7 @@ const BuildRow = ({bucketId, projectId, repository, build: {
 }}) => (
   <tr>
     <BuildColumn bucketId={bucketId} projectId={projectId} buildNum={buildNum} files={files}/>
-    <td className={classnames('build-status', {success: status === 'success', danger: status === 'failure'})}>
+    <td className={classnames('status', {success: status === 'success', danger: status === 'failure'})}>
       {status}
     </td>
     <td className='branch'>
