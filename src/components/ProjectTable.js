@@ -5,15 +5,17 @@ const ProjectTable = ({bucketId, projects}) => (
   <table className='table table-striped'>
     <thead>
     <tr>
-      <th/>
+      <th>Project ID</th>
       <th>Last Built</th>
       <th>Repository</th>
     </tr>
     </thead>
     <tbody>
-    {projects.map(project => (
-      <ProjectRow key={project.id} bucketId={bucketId} project={project}/>
-    ))}
+    {projects.map(
+      project => (
+        <ProjectRow key={project.id} bucketId={bucketId} project={project}/>
+      )
+    )}
     </tbody>
   </table>
 )
