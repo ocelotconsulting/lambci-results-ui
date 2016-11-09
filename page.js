@@ -1,6 +1,7 @@
+const fs = require('fs')
 const title = 'Lambda CI Results'
 
-module.exports = `
+const html = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,4 +16,9 @@ module.exports = `
   <script type="text/javascript" src="/bundle.js" charset="utf-8"></script>
 </body>
 </html>
-`
+`.trim()
+
+const build = () =>
+  fs.writeFileSync('public/index.html', html, {encoding: 'utf8'})
+
+module.exports = {html, build}

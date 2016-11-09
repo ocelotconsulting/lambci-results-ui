@@ -1,12 +1,9 @@
 const express = require('express')
-const html = require('./page')
+const {html} = require('./page')
 
 const app = express()
 
 app.use('/api', require('./api'))
-
-app.use('/font-awesome', express.static('node_modules/font-awesome'))
-app.use('/images', express.static('images'))
 
 if (process.env.NODE_ENV !== 'production') {
   require('./enableDevMode')(app)
@@ -14,7 +11,10 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use('/', express.static('public'))
 
-app.get('/*', (req, res) => res.send(html))
+app.get('/*', (req, res) => {
+  res.cookie('lambci-ui-express', 'true')
+  res.send(html)
+})
 
 const port = parseInt(process.env.PORT, 10) || 3000
 
