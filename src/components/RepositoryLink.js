@@ -1,17 +1,19 @@
 import React, {PropTypes as T} from 'react'
 
-const RepositoryLink = ({githubPath, commit}) => {
-  const displayValue = commit ? commit.slice(0, 10) : githubPath
+const RepositoryLink = ({repository: {baseUrl, project, icon}, path, commit}) => {
+  const pathOrProject = path || project
+  const displayValue = commit ? commit.slice(0, 10) : pathOrProject
 
-  if (githubPath) {
+  if (baseUrl) {
     return (
-      <a href={`https://github.com/${githubPath}${commit ? `/commit/${commit}` : ''}`}>
-        <i className='fa fa-github'/>
+      <a href={`${baseUrl}/${pathOrProject}${commit ? `/commit/${commit}` : ''}`}>
+        <i className={`fa fa-${icon}`}/>
         {' '}
         {displayValue}
       </a>
     )
   } else {
+    // repository not supported... just show a value
     return (
       <span>{displayValue}</span>
     )
@@ -21,7 +23,8 @@ const RepositoryLink = ({githubPath, commit}) => {
 RepositoryLink.displayName = 'RepositoryLink'
 
 RepositoryLink.propTypes = {
-  githubPath: T.string.isRequired,
+  repository: T.object.isRequired,
+  path: T.string,
   commit: T.string
 }
 

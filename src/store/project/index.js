@@ -1,17 +1,22 @@
 import {SELECT_PROJECT, GET_BUILDS} from './actions/types'
 import startsWith from 'underscore.string/startsWith'
 
-const initialState = {}
+const initialState = {
+  repository: {}
+}
 
 const githubPrefix = 'gh/'
 
-const getGithubProject = projectId =>
-  startsWith(projectId, githubPrefix) ? projectId.slice(githubPrefix.length) : undefined
+const repository = projectId => startsWith(projectId, githubPrefix) ? {
+  baseUrl: 'https://github.com',
+  icon: 'github',
+  project: projectId.slice(githubPrefix.length)
+} : {}
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case SELECT_PROJECT:
-      return {...state, selected: action.projectId, githubProject: getGithubProject(action.projectId)}
+      return {...state, selected: action.projectId, repository: repository(action.projectId)}
     case GET_BUILDS:
       switch (action.status) {
         case 'start':

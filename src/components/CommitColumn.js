@@ -1,16 +1,16 @@
 import React, {PropTypes as T} from 'react'
 import RepositoryLink from './RepositoryLink'
 
-const CommitColumn = ({githubProject, commit}) => (
+const CommitColumn = ({repository, commit}) => (
   <td className='commit'>
-    <RepositoryLink githubPath={githubProject} commit={commit}/>
+    <RepositoryLink repository={repository} commit={commit}/>
   </td>
 )
 
 CommitColumn.displayName = 'CommitColumn'
 
 CommitColumn.propTypes = {
-  githubProject: T.string.isRequired,
+  repository: T.string.isRequired,
   commit: T.string.isRequired
 }
 

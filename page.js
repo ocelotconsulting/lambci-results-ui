@@ -6,7 +6,8 @@ module.exports = `
 <head>
   <meta charset="UTF-8">
   <title>${title}</title>
-  <link rel="stylesheet" type="text/css" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" 
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="/styles.css">
 </head>
 <body>

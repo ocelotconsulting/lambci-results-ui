@@ -1,9 +1,9 @@
 import React, {PropTypes as T} from 'react'
 import RepositoryLink from './RepositoryLink'
 
-const UserColumn = ({user, github}) => (
+const UserColumn = ({user, repository}) => (
   <td className='user'>
-    {github ? (<RepositoryLink githubPath={user}/>) : user}
+    <RepositoryLink repository={repository} path={user}/>
   </td>
 )
 
@@ -11,7 +11,7 @@ UserColumn.displayName = 'BuildColumn'
 
 UserColumn.propTypes = {
   user: T.string.isRequired,
-  github: T.bool.isRequired
+  repository: T.object.isRequired
 }
 
 export default UserColumn

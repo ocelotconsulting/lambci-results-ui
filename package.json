@@ -34,11 +34,8 @@
     "aws-sdk": "~2.6.15",
     "body-parser": "~1.15.2",
     "express": "~4.14.0",
-    "font-awesome": "~4.7.0",
     "lodash": "~4.16.6",
     "moment": "~2.15.1",
-    "react-bootstrap": "^0.30.5",
-    "react-router-bootstrap": "^0.23.1",
     "underscore.string": "~3.3.4"
   },
   "devDependencies": {

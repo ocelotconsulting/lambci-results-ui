@@ -31,7 +31,7 @@ const renderTime = (startedAt, endedAt) => {
   return `${dateTimeString(end.toDate())} (${hourString}${minuteString}${seconds} second${pl(seconds)})`
 }
 
-const BuildRow = ({bucketId, projectId, githubProject, build: {
+const BuildRow = ({bucketId, projectId, repository, build: {
   buildNum, endedAt, startedAt, status, checkoutBranch, files, commit, user
 }}) => (
   <tr>
@@ -45,8 +45,8 @@ const BuildRow = ({bucketId, projectId, githubProject, build: {
     <td className='time'>
       {renderTime(startedAt, endedAt)}
     </td>
-    <CommitColumn githubProject={githubProject} commit={commit}/>
-    <UserColumn user={user} github={Boolean(user && githubProject)}/>
+    <CommitColumn repository={repository} commit={commit}/>
+    <UserColumn user={user} repository={repository}/>
   </tr>
 )
 
@@ -55,6 +55,7 @@ BuildRow.displayName = 'BuildRow'
 BuildRow.propTypes = {
   bucketId: T.string.isRequired,
   projectId: T.string.isRequired,
+  repository: T.object.isRequired,
   build: T.object.isRequired
 }
 
