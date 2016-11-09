@@ -20,7 +20,7 @@ const ProjectTable = ({bucketId, projects}) => (
   </table>
 )
 
-ProjectTable.displayName = 'ProjectRow'
+ProjectTable.displayName = 'ProjectTable'
 
 ProjectTable.propTypes = {
   bucketId: T.string.isRequired,

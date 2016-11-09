@@ -7,7 +7,7 @@ const UserColumn = ({user, repository}) => (
   </td>
 )
 
-UserColumn.displayName = 'BuildColumn'
+UserColumn.displayName = 'UserColumn'
 
 UserColumn.propTypes = {
   user: T.string.isRequired,
