@@ -1,3 +1,4 @@
+const express = require('express')
 const devMiddleware = require('webpack-dev-middleware')
 const lessMiddleware = require('less-middleware')
 const webpack = require('webpack')
@@ -18,6 +19,7 @@ if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
 }
 
 module.exports = app => {
+  app.use('/images', express.static('images'))
   app.use(devMiddleware(webpack(webpackDevConfig), middlewareOptions))
   app.use(lessMiddleware('src', {dest: 'public'}))
 }
