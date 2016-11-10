@@ -1,4 +1,4 @@
-import {SELECT_PROJECT, GET_BUILDS, GET_CONFIG} from './actions/types'
+import {SELECT_PROJECT, GET_BUILDS, GET_CONFIG, UPDATE_CONFIG} from './actions/types'
 import getRepository from '../getRepository'
 
 const initialState = {
@@ -49,6 +49,9 @@ export default (state = initialState, action) => {
         default:
           return state
       }
+    case UPDATE_CONFIG: {
+      return {...state, config: {...state.config, [action.prop]: action.value}}
+    }
     default:
       return state
   }

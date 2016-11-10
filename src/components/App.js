@@ -17,10 +17,10 @@ const App = ({onBucketSelected, onProjectSelected, onConfigSelected, onLoadIndex
            onEnter={() => onLoadIndex()}/>
     <Route path='/instances/:bucketId' component={Projects}
            onEnter={({params: {bucketId}}) => onBucketSelected(bucketId)}/>
-    <Route path='/instances/:bucketId/:projectId/config' component={ProjectConfig}
-           onEnter={({params: {projectId}}) => onConfigSelected(projectId)}/>
     <Route path='/instances/:bucketId/:projectId' component={Builds}
            onEnter={({params: {bucketId, projectId}}) => onProjectSelected(bucketId, projectId)}/>
+     <Route path='/instances/:bucketId/:projectId/config' component={ProjectConfig}
+           onEnter={({params: {projectId}}) => onConfigSelected(projectId)}/>
   </Router>
 )
 
