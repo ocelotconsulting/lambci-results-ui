@@ -27,6 +27,6 @@ describe('BuildColumn', () => {
 
     const url = `/api/projects/${encodeURIComponent(projectId)}/builds/3/foo.html`
     linkWrapper.prop('href').should.equal(url)
-    linkWrapper.text().should.equal(`#${buildNum}`)
+    linkWrapper.text().should.equal(`#${buildNum}???`)
   })
 })
