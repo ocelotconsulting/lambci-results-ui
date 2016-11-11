@@ -45,9 +45,12 @@ export default (state = initialState, action) => {
           return state
       }
     case UPDATE_CONFIG: {
-      if(action.branch){
+      if(action.branch && state.config.branches){
         return {...state, config: {...state.config, branches: {...state.config.branches,
             [action.branch]: {...state.config.branches[action.branch], [action.prop]: action.value}}}}
+      }
+      else if (action.branch){
+        return {...state, config: {...state.config, branches: {[action.branch]: {[action.prop]: action.value}}}}
       }
       else{
         return {...state, config: {...state.config, [action.prop]: action.value}}

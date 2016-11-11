@@ -6,17 +6,10 @@ import RepositoryLink from './RepositoryLink'
 import updateConfigField from '../store/actions/updateConfigField'
 import saveConfig from '../store/actions/saveConfig'
 import addBranchConfig from '../store/actions/addBranchConfig'
-import Config from './Config'
 
-const branchConfigs = (config) =>
-  Object.keys(config.branches || {}).map(
-    branch => (
-      <Config config={config.branches[branch]} branch={branch} key={branch}/>
-    )
-  )
-
-const ProjectConfig = ({repository, config, onChange, addBranchConfig, params: {projectId}, onSave}) =>
-  config ? (
+const ProjectConfig = ({repository, config, onChange, onCheck, addBranchConfig, params: {projectId, branch}, onSave}) => {
+  const editConfig = config && config.branches && branch ? config.branches[branch] || {} : config
+  return config ? (
     <div className='container'>
       <ol className="breadcrumb">
         <li>
@@ -32,19 +25,26 @@ const ProjectConfig = ({repository, config, onChange, addBranchConfig, params: {
         <small>config</small>
       </h3>
 
-      <Config config={config} branch="" key="_"/>
-      {branchConfigs(config)}
+      <div className="configProperty">
+        <div>Command</div>
+        <textarea value={ editConfig.cmd || ''} onChange={onChange('cmd', branch)} placeholder='Default'/>
+      </div>
 
-      <div>
-        <input type="text" value={config._newBranchName || ""} onChange={onChange('_newBranchName')}/>
-        <button type="button" onClick={addBranchConfig}>Add</button>
+      <div className="configProperty">
+        <div>Environment Variables</div>
+        <textarea value={ editConfig.env || ''} onChange={onChange('env', branch)} placeholder='None'/>
+      </div>
+
+      <div className="configProperty">
+        <div>Build</div>
+        <input type='checkbox' value={ editConfig.build || false} onChange={onCheck('build', branch)} />
       </div>
 
       <button type="button" onClick={onSave}>Save</button>
     </div>
   ) : (
     <Spinner/>
-  )
+  )}
 
 ProjectConfig.displayName = 'ProjectConfig'
 
@@ -58,9 +58,10 @@ const mapStateToProps = ({selectedProject: {repository}, config}) => ({repositor
 const mapDispatchToProps = dispatch => ({
   onSave: () => dispatch(saveConfig()),
   onChange: (prop, branch) =>
-    (e) => dispatch(updateConfigField(prop, e.target.value)),
+      (e) => dispatch(updateConfigField(prop, e.target.value, branch)),
+  onCheck: (prop, branch) =>
+      (e) => dispatch(updateConfigField(prop, e.target.checked, branch)),
   addBranchConfig: (e) => dispatch(addBranchConfig())
-
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectConfig)

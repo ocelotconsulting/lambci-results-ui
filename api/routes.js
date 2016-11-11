@@ -14,7 +14,8 @@ const routes = [
   },
   {
     path: '/projects/:projectId/config',
-    get: require('./handlers/getBuildConfig')
+    get: require('./handlers/getBuildConfig'),
+    put: require('./handlers/putBuildConfig')
   },
   {
     path: '/projects/:projectId/builds/:buildNumber/:fileName',

@@ -14,6 +14,8 @@ const App = ({onProjectSelected, onConfigSelected, onLoadProjects}) => (
     <Route path='/projects' component={Projects} onEnter={onLoadProjects}/>
     <Route path='/projects/:projectId/config' component={ProjectConfig}
            onEnter={({params: {projectId}}) => onConfigSelected(projectId)}/>
+    <Route path='/projects/:projectId/config/:branch' component={ProjectConfig}
+           onEnter={({params: {projectId}}) => onConfigSelected(projectId)}/>
     <Route path='/projects/:projectId/builds' component={Builds}
            onEnter={({params: {projectId}}) => onProjectSelected(projectId)}/>
     <Redirect path="*" to="/projects" />
