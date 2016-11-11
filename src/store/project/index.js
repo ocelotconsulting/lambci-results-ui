@@ -1,4 +1,4 @@
-import {SELECT_PROJECT, GET_BUILDS, GET_CONFIG, UPDATE_CONFIG} from './actions/types'
+import {SELECT_PROJECT, GET_BUILDS, GET_CONFIG, UPDATE_CONFIG, ADD_BRANCH_CONFIG} from './actions/types'
 import getRepository from '../getRepository'
 
 const initialState = {
@@ -50,7 +50,17 @@ export default (state = initialState, action) => {
           return state
       }
     case UPDATE_CONFIG: {
-      return {...state, config: {...state.config, [action.prop]: action.value}}
+      if(action.branch){
+        return {...state, config: {...state.config, branches: {...state.config.branches,
+            [action.branch]: {...state.config.branches[action.branch], [action.prop]: action.value}}}}
+      }
+      else{
+        return {...state, config: {...state.config, [action.prop]: action.value}}
+      }
+    }
+    case ADD_BRANCH_CONFIG: {
+      return {...state, config: {...state.config, branches: {...state.config.branches,
+            [action.branch]: {build: true}}}}
     }
     default:
       return state

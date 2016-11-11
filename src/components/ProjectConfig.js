@@ -6,8 +6,13 @@ import encode from '../encode'
 import RepositoryLink from './RepositoryLink'
 import updateConfigField from '../store/project/actions/updateConfigField'
 import saveConfig from '../store/project/actions/saveConfig'
+import addBranchConfig from '../store/project/actions/addBranchConfig'
+import Config from './Config'
 
-const ProjectConfig = ({onChange, onSave, repository, config, params: {bucketId, projectId}}) => {
+const branchConfigs = (config) =>
+  Object.keys(config.branches || {}).map((branch) => <Config config={config.branches[branch]} branch={branch} key={branch} />)
+
+const ProjectConfig = ({repository, config, onChange, addBranchConfig, params: {bucketId, projectId}, onSave}) => {
   return typeof config !== 'undefined' ? (
     <div className='container'>
       <ol className="breadcrumb">
@@ -24,23 +29,15 @@ const ProjectConfig = ({onChange, onSave, repository, config, params: {bucketId,
         <small>config</small>
       </h3>
 
-      <div className="configProperty">
-        <div>Command</div>
-        <textarea value={config.cmd || ''} onChange={onChange('cmd')} placeholder='Default'/>
-      </div>
+      <Config config={config} branch="" key="_"/>
+      {branchConfigs(config)}
 
-      <div className="configProperty">
-        <div>Environment Variables</div>
-        <textarea value={config.env || ''} onChange={onChange('env')} placeholder='None'/>
-      </div>
-
-      <div className="configProperty">
-        <div>Build Branches</div>
-        <input type='text' value={config.branches || ''} onChange={onChange('branches')} placeholder='None'/>
+      <div>
+        <input type="text" value = {config._newBranchName || ""} onChange={onChange('_newBranchName')}/>
+        <button type="button" onClick={addBranchConfig}>Add</button>
       </div>
 
       <button type="button" onClick={onSave}>Save</button>
-
     </div>
   ) : (
     <Spinner/>
@@ -56,9 +53,11 @@ ProjectConfig.propTypes = {
 
 const mapStateToProps = ({project: {repository, config}}) => ({repository, config})
 const mapDispatchToProps = dispatch => ({
-  onChange: (prop) =>
+  onSave: () => dispatch(saveConfig()),
+  onChange: (prop, branch) =>
       (e) => dispatch(updateConfigField(prop, e.target.value)),
-  onSave: () => dispatch(saveConfig(config))
+  addBranchConfig: (e) => dispatch(addBranchConfig())
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectConfig)
