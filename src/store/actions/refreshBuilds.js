@@ -29,6 +29,7 @@ export default () =>
         }
       })
       .catch(() => {
-      }) // ignore the error... will retry later if appropriate
+        // ignore any error... will retry later if appropriate
+      })
     }
   }
