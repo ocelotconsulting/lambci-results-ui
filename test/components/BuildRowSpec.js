@@ -42,20 +42,8 @@ describe('BuildRow', () => {
   })
 
   describe('status column', () => {
-    const findStatusColumn = () => render().find('td.status')
-    const className = () => findStatusColumn().prop('className')
-
-    it('renders with danger status when build is a failure', () => {
-      build.status = 'failure'
-      className().should.equal('status danger')
-    })
-
-    it('renders with success stats when build is a success', () => {
-      className().should.equal('status success')
-    })
-
-    it('renders status', () => {
-      findStatusColumn().text().should.equal(build.status)
+    it('renders with status', () => {
+      render().find('StatusColumn').prop('status').should.equal(build.status)
     })
   })
 

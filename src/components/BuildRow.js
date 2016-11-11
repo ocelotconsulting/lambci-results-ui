@@ -1,7 +1,7 @@
 import React, {PropTypes as T} from 'react'
 import moment from 'moment'
-import classnames from 'classnames'
 import BuildColumn from './BuildColumn'
+import StatusColumn from './StatusColumn'
 import CommitColumn from './CommitColumn'
 import UserColumn from './UserColumn'
 import compact from 'lodash/compact'
@@ -34,9 +34,7 @@ const BuildRow = ({projectId, repository, build: {
 }}) => (
   <tr>
     <BuildColumn projectId={projectId} buildNum={buildNum} files={files}/>
-    <td className={classnames('status', {success: status === 'success', danger: status === 'failure'})}>
-      {status}
-    </td>
+    <StatusColumn status={status}/>
     <td className='branch'>
       {checkoutBranch}
     </td>

@@ -1,4 +1,12 @@
-import {GET_PROJECTS, SELECT_PROJECT, GET_BUILDS, GET_CONFIG, ADD_BRANCH_CONFIG, UPDATE_CONFIG} from './actions/types'
+import {
+  GET_PROJECTS,
+  SELECT_PROJECT,
+  GET_BUILDS,
+  REFRESH_BUILDS,
+  GET_CONFIG,
+  ADD_BRANCH_CONFIG,
+  UPDATE_CONFIG
+} from './actions/types'
 import getRepository from './getRepository'
 
 const initialState = {
@@ -28,6 +36,8 @@ export default (state = initialState, action) => {
       return {...state, selectedProject: {id: action.projectId, repository: getRepository(action.projectId)}}
     case GET_BUILDS:
       return handleGet(state, action, 'builds')
+    case REFRESH_BUILDS:
+      return {...state, builds: action.result}
     case GET_CONFIG:
       switch (action.status) {
         case 'start':
