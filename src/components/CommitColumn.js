@@ -10,7 +10,7 @@ const CommitColumn = ({repository, commit}) => (
 CommitColumn.displayName = 'CommitColumn'
 
 CommitColumn.propTypes = {
-  repository: T.string.isRequired,
+  repository: T.object.isRequired,
   commit: T.string.isRequired
 }
 

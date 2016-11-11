@@ -4,12 +4,13 @@
   "description": "UI for viewing lambci results in S3",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf public && mkdir public",
+    "clean": "rm -rf public && rm -rf lambda && mkdir public",
     "dev": "NODE_ENV=development supervisor -w server.js,page.js,enableDevMode.js,api node server",
     "build:copy-images": "cp -r images public/images",
     "build:create-static-html": "node createStaticHtml.js",
     "build:less": "lessc --clean-css src/styles.less public/styles.css",
     "build:webpack": "NODE_ENV=production webpack",
+    "build:lambda": "webpack --config webpack.lambda.config.js",
     "build": "npm run clean && npm-run-all build:*",
     "start": "NODE_ENV=production node server",
     "test": "mocha",
@@ -37,6 +38,7 @@
   "dependencies": {
     "aws-sdk": "~2.6.15",
     "body-parser": "~1.15.2",
+    "dynamodb-doc": "~1.0.0",
     "express": "~4.14.0",
     "lodash": "~4.16.6",
     "moment": "~2.15.1",

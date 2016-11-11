@@ -4,10 +4,10 @@ import moment from 'moment'
 import RepositoryLink from './RepositoryLink'
 import encode from '../encode'
 
-const ProjectRow = ({bucketId, project: {id, lastTimestamp, repository}}) => (
+const ProjectRow = ({project: {id, lastTimestamp, repository}}) => (
   <tr>
     <td className='id'>
-      <Link to={`/instances/${encode(bucketId)}/${encode(id)}`}>
+      <Link to={`/projects/${encode(id)}/builds`}>
         {id}
       </Link>
     </td>
@@ -23,7 +23,6 @@ const ProjectRow = ({bucketId, project: {id, lastTimestamp, repository}}) => (
 ProjectRow.displayName = 'ProjectRow'
 
 ProjectRow.propTypes = {
-  bucketId: T.string.isRequired,
   project: T.object.isRequired
 }
 

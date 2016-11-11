@@ -1,11 +1,11 @@
-const {dynamoTablePrefix} = require('./config')
+const {stackName} = require('./../config')
 const dynamoClient = require('./dynamoClient')
 
 const fields = ['branches', 'build', 'cmd', 'env', 'notifications', 'project', 's3Bucket']
 
 module.exports = ({params: {projectId}}, res, next) => {
   return dynamoClient.query({
-    TableName: `${dynamoTablePrefix}-config`,
+    TableName: `${stackName}-config`,
     KeyConditions: {
       project: {
         ComparisonOperator: 'EQ',
@@ -13,9 +13,15 @@ module.exports = ({params: {projectId}}, res, next) => {
       }
     }
   }).promise()
-  .then(items => items.Items.map(item => fields.reduce((p,c) => {
-    p[c] = item[c];
-    return p
-  }, {})))
-  .then(items => items.length == 1 ? res.json(items[0]) : res.status(404).send())
+  .then(({Items: [item]}) => {
+    if (item) {
+      res.json(fields.reduce((p, c) => {
+        p[c] = item[c]
+        return p
+      }, {}))
+    } else {
+      res.status(404).send(`Project ${projectId} not found`)
+    }
+  })
+  .catch(next)
 }

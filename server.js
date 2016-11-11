@@ -3,7 +3,7 @@ const {html} = require('./page')
 
 const app = express()
 
-app.use('/api', require('./api'))
+app.use('/api', require('./api/express'))
 
 if (process.env.NODE_ENV !== 'production') {
   require('./enableDevMode')(app)

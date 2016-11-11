@@ -4,14 +4,13 @@ import {shallow} from 'enzyme'
 import moment from 'moment'
 
 describe('BuildRow', () => {
-  let {bucketId, projectId, repository, build} = {}
+  let {projectId, repository, build} = {}
 
   const render = () => shallow(
-    <BuildRow bucketId={bucketId} projectId={projectId} repository={repository} build={build}/>
+    <BuildRow projectId={projectId} repository={repository} build={build}/>
   )
 
   beforeEach(() => {
-    bucketId = 'bucket 42'
     projectId = 'my/project'
     repository = {icon: 'github'}
     let endedAt = moment().set({
@@ -33,9 +32,8 @@ describe('BuildRow', () => {
   })
 
   describe('BuildColumn', () => {
-    it('includes bucket id, project id, buildNum, and files', () => {
+    it('includes project id, buildNum, and files', () => {
       render().find('BuildColumn').props().should.eql({
-        bucketId,
         projectId,
         buildNum: build.buildNum,
         files: build.files

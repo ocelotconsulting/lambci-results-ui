@@ -9,8 +9,8 @@ const toFile = ({Key, Size, LastModified}) => ({
   lastModified: LastModified
 })
 
-module.exports = (bucketId, folder) =>
-  s3.listObjectsV2({Bucket: bucketId, Prefix: folder && `${folder}/`, Delimiter: '/'}).promise()
+module.exports = (bucket, folder) =>
+  s3.listObjectsV2({Bucket: bucket, Prefix: folder && `${folder}/`, Delimiter: '/'}).promise()
   .then(({Contents, CommonPrefixes}) => ({
     files: Contents.map(toFile),
     folders: CommonPrefixes.map(({Prefix}) => lastSegment(Prefix))

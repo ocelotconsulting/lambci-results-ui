@@ -13,11 +13,6 @@ const middlewareOptions = {
 
 console.log('DEV mode')
 
-if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
-  console.error('!!! AWS credentials missing !!!')
-  console.error('!!! set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables !!!')
-}
-
 module.exports = app => {
   app.use('/images', express.static('images'))
   app.use(devMiddleware(webpack(webpackDevConfig), middlewareOptions))

@@ -1,6 +1,6 @@
 import React, {PropTypes as T} from 'react'
 import {connect} from 'react-redux'
-import updateConfigField from '../store/project/actions/updateConfigField'
+import updateConfigField from '../store/actions/updateConfigField'
 
 const Config = ({branch, config, onChange, onCheck}) => {
   return config ? <div>

@@ -2,22 +2,25 @@ import React, {PropTypes as T} from 'react'
 import Spinner from './Spinner'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
-import encode from '../encode'
 import RepositoryLink from './RepositoryLink'
-import updateConfigField from '../store/project/actions/updateConfigField'
-import saveConfig from '../store/project/actions/saveConfig'
-import addBranchConfig from '../store/project/actions/addBranchConfig'
+import updateConfigField from '../store/actions/updateConfigField'
+import saveConfig from '../store/actions/saveConfig'
+import addBranchConfig from '../store/actions/addBranchConfig'
 import Config from './Config'
 
 const branchConfigs = (config) =>
-  Object.keys(config.branches || {}).map((branch) => <Config config={config.branches[branch]} branch={branch} key={branch} />)
+  Object.keys(config.branches || {}).map(
+    branch => (
+      <Config config={config.branches[branch]} branch={branch} key={branch}/>
+    )
+  )
 
-const ProjectConfig = ({repository, config, onChange, addBranchConfig, params: {bucketId, projectId}, onSave}) => {
-  return typeof config !== 'undefined' ? (
+const ProjectConfig = ({repository, config, onChange, addBranchConfig, params: {projectId}, onSave}) =>
+  config ? (
     <div className='container'>
       <ol className="breadcrumb">
         <li>
-          <Link to={`/instances/${encode(bucketId)}`}>Projects</Link>
+          <Link to='/projects'>Projects</Link>
         </li>
         <li className="active">
           {`${projectId}`}
@@ -33,7 +36,7 @@ const ProjectConfig = ({repository, config, onChange, addBranchConfig, params: {
       {branchConfigs(config)}
 
       <div>
-        <input type="text" value = {config._newBranchName || ""} onChange={onChange('_newBranchName')}/>
+        <input type="text" value={config._newBranchName || ""} onChange={onChange('_newBranchName')}/>
         <button type="button" onClick={addBranchConfig}>Add</button>
       </div>
 
@@ -42,20 +45,20 @@ const ProjectConfig = ({repository, config, onChange, addBranchConfig, params: {
   ) : (
     <Spinner/>
   )
-}
 
-ProjectConfig.displayName = 'Project Configuration'
+ProjectConfig.displayName = 'ProjectConfig'
 
 ProjectConfig.propTypes = {
   config: T.object,
-  repository: T.object
+  repository: T.object.isRequired,
+  onSave: T.func.isRequired
 }
 
-const mapStateToProps = ({project: {repository, config}}) => ({repository, config})
+const mapStateToProps = ({selectedProject: {repository}, config}) => ({repository, config})
 const mapDispatchToProps = dispatch => ({
   onSave: () => dispatch(saveConfig()),
   onChange: (prop, branch) =>
-      (e) => dispatch(updateConfigField(prop, e.target.value)),
+    (e) => dispatch(updateConfigField(prop, e.target.value)),
   addBranchConfig: (e) => dispatch(addBranchConfig())
 
 })

@@ -1,17 +1,18 @@
-const s3 = require('./s3')
 const sortBy = require('lodash/sortBy')
 const flatten = require('lodash/flatten')
 const nth = require('lodash/nth')
+const s3 = require('./s3')
 const mostRecent = require('./mostRecent')
 const listS3Folder = require('./listS3Folder')
+const getResultsBucket = require('./getResultsBucket')
 
-const findProjects = (bucketId, parentFolder, remainingDepth = 2) =>
-  listS3Folder(bucketId, parentFolder)
+const findProjects = (bucket, parentFolder, remainingDepth = 2) =>
+  listS3Folder(bucket, parentFolder)
   .then(({folders}) => {
     const ids = parentFolder ? folders.map(folder => `${parentFolder}/${folder}`) : folders
     return remainingDepth === 0 ?
       ids.map(id => ({id}))
-      : Promise.all(ids.map(id => findProjects(bucketId, id, remainingDepth - 1))).then(flatten)
+      : Promise.all(ids.map(id => findProjects(bucket, id, remainingDepth - 1))).then(flatten)
   })
 
 const getBuildNumber = key => parseInt(nth(key.split('/'), -2), 10)
@@ -33,16 +34,17 @@ const addMetadata = (project, objects) => {
 
 const sortProjects = projects => sortBy(projects, mostRecent('lastTimestamp'))
 
-const findAll = bucketId => {
+const findAll = bucket => {
   const withMetadata = project =>
-    s3.listObjectsV2({Bucket: bucketId, Prefix: `${project.id}/builds/`}).promise()
+    s3.listObjectsV2({Bucket: bucket, Prefix: `${project.id}/builds/`}).promise()
     .then(({Contents}) => addMetadata(project, Contents))
 
-  return findProjects(bucketId)
+  return findProjects(bucket)
   .then(projects => Promise.all(projects.map(withMetadata)).then(sortProjects))
 }
 
-module.exports = ({params: {bucketId}}, res, next) =>
-  findAll(bucketId)
+module.exports = (req, res, next) =>
+  getResultsBucket()
+  .then(findAll)
   .then(projects => res.json(projects))
   .catch(next)

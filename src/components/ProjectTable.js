@@ -1,7 +1,7 @@
 import React, {PropTypes as T} from 'react'
 import ProjectRow from './ProjectRow'
 
-const ProjectTable = ({bucketId, projects}) => (
+const ProjectTable = ({projects}) => (
   <table className='table table-striped'>
     <thead>
     <tr>
@@ -13,7 +13,7 @@ const ProjectTable = ({bucketId, projects}) => (
     <tbody>
     {projects.map(
       project => (
-        <ProjectRow key={project.id} bucketId={bucketId} project={project}/>
+        <ProjectRow key={project.id} project={project}/>
       )
     )}
     </tbody>
@@ -23,7 +23,6 @@ const ProjectTable = ({bucketId, projects}) => (
 ProjectTable.displayName = 'ProjectTable'
 
 ProjectTable.propTypes = {
-  bucketId: T.string.isRequired,
   projects: T.arrayOf(T.object).isRequired
 }
 

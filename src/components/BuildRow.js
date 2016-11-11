@@ -29,11 +29,11 @@ const renderTime = (startedAt, endedAt) => {
   return `${dateTimeString(end.toDate())} (${hourString}${minuteString}${seconds} second${pl(seconds)})`
 }
 
-const BuildRow = ({bucketId, projectId, repository, build: {
+const BuildRow = ({projectId, repository, build: {
   buildNum, endedAt, startedAt, status, checkoutBranch, files, commit, user
 }}) => (
   <tr>
-    <BuildColumn bucketId={bucketId} projectId={projectId} buildNum={buildNum} files={files}/>
+    <BuildColumn projectId={projectId} buildNum={buildNum} files={files}/>
     <td className={classnames('status', {success: status === 'success', danger: status === 'failure'})}>
       {status}
     </td>
@@ -51,7 +51,6 @@ const BuildRow = ({bucketId, projectId, repository, build: {
 BuildRow.displayName = 'BuildRow'
 
 BuildRow.propTypes = {
-  bucketId: T.string.isRequired,
   projectId: T.string.isRequired,
   repository: T.object.isRequired,
   build: T.object.isRequired

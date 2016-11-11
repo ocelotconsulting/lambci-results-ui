@@ -1,7 +1,7 @@
 import React, {PropTypes as T} from 'react'
 import BuildRow from './BuildRow'
 
-const BuildTable = ({bucketId, projectId, repository, builds}) =>
+const BuildTable = ({projectId, repository, builds}) =>
   <table className='table table-striped'>
     <thead>
     <tr>
@@ -15,8 +15,7 @@ const BuildTable = ({bucketId, projectId, repository, builds}) =>
     </thead>
     <tbody>
     {builds.map(build => (
-      <BuildRow key={build.buildNum} bucketId={bucketId} projectId={projectId}
-                repository={repository} build={build}/>
+      <BuildRow key={build.buildNum} projectId={projectId} repository={repository} build={build}/>
     ))}
     </tbody>
   </table>
@@ -24,7 +23,6 @@ const BuildTable = ({bucketId, projectId, repository, builds}) =>
 BuildTable.displayName = 'BuildTable'
 
 BuildTable.propTypes = {
-  bucketId: T.string.isRequired,
   projectId: T.string.isRequired,
   repository: T.object.isRequired,
   builds: T.arrayOf(T.object)

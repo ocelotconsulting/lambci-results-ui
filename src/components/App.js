@@ -1,55 +1,37 @@
 import React, {PropTypes as T} from 'react'
-import {Router, Route} from 'react-router'
+import {Router, Route, Redirect} from 'react-router'
 import {connect} from 'react-redux'
-import Buckets from './Buckets'
 import Projects from './Projects'
 import Builds from './Builds'
 import ProjectConfig from './ProjectConfig'
-import selectBucket from '../store/buckets/actions/selectBucket'
-import selectProject from '../store/project/actions/selectProject'
-import getConfig from '../store/project/actions/getConfig'
-import getAllBuckets from '../store/buckets/actions/getAllBuckets'
+import getProjects from '../store/actions/getProjects'
+import selectProject from '../store/actions/selectProject'
+import getConfig from '../store/actions/getConfig'
 import history from '../history'
 
-const App = ({onBucketSelected, onProjectSelected, onConfigSelected, onLoadIndex}) => (
+const App = ({onProjectSelected, onConfigSelected, onLoadProjects}) => (
   <Router history={history}>
-    <Route path='/' component={Buckets}
-           onEnter={() => onLoadIndex()}/>
-    <Route path='/instances/:bucketId' component={Projects}
-           onEnter={({params: {bucketId}}) => onBucketSelected(bucketId)}/>
-    <Route path='/instances/:bucketId/:projectId' component={Builds}
-           onEnter={({params: {bucketId, projectId}}) => onProjectSelected(bucketId, projectId)}/>
-     <Route path='/instances/:bucketId/:projectId/config' component={ProjectConfig}
+    <Route path='/projects' component={Projects} onEnter={onLoadProjects}/>
+    <Route path='/projects/:projectId/config' component={ProjectConfig}
            onEnter={({params: {projectId}}) => onConfigSelected(projectId)}/>
+    <Route path='/projects/:projectId/builds' component={Builds}
+           onEnter={({params: {projectId}}) => onProjectSelected(projectId)}/>
+    <Redirect path="*" to="/projects" />
   </Router>
 )
 
 App.displayName = 'App'
 
 App.propTypes = {
-  onBucketSelected: T.func.isRequired,
+  onLoadProjects: T.func.isRequired,
+  onConfigSelected: T.func.isRequired,
   onProjectSelected: T.func.isRequired
 }
 
-const mapDispatchToProps = dispatch => {
-  const onBucketSelected = bucketId => {
-    dispatch(selectBucket(bucketId))
-  }
-
-  const onProjectSelected = (bucketId, projectId) => {
-    onBucketSelected(bucketId)
-    dispatch(selectProject(projectId))
-  }
-
-  const onConfigSelected = (projectId) => {
-    dispatch(getConfig(projectId))
-  }
-
-  const onLoadIndex = () => {
-    dispatch(getAllBuckets())
-  }
-
-  return {onBucketSelected, onProjectSelected, onConfigSelected, onLoadIndex}
-}
+const mapDispatchToProps = dispatch => ({
+  onLoadProjects: () => dispatch(getProjects()),
+  onProjectSelected: projectId => dispatch(selectProject(projectId)),
+  onConfigSelected: projectId => dispatch(getConfig(projectId))
+})
 
 export default connect(() => ({}), mapDispatchToProps)(App)
