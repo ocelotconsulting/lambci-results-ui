@@ -29,7 +29,7 @@ const renderTime = (startedAt, endedAt) => {
 
     return `${dateTimeString(end.toDate())} (${hourString}${minuteString}${seconds} second${pl(seconds)})`
   } else {
-    return dateTimeString(moment(startedAt).toDate())
+    return `started ${dateTimeString(moment(startedAt).toDate())}`
   }
 }
 
