@@ -8,19 +8,19 @@ import refreshBuilds from '../store/actions/refreshBuilds'
 
 class Builds extends React.Component {
   enableRefresh() {
-    if (!this.refreshEnabled) {
+    if (!this.refreshEnabled && this.props.refreshTime) {
       this.refreshEnabled = true
 
       const refresh = () => {
         if (this.refreshEnabled) {
           const promise = this.props.onRefresh()
-          if (promise) {
+          if (promise && typeof promise.then === 'function') {
             promise.then(refreshLater)
           }
         }
       }
 
-      const refreshLater = () => setTimeout(refresh, 5000)
+      const refreshLater = () => setTimeout(refresh, this.props.refreshTime)
 
       refreshLater()
     }
@@ -61,10 +61,15 @@ class Builds extends React.Component {
   }
 }
 
+Builds.defaultProps = {
+  refreshTime: 5000
+}
+
 Builds.propTypes = {
   onRefresh: T.func.isRequired,
   repository: T.object.isRequired,
-  builds: T.arrayOf(T.object)
+  builds: T.arrayOf(T.object),
+  refreshTime: T.number
 }
 
 const mapStateToProps = ({selectedProject: {repository}, builds}) => ({repository, builds})
@@ -72,6 +77,8 @@ const mapStateToProps = ({selectedProject: {repository}, builds}) => ({repositor
 const mapDispatchToProps = dispatch => ({
   onRefresh: () => dispatch(refreshBuilds())
 })
+
+export {Builds}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Builds)
 
