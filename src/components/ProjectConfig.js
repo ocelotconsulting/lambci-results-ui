@@ -37,10 +37,10 @@ const ProjectConfig = ({repository, config, onChange, onCheck, addBranchConfig, 
 
       <div className="configProperty">
         <div>Build</div>
-        <input type='checkbox' value={ editConfig.build || false} onChange={onCheck('build', branch)} />
+        <input type='checkbox' checked={editConfig.build} onChange={onCheck('build', branch)} />
       </div>
 
-      <button type="button" onClick={onSave}>Save</button>
+      <button type="button" onClick={onSave(editConfig, projectId)}>Save</button>
     </div>
   ) : (
     <Spinner/>
@@ -56,7 +56,7 @@ ProjectConfig.propTypes = {
 
 const mapStateToProps = ({selectedProject: {repository}, config}) => ({repository, config})
 const mapDispatchToProps = dispatch => ({
-  onSave: () => dispatch(saveConfig()),
+  onSave: (config, projectId) => () => dispatch(saveConfig(config, projectId)),
   onChange: (prop, branch) =>
       (e) => dispatch(updateConfigField(prop, e.target.value, branch)),
   onCheck: (prop, branch) =>

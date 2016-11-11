@@ -1,7 +1,7 @@
 const {stackName} = require('./../config')
 const dynamoClient = require('./dynamoClient')
 
-const fields = ['branches', 'build', 'cmd', 'env', 'notifications', 'project', 's3Bucket']
+const fields = ['branches', 'build', 'cmd', 'env', 'notifications', 's3Bucket']
 
 module.exports = ({body, params: {projectId}}, res, next) => {
   const toUpdate = Object.keys(body).filter((key) => fields.indexOf(key) >= 0)
