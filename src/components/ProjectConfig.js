@@ -8,7 +8,8 @@ import saveConfig from '../store/actions/saveConfig'
 import addBranchConfig from '../store/actions/addBranchConfig'
 
 const ProjectConfig = ({repository, config, onChange, onCheck, addBranchConfig, params: {projectId, branch}, onSave}) => {
-  const editConfig = config && config.branches && branch ? config.branches[branch] || {} : config
+  console.log('c', config)
+  const editConfig = config && branch ?  config.branches ? config.branches[branch] : {}  : config
   return config ? (
     <div className='container'>
       <ol className="breadcrumb">
@@ -40,7 +41,7 @@ const ProjectConfig = ({repository, config, onChange, onCheck, addBranchConfig, 
         <input type='checkbox' checked={editConfig.build} onChange={onCheck('build', branch)} />
       </div>
 
-      <button type="button" onClick={onSave(editConfig, projectId)}>Save</button>
+      <button type="button" onClick={onSave(projectId)}>Save</button>
     </div>
   ) : (
     <Spinner/>
@@ -56,7 +57,7 @@ ProjectConfig.propTypes = {
 
 const mapStateToProps = ({selectedProject: {repository}, config}) => ({repository, config})
 const mapDispatchToProps = dispatch => ({
-  onSave: (config, projectId) => () => dispatch(saveConfig(config, projectId)),
+  onSave: (projectId) => () => dispatch(saveConfig(projectId)),
   onChange: (prop, branch) =>
       (e) => dispatch(updateConfigField(prop, e.target.value, branch)),
   onCheck: (prop, branch) =>

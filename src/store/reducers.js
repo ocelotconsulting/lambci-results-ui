@@ -60,6 +60,7 @@ export default (state = initialState, action) => {
             [action.branch]: {...state.config.branches[action.branch], [action.prop]: action.value}}}}
       }
       else if (action.branch){
+        console.log('this!')
         return {...state, config: {...state.config, branches: {[action.branch]: {[action.prop]: action.value}}}}
       }
       else{
