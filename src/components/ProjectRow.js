@@ -17,6 +17,12 @@ const ProjectRow = ({project: {id, lastTimestamp, repository}}) => (
     <td className='repository'>
       <RepositoryLink repository={repository}/>
     </td>
+    <td className='config'>
+      <Link to={`/projects/${encode(id)}/config`}>
+        <i className='fa fa-cog'/>
+        {' configure'}
+      </Link>
+    </td>
   </tr>
 )
 

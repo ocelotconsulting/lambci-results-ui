@@ -8,6 +8,7 @@ const ProjectTable = ({projects}) => (
       <th>Project ID</th>
       <th>Last Built</th>
       <th>Repository</th>
+      <th/>
     </tr>
     </thead>
     <tbody>
