@@ -14,19 +14,23 @@ const dateTimeString = (endDate) => {
 }
 
 const renderTime = (startedAt, endedAt) => {
-  const end = moment(endedAt)
-  const duration = moment.duration(end - moment(startedAt))
-  const hours = Math.floor(duration.asHours())
-  const minutes = duration.minutes()
-  const seconds = duration.seconds()
+  if (endedAt) {
+    const end = moment(endedAt)
+    const duration = moment.duration(end - moment(startedAt))
+    const hours = Math.floor(duration.asHours())
+    const minutes = duration.minutes()
+    const seconds = duration.seconds()
 
-  const pl = v => v === 1 ? '' : 's'
+    const pl = v => v === 1 ? '' : 's'
 
-  const hourString = hours > 0 ? `${hours} hour${pl(hours)}, ` : ''
+    const hourString = hours > 0 ? `${hours} hour${pl(hours)}, ` : ''
 
-  const minuteString = hours > 0 || minutes > 0 ? `${minutes} minute${pl(minutes)}, ` : ''
+    const minuteString = hours > 0 || minutes > 0 ? `${minutes} minute${pl(minutes)}, ` : ''
 
-  return `${dateTimeString(end.toDate())} (${hourString}${minuteString}${seconds} second${pl(seconds)})`
+    return `${dateTimeString(end.toDate())} (${hourString}${minuteString}${seconds} second${pl(seconds)})`
+  } else {
+    return dateTimeString(moment(startedAt).toDate())
+  }
 }
 
 const BuildRow = ({projectId, repository, build: {
