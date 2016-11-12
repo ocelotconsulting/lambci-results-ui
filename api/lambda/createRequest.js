@@ -1,2 +1,2 @@
-module.exports = ({params, body, headers}) =>
-  ({params, body: body && JSON.parse(body), headers})
+module.exports = ({params, body, headers, query}) =>
+  ({params, body: body && JSON.parse(body), headers, query})

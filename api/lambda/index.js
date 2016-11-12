@@ -18,13 +18,14 @@ const findRoute = (httpMethod, path) => {
   return params && {params, handler}
 }
 
-exports.handler = ({httpMethod, path, body, headers}, context, callback) => {
+exports.handler = ({httpMethod, path, body, headers, queryStringParameters}, context, callback) => {
   const {params, handler} = findRoute(httpMethod, path)
+  const query = queryStringParameters || {}
 
   const res = createResponse(callback)
 
   if (params) {
-    handler(createRequest({params, body, headers}), res, error =>
+    handler(createRequest({params, body, headers, query}), res, error =>
       res.status(500).type('text/plain').send(
         `An unexpected error occurred: ${error.message || JSON.stringify(error)}`
       )
