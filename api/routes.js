@@ -1,6 +1,3 @@
-const AWS = require('aws-sdk')
-const {region} = require('./config')
-AWS.config.update({region})
 const Path = require('./Path')
 
 const routes = [
