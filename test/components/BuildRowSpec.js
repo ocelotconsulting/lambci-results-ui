@@ -21,7 +21,7 @@ describe('BuildRow', () => {
 
     build = {
       buildNum: 3,
-      endedAt: endedAt,
+      endedAt,
       startedAt: moment(endedAt).subtract(3, 's'),
       status: 'success',
       checkoutBranch: 'master',
