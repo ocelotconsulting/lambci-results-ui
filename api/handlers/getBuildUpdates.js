@@ -1,5 +1,5 @@
 const queryBuilds = require('./queryBuilds')
-const fromPairs = require('lodash/fromPairs')
+const sortBy = require('lodash/sortBy')
 const compact = require('lodash/compact')
 
 const defaultBuildParams = (projectId, buildNum, operator = 'EQ') => ({
@@ -66,7 +66,7 @@ module.exports = ({query, params: {projectId}}, res, next) => {
       getNewBuilds(projectId, lastBuildNum)
     ])
     .then(([updates, newBuilds]) =>
-      res.json(fromPairs(updates.concat(newBuilds).map(build => [build.buildNum, build])))
+      res.json(sortBy(updates.concat(newBuilds), ({buildNum}) => -1 * buildNum))
     )
     .catch(next)
   }
