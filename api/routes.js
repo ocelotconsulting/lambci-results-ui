@@ -10,6 +10,10 @@ const routes = [
     get: require('./handlers/getBuilds')
   },
   {
+    path: '/projects/:projectId/builds/:buildNum',
+    get: require('./handlers/getBuild')
+  },
+  {
     path: '/projects/:projectId/config',
     get: require('./handlers/getBuildConfig'),
     put: require('./handlers/putBuildConfig')

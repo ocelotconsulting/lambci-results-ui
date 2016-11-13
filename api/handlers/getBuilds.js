@@ -1,17 +1,11 @@
 const {stackName} = require('./../config')
 const dynamoClient = require('./dynamoClient')
-const listS3Folder = require('./listS3Folder')
+const addBuildFiles = require('./addBuildFiles')
 const getResultsBucket = require('./getResultsBucket')
-const map = require('lodash/map')
-const sortBy = require('lodash/sortBy')
 
 const defaultPageSize = 20
 
 const getBuilds = (bucket, projectId, lastBuildNum, pageSize) => {
-  const withFiles = build =>
-    listS3Folder(bucket, `${projectId}/builds/${build.buildNum}`)
-    .then(({files}) => Object.assign(build, {files: map(files, 'name')}))
-
   const exclusiveStartKey = lastBuildNum ? {
     ExclusiveStartKey: {
       project: projectId,
@@ -28,9 +22,7 @@ const getBuilds = (bucket, projectId, lastBuildNum, pageSize) => {
       },
       buildNum: {
         ComparisonOperator: 'GT',
-        AttributeValueList: [
-          0
-        ]
+        AttributeValueList: [0]
       }
     },
     ScanIndexForward: false,
@@ -39,14 +31,14 @@ const getBuilds = (bucket, projectId, lastBuildNum, pageSize) => {
 
   return dynamoClient.query(parameters).promise()
   .then(({Items}) =>
-    Promise.all(Items.map(withFiles))
+    Promise.all(Items.map(build => addBuildFiles(bucket, build)))
   )
 }
 
-const parse = queryParameter => queryParameter && parseInt(queryParameter, 10)
+const intParam = parameterValue => parameterValue && parseInt(parameterValue, 10)
 
 module.exports = ({params: {projectId}, query: {lastBuildNum, pageSize}}, res, next) =>
   getResultsBucket()
-  .then(bucket => getBuilds(bucket, projectId, parse(lastBuildNum), parse(pageSize)))
+  .then(bucket => getBuilds(bucket, projectId, intParam(lastBuildNum), intParam(pageSize)))
   .then(items => res.json(items))
   .catch(next)
