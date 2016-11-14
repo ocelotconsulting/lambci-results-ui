@@ -3,10 +3,11 @@ import {Builds} from '../../src/components/Builds'
 import {shallow} from 'enzyme'
 
 describe('Builds', () => {
-  let repository, builds, projectId, sleeping, onWakeUp
+  let repository, builds, projectId, sleeping, lastTimestamp, onWakeUp
 
   const render = () => shallow(
-    <Builds builds={builds} repository={repository} params={{projectId}} sleeping={sleeping} onWakeUp={onWakeUp}/>
+    <Builds builds={builds} repository={repository} lastTimestamp={lastTimestamp}
+            params={{projectId}} sleeping={sleeping} onWakeUp={onWakeUp}/>
   )
 
   beforeEach(() => {
@@ -14,6 +15,7 @@ describe('Builds', () => {
     projectId = 'foo bar'
     builds = [{id: 1}]
     sleeping = false
+    lastTimestamp = Date.now()
     onWakeUp = sinon.stub()
   })
 
@@ -60,9 +62,8 @@ describe('Builds', () => {
       overlay.length.should.equal(1)
     })
 
-    it('passes onWakeUp prop to overlay', () => {
-      overlay.prop('onWakeUp').should.equal(onWakeUp)
+    it('passes onWakeUp and lastTimestamp props to overlay', () => {
+      overlay.props().should.eql({onWakeUp, lastTimestamp})
     })
-
   })
 })
