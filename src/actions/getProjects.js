@@ -1,6 +1,6 @@
 import {GET_PROJECTS} from './types'
-import getAction from '../getAction'
-import getRepository from '../getRepository'
+import getAction from './getAction'
+import getRepository from '../store/getRepository'
 
 const withRepositories = projects => projects.map(p => {
   p.repository = getRepository(p.id)

@@ -1,10 +1,12 @@
-import {createStore, applyMiddleware} from 'redux'
+import {createStore, applyMiddleware, combineReducers} from 'redux'
 import thunk from 'redux-thunk'
-import reducers from './reducers'
 import createLogger from 'redux-logger'
+import builds from './builds'
+import config from './config'
+import projects from './projects'
 
 const logger = createLogger()
 
 export default () =>
-  createStore(reducers, applyMiddleware(thunk, logger))
+  createStore(combineReducers({builds, config, projects}), applyMiddleware(thunk, logger))
 

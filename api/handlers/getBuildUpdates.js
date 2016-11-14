@@ -26,15 +26,13 @@ const parseQuery = query => {
   const lastBuildNum = parseInt(query.lastBuildNum, 10)
   const buildNums = (query.buildNums && query.buildNums.split(',').map(n => parseInt(n, 10))) || []
 
-  const isValid = buildNum => buildNum > 0
-
-  if (!isValid(lastBuildNum)) {
+  if (!(lastBuildNum >= 0)) {
     return {
-      error: `Query parameter lastBuildNum must be a positive number; was ${query.lastBuildNum}`
+      error: `Query parameter 'lastBuildNum' must be a non-negative number; was ${query.lastBuildNum}`
     }
-  } else if (!buildNums.every(isValid)) {
+  } else if (!buildNums.every(n => n > 0)) {
     return {
-      error: `Optional query parameter buildNums must be a CSV of positive integers; was ${query.buildNums}`
+      error: `Optional query parameter 'buildNums' must be a CSV of positive integers; was ${query.buildNums}`
     }
   } else {
     return {lastBuildNum, buildNums}

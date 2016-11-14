@@ -1,8 +1,0 @@
-export const GET_PROJECTS = 'GET_PROJECTS'
-export const SELECT_PROJECT = 'SELECT_PROJECT'
-export const GET_BUILDS = 'GET_BUILDS'
-export const REFRESH_BUILDS = 'REFRESH_BUILDS'
-export const GET_CONFIG = 'GET_CONFIG'
-export const UPDATE_CONFIG = 'UPDATE_CONFIG'
-export const ADD_BRANCH_CONFIG = 'ADD_BRANCH_CONFIG'
-export const SAVE_CONFIG = 'SAVE_CONFIG'

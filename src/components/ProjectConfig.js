@@ -3,12 +3,11 @@ import Spinner from './Spinner'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import RepositoryLink from './RepositoryLink'
-import updateConfigField from '../store/actions/updateConfigField'
-import saveConfig from '../store/actions/saveConfig'
-import addBranchConfig from '../store/actions/addBranchConfig'
+import updateConfigField from '../actions/updateConfigField'
+import saveConfig from '../actions/saveConfig'
+import addBranchConfig from '../actions/addBranchConfig'
 
 const ProjectConfig = ({repository, config, onChange, onCheck, addBranchConfig, params: {projectId, branch}, onSave}) => {
-  console.log('c', config)
   const editConfig = config && branch ?  config.branches ? config.branches[branch] : {}  : config
   return config ? (
     <div className='container'>
@@ -52,17 +51,24 @@ ProjectConfig.displayName = 'ProjectConfig'
 ProjectConfig.propTypes = {
   config: T.object,
   repository: T.object.isRequired,
-  onSave: T.func.isRequired
+  onSave: T.func.isRequired,
+  onChange: T.func.isRequired,
+  onCheck: T.func.isRequired,
+  addBranchConfig: T.func.isRequired
 }
 
-const mapStateToProps = ({selectedProject: {repository}, config}) => ({repository, config})
+const mapStateToProps = ({projects: {selected: {repository}}, config: {value}}) =>
+  ({repository, config: value})
+
+const onChange = (prop, branch, targetProperty = 'value') =>
+  ({target}) =>
+    dispatch(updateConfigField(prop, target[targetProperty], branch))
+
 const mapDispatchToProps = dispatch => ({
   onSave: (projectId) => () => dispatch(saveConfig(projectId)),
-  onChange: (prop, branch) =>
-      (e) => dispatch(updateConfigField(prop, e.target.value, branch)),
-  onCheck: (prop, branch) =>
-      (e) => dispatch(updateConfigField(prop, e.target.checked, branch)),
-  addBranchConfig: (e) => dispatch(addBranchConfig())
+  onChange: (prop, branch) => onChange(prop, branch),
+  onCheck: (prop, branch) => onChange(prop, branch, 'checked'),
+  addBranchConfig: () => dispatch(addBranchConfig())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectConfig)

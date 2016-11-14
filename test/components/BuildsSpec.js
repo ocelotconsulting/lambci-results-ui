@@ -3,19 +3,18 @@ import {Builds} from '../../src/components/Builds'
 import {shallow} from 'enzyme'
 
 describe('Builds', () => {
-  let onRefresh, repository, refreshTime, builds, projectId
+  let repository, builds, projectId, sleeping, onWakeUp
 
   const render = () => shallow(
-    <Builds builds={builds} onRefresh={onRefresh} repository={repository}
-            refreshTime={refreshTime} params={{projectId}}/>
+    <Builds builds={builds} repository={repository} params={{projectId}} sleeping={sleeping} onWakeUp={onWakeUp}/>
   )
 
   beforeEach(() => {
-    onRefresh = sinon.stub()
     repository = {}
-    refreshTime = 0
     projectId = 'foo bar'
     builds = [{id: 1}]
+    sleeping = false
+    onWakeUp = sinon.stub()
   })
 
   describe('when builds is missing', () => {
@@ -24,9 +23,9 @@ describe('Builds', () => {
     })
 
     it('displays spinner', () => {
-        const wrapper = render()
-        wrapper.find('.builds').length.should.equal(0)
-        wrapper.find('Spinner').length.should.equal(1)
+      const wrapper = render()
+      wrapper.find('.builds').length.should.equal(0)
+      wrapper.find('Spinner').length.should.equal(1)
     })
   })
 
@@ -49,43 +48,20 @@ describe('Builds', () => {
     })
   })
 
-  describe('with refresh enabled', () => {
-    let wrapper
+  describe('when sleeping', () => {
+    let overlay
 
     beforeEach(() => {
-      onRefresh.resolves()
-      refreshTime = 1
-      wrapper = render()
+      sleeping = true
+      overlay = render().find('SleepOverlay')
     })
 
-    const unmount = () => wrapper && wrapper.instance().componentWillUnmount()
-
-    afterEach((done) => {
-      unmount()
-      setTimeout(done, 1)
+    it('renders overlay', () => {
+      overlay.length.should.equal(1)
     })
 
-    it('refreshes', (done) => {
-      setTimeout(() => {
-        onRefresh.should.have.been.calledWithExactly()
-        done()
-      }, 1)
-    })
-
-    it('refreshes again after original refresh completes', (done) => {
-      setTimeout(() => {
-        onRefresh.callCount.should.be.greaterThan(1)
-        done()
-      }, 50)
-    })
-
-    it('does not refresh if component is unmounted', (done) => {
-      unmount()
-      setTimeout(() => {
-        //noinspection BadExpressionStatementJS
-        onRefresh.should.not.have.been.called
-        done()
-      }, 0)
+    it('passes onWakeUp prop to overlay', () => {
+      overlay.prop('onWakeUp').should.equal(onWakeUp)
     })
 
   })

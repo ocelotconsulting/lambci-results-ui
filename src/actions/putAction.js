@@ -7,8 +7,5 @@ export default (dispatch, actionId, url, body) => {
   .then(({body}) => {
     dispatch({type: actionId, status: 'done', result: body})
   })
-  .catch(error => {
-    error.stack && console.error(error.stack)
-    dispatch({type: actionId, status: 'error', error})
-  })
+  .catch(error => dispatch({type: actionId, status: 'error', error}))
 }

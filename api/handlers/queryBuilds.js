@@ -11,9 +11,7 @@ const addBuildFiles = (bucket, build) =>
     Object.assign(build, {files: map(files, 'name')})
   )
 
-const tableParameter = {
-  TableName: `${stackName}-builds`,
-}
+const tableParameter = {TableName: `${stackName}-builds`}
 
 module.exports = ({parameters, includeFiles}) =>
   Promise.all(compact([

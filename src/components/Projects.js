@@ -18,7 +18,7 @@ Projects.propTypes = {
   projects: T.arrayOf(T.object)
 }
 
-const mapStateToProps = ({projects}) => ({projects})
+const mapStateToProps = ({projects: {all}}) => ({projects: all})
 
 export default connect(mapStateToProps, () => ({}))(Projects)
 

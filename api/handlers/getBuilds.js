@@ -18,7 +18,7 @@ const getParams = (projectId, {lastBuildNum, pageSize}) => Object.assign(
       },
       buildNum: {
         ComparisonOperator: 'GT',
-        AttributeValueList: [lastBuildNum]
+        AttributeValueList: [0]
       }
     },
     ScanIndexForward: false,
