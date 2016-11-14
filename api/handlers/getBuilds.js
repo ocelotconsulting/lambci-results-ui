@@ -1,4 +1,6 @@
 const queryBuilds = require('./queryBuilds')
+const projectExists = require('./projectExists')
+const projectNotFound = require('./projectNotFound')
 
 const defaultPageSize = 20
 
@@ -32,10 +34,18 @@ const getParams = (projectId, {lastBuildNum, pageSize}) => Object.assign(
   } : {}
 )
 
-module.exports = ({params: {projectId}, query}, res, next) =>
+const getBuilds = (projectId, query) =>
   queryBuilds({
     parameters: getParams(projectId, parseQueryParams(query))
   })
-  .then(builds => res.json(builds))
+  .then(builds =>
+    builds.length ? builds : projectExists(projectId).then(exists => exists && [])
+  )
+
+module.exports = ({params: {projectId}, query}, res, next) =>
+  getBuilds(projectId, query)
+  .then(builds =>
+    builds ? res.json(builds) : projectNotFound(res, projectId)
+  )
   .catch(next)
 

@@ -1,5 +1,7 @@
 const {stackName} = require('./../config')
 const dynamoClient = require('./dynamoClient')
+const projectExists = require('./projectExists')
+const projectNotFound = require('./projectNotFound')
 
 const fields = ['branches', 'build', 'cmd', 'env', 'notifications', 'project', 's3Bucket']
 
@@ -9,8 +11,8 @@ const toConfig = item =>
     return p
   }, {})
 
-module.exports = ({params: {projectId}}, res, next) => {
-  return dynamoClient.query({
+const getConfig = projectId =>
+  dynamoClient.query({
     TableName: `${stackName}-config`,
     KeyConditions: {
       project: {
@@ -20,7 +22,10 @@ module.exports = ({params: {projectId}}, res, next) => {
     }
   }).promise()
   .then(({Items: [item]}) =>
-    res.json((item && toConfig(item)) || {project: projectId})
+    (item && toConfig(item)) || projectExists(projectId).then(exists => exists && ({project: projectId}))
   )
+
+module.exports = ({params: {projectId}}, res, next) =>
+  getConfig(projectId)
+  .then(config => config ? res.json(config) : projectNotFound(res, projectId))
   .catch(next)
-}
