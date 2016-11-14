@@ -22,7 +22,8 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': '"production"'
+        NODE_ENV: '"production"',
+        API_BASE_URL: `"${process.env.API_BASE_URL || '/api'}"`
       }
     }),
     new webpack.optimize.UglifyJsPlugin()

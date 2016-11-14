@@ -9,21 +9,20 @@ module.exports = callback => {
   const end = () => callback(null, {statusCode, body, headers})
 
   return {
-    // shorthand like 'json' and 'html' not supported
-    type: mimeType => {
+    type(mimeType) {
       headers['Content-Type'] = mimeType
       return this
     },
-    status: code => {
+    status(code) {
       statusCode = code
       return this
     },
-    json: (object) => {
+    json(object) {
       body = JSON.stringify(object)
       headers['Content-Type'] = 'application/json'
       end()
     },
-    send: (textBody = '') => {
+    send(textBody = '') {
       body = textBody
       end()
     }

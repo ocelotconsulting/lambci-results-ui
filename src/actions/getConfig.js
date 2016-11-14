@@ -5,5 +5,5 @@ import encode from '../encode'
 export default (projectId, branch) =>
   dispatch => {
     dispatch({type: SELECT_PROJECT, projectId})
-    getAction(dispatch, GET_CONFIG, `/api/projects/${encode(projectId)}/config`, (res) => ({...res, branch: branch}))
+    getAction(dispatch, GET_CONFIG, `/projects/${encode(projectId)}/config`, (res) => ({...res, branch: branch}))
   }

@@ -4,7 +4,7 @@ import {REFRESH_BUILDS} from './types'
 import encode from '../encode'
 import agent from '../agent'
 import queryString from 'query-string'
-
+import {apiBaseUrl} from '../config'
 
 export default (refreshBuildsLater, projectId) =>
   (dispatch, getState) => {
@@ -26,7 +26,7 @@ export default (refreshBuildsLater, projectId) =>
       buildNums: buildNums || undefined
     }
 
-    agent.get(`/api/projects/${encode(projectId)}/build-updates?${queryString.stringify(query)}`)
+    agent.get(`${apiBaseUrl}/projects/${encode(projectId)}/build-updates?${queryString.stringify(query)}`)
     .then(({body}) => {
       if (isEnabled()) {
         dispatch({type: REFRESH_BUILDS, result: body})

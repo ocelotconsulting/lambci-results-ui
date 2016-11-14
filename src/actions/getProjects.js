@@ -9,4 +9,4 @@ const withRepositories = projects => projects.map(p => {
 
 export default () =>
   dispatch =>
-    getAction(dispatch, GET_PROJECTS, `/api/projects`, withRepositories)
+    getAction(dispatch, GET_PROJECTS, 'projects', withRepositories)

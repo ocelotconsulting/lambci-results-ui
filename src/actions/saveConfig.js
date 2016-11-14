@@ -12,8 +12,8 @@ export default (projectId, branch) =>
       }
       return p
     }, {})
-    
+
     const editedConfig = {...editing, env: parsedEnv}
     const projectConfig = branch ? {...value, branches: {...value.branches, [branch]: editedConfig}} : Object.assign({}, value, editedConfig)
-    putAction(dispatch, SAVE_CONFIG, `/api/projects/${encode(projectId)}/config`, projectConfig)
+    putAction(dispatch, SAVE_CONFIG, `/projects/${encode(projectId)}/config`, projectConfig)
   }
