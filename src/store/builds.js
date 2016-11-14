@@ -10,7 +10,7 @@ const initialState = {
     enabled: false,
     waitTime: 15 * 1000,
     sleepCount: 0,
-    sleepThreshold: 2,
+    sleepThreshold: 20,
     lastTimestamp: 0 // this will suppress a console error on initial render
   }
 }
