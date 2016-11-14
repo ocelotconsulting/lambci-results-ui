@@ -10,7 +10,8 @@ const initialState = {
     enabled: false,
     waitTime: 15 * 1000,
     sleepCount: 0,
-    sleepThreshold: 20
+    sleepThreshold: 2,
+    lastTimestamp: 0 // this will suppress a console error on initial render
   }
 }
 
@@ -53,9 +54,10 @@ export default (state = initialState, action) => {
     case REFRESH_BUILDS: {
       // after 10 successive refreshes with no new changes go to sleep
       const sleepCount = action.result.length ? 0: state.refresh.sleepCount + 1
+      const lastTimestamp = Date.now()
       return {
         ...state,
-        refresh: refresh({sleepCount}),
+        refresh: refresh({sleepCount, lastTimestamp}),
         value: refreshBuilds(state.value, action.result, state.pageSize)
       }
     }

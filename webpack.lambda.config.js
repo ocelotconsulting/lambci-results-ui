@@ -1,7 +1,9 @@
+const webpack = require('webpack')
+
 module.exports = {
   entry: './api/lambda/index.js',
   output: {
-    path: 'lambda',
+    path: 'dist',
     libraryTarget: 'commonjs2',
     filename: 'lambdaApi.js'
   },
@@ -21,5 +23,13 @@ module.exports = {
         loader: 'json',
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        LAMBCI_STACK_NAME: `"${process.env.LAMBCI_STACK_NAME}"`
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin()
+  ]
 }

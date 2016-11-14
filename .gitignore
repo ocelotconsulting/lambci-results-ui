@@ -1,5 +1,6 @@
-.idea
+/.idea
 /node_modules
-.DS_Store
 /public
 /npm-debug.log
+/dist
+.DS_Store

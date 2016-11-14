@@ -4,5 +4,5 @@ import encode from '../encode'
 
 export default (projectId) =>
   (dispatch, getState) => {
-    putAction(dispatch, SAVE_CONFIG, `/api/projects/${encode(projectId)}/config`, getState().config.value)
+    putAction(dispatch, SAVE_CONFIG, `projects/${encode(projectId)}/config`, getState().config.value)
   }
