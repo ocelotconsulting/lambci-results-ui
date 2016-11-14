@@ -7,10 +7,11 @@ import updateConfigField from '../actions/updateConfigField'
 import saveConfig from '../actions/saveConfig'
 import addBranchConfig from '../actions/addBranchConfig'
 
+const configName = (branch) => branch ? <small>Branch Configuration '{branch}'</small> : <small>Project Configuration</small>
+
 const ProjectConfig = ({repository, config, onChange, onCheck, addBranchConfig, params: {projectId, branch}, onSave}) => {
-  const editConfig = config && branch ?  config.branches ? config.branches[branch] : {}  : config
   return config ? (
-    <div className='container'>
+    <div className='container config'>
       <ol className="breadcrumb">
         <li>
           <Link to='/projects'>Projects</Link>
@@ -22,25 +23,29 @@ const ProjectConfig = ({repository, config, onChange, onCheck, addBranchConfig, 
       <h3>
         <RepositoryLink repository={repository}/>
         {' '}
-        <small>config</small>
+        {configName(branch)}
       </h3>
 
-      <div className="configProperty">
-        <div>Command</div>
-        <textarea value={ editConfig.cmd || ''} onChange={onChange('cmd', branch)} placeholder='Default'/>
+      <div>
+        <label for="build">Build</label>
+        <input name="build" type='checkbox' checked={config.build || false} onChange={onCheck('build', branch)} />
       </div>
 
-      <div className="configProperty">
-        <div>Environment Variables</div>
-        <textarea value={ editConfig.env || ''} onChange={onChange('env', branch)} placeholder='None'/>
+      <div>
+        <div>
+          <label>Command</label>
+        </div>
+        <textarea name="cmd" value={ config.cmd || ''} onChange={onChange('cmd', branch)} placeholder='Default'/>
       </div>
 
-      <div className="configProperty">
-        <div>Build</div>
-        <input type='checkbox' checked={editConfig.build} onChange={onCheck('build', branch)} />
+      <div>
+        <div>
+          <label>Environment Variables</label>
+        </div>
+        <textarea name="env" value={ config.env || ''} onChange={onChange('env', branch)} placeholder='Default'/>
       </div>
 
-      <button type="button" onClick={onSave(projectId)}>Save</button>
+      <button type="button" onClick={onSave(projectId, branch)}>Save</button>
     </div>
   ) : (
     <Spinner/>
@@ -57,18 +62,19 @@ ProjectConfig.propTypes = {
   addBranchConfig: T.func.isRequired
 }
 
-const mapStateToProps = ({projects: {selected: {repository}}, config: {value}}) =>
-  ({repository, config: value})
+const mapStateToProps = ({projects: {selected: {repository}}, config: {editing}}) =>
+  ({repository, config: editing})
 
-const onChange = (prop, branch, targetProperty = 'value') =>
-  ({target}) =>
-    dispatch(updateConfigField(prop, target[targetProperty], branch))
-
-const mapDispatchToProps = dispatch => ({
-  onSave: (projectId) => () => dispatch(saveConfig(projectId)),
-  onChange: (prop, branch) => onChange(prop, branch),
-  onCheck: (prop, branch) => onChange(prop, branch, 'checked'),
-  addBranchConfig: () => dispatch(addBranchConfig())
-})
+const mapDispatchToProps = dispatch => {
+  const onChange = (prop, targetProperty = 'value') =>
+    ({target}) =>
+      dispatch(updateConfigField(prop, target[targetProperty]))
+   return {
+    onSave: (projectId, branch) => () => dispatch(saveConfig(projectId, branch)),
+    onChange: (prop, branch) => onChange(prop),
+    onCheck: (prop, branch) => onChange(prop, 'checked'),
+    addBranchConfig: () => dispatch(addBranchConfig())
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectConfig)

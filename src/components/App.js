@@ -16,7 +16,7 @@ const App = ({onProjectSelected, onConfigSelected, onLoadProjects, onLeaveBuildP
     <Route path='/projects/:projectId/config' component={ProjectConfig}
            onEnter={({params: {projectId}}) => onConfigSelected(projectId)}/>
     <Route path='/projects/:projectId/config/:branch' component={ProjectConfig}
-           onEnter={({params: {projectId}}) => onConfigSelected(projectId)}/>
+           onEnter={({params: {projectId, branch}}) => onConfigSelected(projectId, branch)}/>
     <Route path='/projects/:projectId/builds' component={Builds}
            onEnter={({params: {projectId}}) => onProjectSelected(projectId)}
            onLeave={onLeaveBuildPage}/>
@@ -35,7 +35,7 @@ App.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   onLoadProjects: () => dispatch(getProjects()),
-  onConfigSelected: projectId => dispatch(getConfig(projectId)),
+  onConfigSelected: (projectId, branch) => dispatch(getConfig(projectId, branch)),
   onProjectSelected: projectId => {
     dispatch(setBuildRefreshEnabled(true))
     dispatch(getBuilds(projectId))

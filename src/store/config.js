@@ -7,54 +7,23 @@ export default (state = initialState, action) => {
     case GET_CONFIG: {
       switch (action.status) {
         case 'start':
-          return {...state, value: undefined, error: undefined}
+          return {...state, value: undefined, editing: undefined, error: undefined}
         case 'error':
           return {...state, error: action.error}
         case 'done':
-          return {...state, value: action.result}
+          const {result} = action
+          const editing = result.branch ? result.branches ? result.branches[result.branch] : {} : result
+          const env = Object.keys(editing.env || {}).sort().map((key)=>`${key}=${editing.env[key]}`).join('\n')
+          return {...state, value: action.result, editing: {...editing, env: env}}
         default:
           return state
       }
     }
     case UPDATE_CONFIG: {
-      const {value} = state
-      if (action.branch) {
-        const branches = value.branches || {}
-        const branch = branches[action.branch] || {}
-        return {
-          ...state,
-          value: {
-            ...value,
-            branches: {
-              ...branches,
-              [action.branch]: {
-                ...branch,
-                [action.prop]: action.value
-              }
-            }
-          }
-        }
-      } else {
-        return {
-          ...state,
-          value: {
-            ...value,
-            [action.prop]: action.value
-          }
-        }
-      }
-    }
-    case ADD_BRANCH_CONFIG: {
-      const {value} = state
-      const branches = value.branches || {}
       return {
         ...state,
-        value: {
-          ...value,
-          branches: {
-            ...branches,
-            [action.branch]: {build: true}
-          }
+        editing: {...state.editing,
+          [action.prop]: action.value
         }
       }
     }
