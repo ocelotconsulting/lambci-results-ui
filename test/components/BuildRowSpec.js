@@ -2,6 +2,7 @@ import React from 'react'
 import BuildRow from '../../src/components/BuildRow'
 import {shallow} from 'enzyme'
 import moment from 'moment'
+import {expectedBuildTableColumnCount} from './expectedColumnCounts'
 
 describe('BuildRow', () => {
   let {projectId, repository, build} = {}
@@ -29,6 +30,12 @@ describe('BuildRow', () => {
       commit: '123',
       user: 'user1'
     }
+  })
+
+  describe('column count', () => {
+    it(`renders ${expectedBuildTableColumnCount} columns`, () => {
+      render().find('tr').children().length.should.equal(expectedBuildTableColumnCount)
+    })
   })
 
   describe('BuildColumn', () => {

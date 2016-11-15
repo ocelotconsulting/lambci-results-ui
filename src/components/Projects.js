@@ -3,7 +3,7 @@ import Spinner from './Spinner'
 import ProjectTable from './ProjectTable'
 import {connect} from 'react-redux'
 
-const Projects = ({projects}) => projects ? (
+export const Projects = ({projects}) => projects ? (
   <div className='container'>
     <h3>Projects</h3>
     <ProjectTable projects={projects}/>
@@ -18,7 +18,7 @@ Projects.propTypes = {
   projects: T.arrayOf(T.object)
 }
 
-const mapStateToProps = ({projects: {all}}) => ({projects: all})
+export const mapStateToProps = ({projects: {all}}) => ({projects: all})
 
 export default connect(mapStateToProps, () => ({}))(Projects)
 

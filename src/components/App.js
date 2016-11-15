@@ -10,7 +10,7 @@ import getConfig from '../actions/getConfig'
 import setBuildRefreshEnabled from '../actions/setBuildRefreshEnabled'
 import history from '../history'
 
-const App = ({onProjectSelected, onConfigSelected, onLoadProjects, onLeaveBuildPage}) => (
+export const App = ({onProjectSelected, onConfigSelected, onLoadProjects, onLeaveBuildPage}) => (
   <Router history={history}>
     <Route path='/projects' component={Projects} onEnter={onLoadProjects}/>
     <Route path='/projects/:projectId/config' component={ProjectConfig}
@@ -33,7 +33,7 @@ App.propTypes = {
   onLeaveBuildPage: T.func.isRequired
 }
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   onLoadProjects: () => dispatch(getProjects()),
   onConfigSelected: (projectId, branch) => dispatch(getConfig(projectId, branch)),
   onProjectSelected: projectId => {

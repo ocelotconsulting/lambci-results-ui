@@ -1,8 +1,6 @@
 import React, {PropTypes as T} from 'react'
 import moment from 'moment'
 
-const tickDuration = 5 * 1000
-
 class SleepOverlay extends React.Component {
   constructor(...args) {
     super(...args)
@@ -16,7 +14,7 @@ class SleepOverlay extends React.Component {
   }
 
   tickLater() {
-    this.timeoutId = setTimeout(this.tick, tickDuration)
+    this.timeoutId = setTimeout(this.tick, this.props.tickDuration)
   }
 
   componentDidMount() {
@@ -50,7 +48,12 @@ class SleepOverlay extends React.Component {
 
 SleepOverlay.propTypes = {
   lastTimestamp: T.number.isRequired,
-  onWakeUp: T.func.isRequired
+  onWakeUp: T.func.isRequired,
+  tickDuration: T.number
+}
+
+SleepOverlay.defaultProps = {
+  tickDuration: 5 * 1000
 }
 
 SleepOverlay.displayName = 'SleepOverlay'

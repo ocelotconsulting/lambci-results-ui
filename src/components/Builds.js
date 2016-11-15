@@ -7,7 +7,7 @@ import RepositoryLink from './RepositoryLink'
 import SleepOverlay from './SleepOverlay'
 import wakeBuildRefresh from '../actions/wakeBuildRefresh'
 
-const Builds = ({repository, builds, sleeping, lastTimestamp, onWakeUp, params: {projectId}}) => builds ? (
+export const Builds = ({repository, builds, sleeping, lastTimestamp, onWakeUp, params: {projectId}}) => builds ? (
   <div className='container builds'>
     {
       sleeping ? (<SleepOverlay lastTimestamp={lastTimestamp} onWakeUp={onWakeUp}/>) : undefined
@@ -43,17 +43,15 @@ Builds.propTypes = {
   builds: T.arrayOf(T.object)
 }
 
-const mapStateToProps = ({projects: {selected: {repository}}, builds: {value, refresh}}) => ({
+export const mapStateToProps = ({projects: {selected: {repository}}, builds: {value, refresh}}) => ({
   repository,
   builds: value,
   sleeping: refresh.sleepCount >= refresh.sleepThreshold,
   lastTimestamp: refresh.lastTimestamp
 })
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   onWakeUp: () => dispatch(wakeBuildRefresh())
 })
-
-export {Builds}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Builds)
