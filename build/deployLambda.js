@@ -26,7 +26,7 @@ const createArchive = () => new Promise((resolve, reject) => {
 })
 
 const updateLambdaFunction = () => {
-  const lambdaFunctionName = process.env.API_LAMBDA_FUNCTION_NAME || 'lambci-ui-api'
+  const lambdaFunctionName = process.env.API_LAMBDA_FUNCTION || 'lambci-ui-api'
 
   const lambda = new AWS.Lambda()
 

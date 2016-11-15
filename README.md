@@ -16,7 +16,7 @@ This is a brand new project.  Some enhancements we hope to add:
 + An [AWS](https://aws.amazon.com) account or login plus the necessary permissions to perform the steps outlined below.
 + An existing [lambci](https://github.com/lambci/lambci) CloudFormation stack.
 
-## Quick Setup for server-less execution
+## Quick Setup for serverless execution
 
 ### Lambda and API Gateway setup
 
@@ -49,7 +49,8 @@ npm run deploy-ui
 ### Deploying the Lambda Function
 
 + You should have created a new IAM role for your new lambda function.  Ensure that this role can do the following:
-    + Read and write to the *(stack name)*-config dynamo DB table.
+    + Read and write to the *(stack name)*-config dynamoDB table.
+    + Read from the *(stack name)*-builds dynamoDB table.
     + List and read objects in the S3 bucket for the lambci stack (you can find the bucket name in the *(stack name)*-config table under the 'global' project.
 + Configure your [aws credentials](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) for the build script.  The credentials must have the ability to updated the lambda function you created for the API.
 + Build and deploy the lambda function:
@@ -57,7 +58,7 @@ npm run deploy-ui
 ```
 export LAMBCI_STACK_NAME=my-lambci-stack
 export AWS_REGION=...
-export API_LAMBDA_FUNCTION_NAME=lambci-ui-api
+export API_LAMBDA_FUNCTION=lambci-ui-api
 npm install # if needed
 npm run deploy-lambda
 ```
@@ -67,14 +68,26 @@ npm run deploy-lambda
 Alternatively, you can run the API and the UI using [express](expressjs.com) - this example uses environment variables for everything but you might want to consider [another approach](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html):
   
 ```
-npm install
-npm run build
-npm prune --production
 export LAMBCI_STACK_NAME=my-lambci-stack
 export AWS_REGION=...
 export AWS_ACCESS_KEY_ID=...
 export AWS_SECRET_ACCESS_KEY=...
+npm install
+npm run build
+npm prune --production
 npm start
 ```
 
+### Developing using express
+  
+Express also works in development mode:
+  
+```
+export LAMBCI_STACK_NAME=my-lambci-stack
+export AWS_REGION=...
+export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_ACCESS_KEY=...
+npm install # if needed
+npm run dev
+```
   
