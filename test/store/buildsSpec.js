@@ -7,7 +7,7 @@ import {
   WAKE_BUILD_REFRESH
 } from '../../src/actions/types'
 
-describe('builds', () => {
+describe('builds reducer', () => {
   let state, action
 
   const dispatch = () => builds(state, action)
