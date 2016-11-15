@@ -1,5 +1,9 @@
 import {
-  GET_BUILDS, SET_BUILD_REFRESH_ENABLED, REFRESH_BUILDS, SET_BUILD_REFRESH_TIMEOUT_ID, WAKE_BUILD_REFRESH
+  GET_BUILDS,
+  SET_BUILD_REFRESH_ENABLED,
+  REFRESH_BUILDS,
+  SET_BUILD_REFRESH_TIMEOUT_ID,
+  WAKE_BUILD_REFRESH
 } from '../actions/types'
 import sortBy from 'lodash/sortBy'
 import values from 'lodash/values'
@@ -31,7 +35,7 @@ const refreshBuilds = (value, updates, pageSize) => {
   }
 }
 
-export default (state = initialState, action) => {
+export default (state = initialState, action = {}) => {
   const refresh = updates => ({
     ...state.refresh,
     ...updates
@@ -53,7 +57,7 @@ export default (state = initialState, action) => {
       return {...state, refresh: refresh({enabled: action.value, timeoutId: undefined})}
     case REFRESH_BUILDS: {
       // after 10 successive refreshes with no new changes go to sleep
-      const sleepCount = action.result.length ? 0: state.refresh.sleepCount + 1
+      const sleepCount = action.result.length ? 0 : state.refresh.sleepCount + 1
       const lastTimestamp = Date.now()
       return {
         ...state,
