@@ -3,6 +3,10 @@ const createResponse = require('../../../api/lambda/createResponse')
 describe('createResponse', () => {
   let callback, res
 
+  const corsHeader = {
+    'Access-Control-Allow-Origin': '*'
+  }
+
   beforeEach(() => {
     callback = sinon.stub()
     res = createResponse(callback)
@@ -17,6 +21,7 @@ describe('createResponse', () => {
       res.type('text/html').send()
 
       callback.lastCall.args[1].headers.should.eql({
+        ...corsHeader,
         'Content-Type': 'text/html'
       })
     })
@@ -42,7 +47,7 @@ describe('createResponse', () => {
     it('sets header', () => {
       res.set('foo', 42).send()
 
-      callback.lastCall.args[1].headers.should.eql({foo: 42})
+      callback.lastCall.args[1].headers.should.eql({...corsHeader, foo: 42})
     })
   })
 
@@ -54,9 +59,7 @@ describe('createResponse', () => {
       callback.should.have.been.calledWithExactly(null, {
         statusCode: '200',
         body: JSON.stringify(body),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: {...corsHeader, 'Content-Type': 'application/json'}
       })
     })
   })
@@ -69,7 +72,7 @@ describe('createResponse', () => {
       callback.should.have.been.calledWithExactly(null, {
         statusCode: '200',
         body: message,
-        headers: {}
+        headers: corsHeader
       })
     })
   })

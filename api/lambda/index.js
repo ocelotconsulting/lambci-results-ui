@@ -20,23 +20,28 @@ const findRoute = (httpMethod, path) => {
 }
 
 exports.handler = (event, context, callback) => {
-  const {httpMethod, path} = event
-  const {params, handler} = findRoute(httpMethod, path) || {}
+  try {
+    const {httpMethod, path} = event
+    const {params, handler} = findRoute(httpMethod, path) || {}
 
-  const res = createResponse(callback)
+    const res = createResponse(callback)
 
-  if (httpMethod === 'GET') res.set('Access-Control-Allow-Origin', '*')
+    const sendError = (status, message) => res.status(status).type('text/plain').send(message)
 
-  const sendError = (status, message) => res.status(status).type('text/plain').send(message)
+    if (params) {
+      const next = error => {
+        if (error.stack) console.error(error.stack)
+        sendError(500, `An unexpected error occurred: ${error.message || JSON.stringify(error)}`)
+      }
 
-  if (params) {
-    const next = error => {
-      if (error.stack) console.error(error.stack)
-      sendError(500, `An unexpected error occurred: ${error.message || JSON.stringify(error)}`)
+      handler(createRequest(params, event), res, next)
+    } else {
+      sendError(404, `Route not found: ${httpMethod} ${path}`)
     }
-
-    handler(createRequest(params, event), res, next)
-  } else {
-    sendError(404, `Route not found: ${httpMethod} ${path}`)
+  } catch (e) {
+    callback(null, {
+      statusCode: 500,
+      body: `An unexpected error occurred: ${String(e.stack || e.message)}`
+    })
   }
 }

@@ -1,4 +1,4 @@
-const {stackName} = require('./../config')
+const {stackName} = require('../config')
 const dynamoClient = require('./dynamoClient')
 
 const fields = ['branches', 'build', 'cmd', 'env', 'notifications', 's3Bucket']
@@ -20,7 +20,5 @@ module.exports = ({body, params: {projectId}}, res, next) => {
     ExpressionAttributeValues: expressionAttributes
   }).promise().then(() => {
     res.json({message: 'ok'})
-  }).catch(ex => {
-    next(ex)
-  })
+  }).catch(next)
 }

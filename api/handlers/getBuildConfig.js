@@ -1,4 +1,4 @@
-const {stackName} = require('./../config')
+const {stackName} = require('../config')
 const dynamoClient = require('./dynamoClient')
 const projectExists = require('./projectExists')
 const projectNotFound = require('./projectNotFound')

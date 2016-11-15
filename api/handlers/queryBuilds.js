@@ -1,6 +1,6 @@
 const map = require('lodash/map')
 const compact = require('lodash/compact')
-const {stackName} = require('./../config')
+const {stackName} = require('../config')
 const dynamoClient = require('./dynamoClient')
 const getResultsBucket = require('./getResultsBucket')
 const listS3Folder = require('./listS3Folder')
@@ -21,4 +21,3 @@ module.exports = ({parameters, includeFiles}) =>
   .then(([{Items}, bucket]) =>
     bucket ? Promise.all(Items.map(build => addBuildFiles(bucket, build))) : Items
   )
-

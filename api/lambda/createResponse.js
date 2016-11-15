@@ -2,7 +2,10 @@
 // express-like response object for lambda
 module.exports = callback => {
   let statusCode = '200'
-  let headers = {}
+  // gateway CORS support does not seem to work, so always send CORS
+  let headers = {
+    'Access-Control-Allow-Origin': '*'
+  }
 
   let body = undefined
 
