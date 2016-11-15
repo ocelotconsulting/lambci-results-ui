@@ -51,9 +51,10 @@ describe('lambda', () => {
       next(new Error(errorMessage))
 
       callback.should.have.been.calledWithExactly(null, {
-        statusCode: 500,
+        statusCode: '500',
         body: 'An unexpected error occurred: ouch',
         headers: {
+          'Access-Control-Allow-Origin': '*',
           'Content-Type': 'text/plain'
         }
       })
@@ -102,9 +103,10 @@ describe('lambda', () => {
       invoke()
 
       callback.should.have.been.calledWithExactly(null, {
-        statusCode: 404,
+        statusCode: '404',
         body: 'Route not found: GET /foobar',
         headers: {
+          'Access-Control-Allow-Origin': '*',
           'Content-Type': 'text/plain'
         }
       })

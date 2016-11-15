@@ -27,10 +27,10 @@ describe('createResponse', () => {
       res.set('foo', 42).should.equal(res)
     })
 
-    it('sets header', () => {
-      res.set('foo', 42).send()
+    it('sets statusCode', () => {
+      res.status(404).send()
 
-      callback.lastCall.args[1].headers.should.eql(404)
+      callback.lastCall.args[1].statusCode.should.equal('404')
     })
   })
 
@@ -39,10 +39,10 @@ describe('createResponse', () => {
       res.status(404).should.equal(res)
     })
 
-    it('sets statusCode', () => {
-      res.status(404).send()
+    it('sets header', () => {
+      res.set('foo', 42).send()
 
-      callback.lastCall.args[1].statusCode.should.equal(404)
+      callback.lastCall.args[1].headers.should.eql({foo: 42})
     })
   })
 
@@ -52,7 +52,7 @@ describe('createResponse', () => {
       res.json(body)
 
       callback.should.have.been.calledWithExactly(null, {
-        statusCode: 200,
+        statusCode: '200',
         body: JSON.stringify(body),
         headers: {
           'Content-Type': 'application/json'
@@ -67,7 +67,7 @@ describe('createResponse', () => {
       res.send(message)
 
       callback.should.have.been.calledWithExactly(null, {
-        statusCode: 200,
+        statusCode: '200',
         body: message,
         headers: {}
       })
