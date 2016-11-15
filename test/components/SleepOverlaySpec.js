@@ -3,7 +3,7 @@ import moment from 'moment'
 import SleepOverlay from '../../src/components/SleepOverlay'
 import {shallow} from 'enzyme'
 
-describe('BuildColumn', () => {
+describe('SleepOverlay', () => {
   let {tickDuration, lastTimestamp, onWakeUp, wrapper} = {}
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('BuildColumn', () => {
     setTimeout(() => {
       wrapper.state('ticks').should.be.greaterThan(2)
       done()
-    }, 20)
+    }, 50)
   })
 
   describe('link', () => {
