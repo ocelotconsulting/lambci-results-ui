@@ -1,6 +1,6 @@
 {
   "name": "lambci-results-ui",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "UI for viewing lambci results in S3",
   "main": "index.js",
   "scripts": {
@@ -10,10 +10,10 @@
     "build:copy-html": "cp index.html public/index.html",
     "build:less": "lessc --clean-css src/styles.less public/styles.css",
     "build:webpack": "NODE_ENV=production webpack",
-    "build:lambda": "webpack --config webpack.lambda.config.js",
     "build": "npm run clean && npm-run-all build:*",
-    "deploy:lambda": "rm -rf dist && npm run build:lambda && node build/deployLambda.js",
-    "deploy:ui": "node build/deployUI.js",
+    "build-lambda": "webpack --config webpack.lambda.config.js",
+    "deploy-lambda": "rm -rf dist && npm run build-lambda && node build/deployLambda.js",
+    "deploy-ui": "npm run build && node build/deployUI.js",
     "start": "NODE_ENV=production node server",
     "test": "mocha",
     "test:dev": "mocha -w"
