@@ -22,7 +22,7 @@ class Path {
       for (let i = 0; i < pathSegments.length; i++) {
         if (matches(i)) {
           const {param} = this.segments[i]
-          param && (params[param] = pathSegments[i])
+          param && (params[param] = decodeURIComponent(pathSegments[i]))
         } else return
       }
       return params

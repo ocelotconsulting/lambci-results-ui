@@ -25,6 +25,8 @@ exports.handler = (event, context, callback) => {
 
   const res = createResponse(callback)
 
+  if (httpMethod === 'GET') res.set('Access-Control-Allow-Origin', '*')
+
   const sendError = (status, message) => res.status(status).type('text/plain').send(message)
 
   if (params) {

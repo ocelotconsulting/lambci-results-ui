@@ -1,7 +1,7 @@
 
 // express-like response object for lambda
 module.exports = callback => {
-  let statusCode = 200
+  let statusCode = '200'
   let headers = {}
 
   let body = undefined
@@ -14,7 +14,15 @@ module.exports = callback => {
       return this
     },
     status(code) {
-      statusCode = code
+      statusCode = String(code)
+      return this
+    },
+    set(headerName, headerValue) {
+      if (typeof headerName === 'string') {
+        headers[headerName] = headerValue
+      } else {
+        Object.assign(headers, headerName)
+      }
       return this
     },
     json(object) {

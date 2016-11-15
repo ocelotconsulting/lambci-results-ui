@@ -24,6 +24,18 @@ describe('createResponse', () => {
 
   describe('status', () => {
     it('chains', () => {
+      res.set('foo', 42).should.equal(res)
+    })
+
+    it('sets header', () => {
+      res.set('foo', 42).send()
+
+      callback.lastCall.args[1].headers.should.eql(404)
+    })
+  })
+
+  describe('set', () => {
+    it('chains', () => {
       res.status(404).should.equal(res)
     })
 
