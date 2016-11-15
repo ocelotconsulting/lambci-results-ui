@@ -1,3 +1,4 @@
+const compact = require('lodash/compact')
 const routes = require('../routes')
 const createRequest = require('./createRequest')
 const createResponse = require('./createResponse')
@@ -27,8 +28,10 @@ exports.handler = (event, context, callback) => {
   const sendError = (status, message) => res.status(status).type('text/plain').send(message)
 
   if (params) {
-    const next = error =>
+    const next = error => {
+      if (error.stack) console.error(error.stack)
       sendError(500, `An unexpected error occurred: ${error.message || JSON.stringify(error)}`)
+    }
 
     handler(createRequest(params, event), res, next)
   } else {

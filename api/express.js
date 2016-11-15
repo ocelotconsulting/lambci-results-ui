@@ -1,6 +1,3 @@
-const AWS = require('aws-sdk')
-const {region} = require('./config')
-AWS.config.update({region})
 const express = require('express')
 const bodyParser = require('body-parser')
 const routes = require('./routes')

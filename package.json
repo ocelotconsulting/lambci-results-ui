@@ -12,6 +12,8 @@
     "build:webpack": "NODE_ENV=production webpack",
     "build:lambda": "webpack --config webpack.lambda.config.js",
     "build": "npm run clean && npm-run-all build:*",
+    "deploy:lambda": "rm -rf dist && npm run build:lambda && node build/deployLambda.js",
+    "deploy:ui": "node build/deployUI.js",
     "start": "NODE_ENV=production node server",
     "test": "mocha",
     "test:dev": "mocha -w"
@@ -45,6 +47,7 @@
     "underscore.string": "~3.3.4"
   },
   "devDependencies": {
+    "archiver": "~1.2.0",
     "babel-core": "~6.18.2",
     "babel-eslint": "~7.1.0",
     "babel-loader": "~6.2.5",
@@ -71,6 +74,7 @@
     "less": "~2.7.1",
     "less-middleware": "~2.2.0",
     "less-plugin-clean-css": "~1.5.1",
+    "mime-types": "~2.1.12",
     "mocha": "~3.1.2",
     "npm-run-all": "~3.1.1",
     "query-string": "~4.2.3",

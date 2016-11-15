@@ -1,11 +1,12 @@
 const webpack = require('webpack')
+const {stackName} = require('./api/config')
 
 module.exports = {
   entry: './api/lambda/index.js',
   output: {
     path: 'dist',
     libraryTarget: 'commonjs2',
-    filename: 'lambdaApi.js'
+    filename: 'index.js'
   },
   target: 'node',
   module: {
@@ -24,12 +25,12 @@ module.exports = {
       }
     ]
   },
+  externals: ['aws-sdk'],
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        LAMBCI_STACK_NAME: `"${process.env.LAMBCI_STACK_NAME}"`
+        LAMBCI_STACK_NAME: `"${stackName}"`
       }
-    }),
-    new webpack.optimize.UglifyJsPlugin()
+    })
   ]
 }
