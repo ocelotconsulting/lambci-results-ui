@@ -5,46 +5,75 @@ import {connect} from 'react-redux'
 import RepositoryLink from './RepositoryLink'
 import updateConfigField from '../actions/updateConfigField'
 import saveConfig from '../actions/saveConfig'
-import addBranchConfig from '../actions/addBranchConfig'
+import deleteBranch from '../actions/deleteBranch'
 
-const configName = (branch) => branch ? <small>Branch Configuration '{branch}'</small> : <small>Project Configuration</small>
+const showBreadcrumbs = (segments) => {
+  const encodedSegments = segments.map((segment) => encodeURIComponent(segment))
+  const components = segments.map((segment, i) =>
+    segments.length === i + 1 ? <li key="crumb-terminal" className="active">{segment}</li> :
+    <li key={`crumb-${i}`}>
+      <Link to={'/' + encodedSegments.slice(0, i + 1).join('/')}>{segment}</Link>
+    </li>)
+  return <ol className="breadcrumb">{components}</ol>
+}
 
-const ProjectConfig = ({repository, config, onChange, onCheck, addBranchConfig, params: {projectId, branch}, onSave}) => {
+const showBranches = (location, branch, branches) => branch ? undefined : typeof branches === 'undefined' || Object.keys(branches).length === 0 ?
+  <div>No Branches are defined</div> :
+  <div>
+    <label>Branch Configurations</label>
+    <ul>
+    {Object.keys(branches).map((branch, i) =>
+      <li key={`branch-${i}`}>
+        <Link to={`${location.pathname}/` + branch}>{branch}</Link>
+      </li>
+    )}
+    </ul>
+  </div>
+
+const showRemoveBranch = (branch, onClick) => branch ?
+  <button type="button" className="danger" onClick={onClick}>Remove</button> : undefined
+
+const configType = (branch) => branch ? `Branch Configuration '${branch}'` : 'Project Configuration'
+
+const ProjectConfig = ({repository, config, onChange, onCheck, params: {projectId, branch}, onSave, location, onDeleteBranch}) => {
   return config ? (
     <div className='container config'>
-      <ol className="breadcrumb">
-        <li>
-          <Link to='/projects'>Projects</Link>
-        </li>
-        <li className="active">
-          {`${projectId}`}
-        </li>
-      </ol>
+      {branch ? showBreadcrumbs(['projects', projectId, 'config', branch]) : showBreadcrumbs(['projects', projectId, 'config'])}
+
       <h3>
         <RepositoryLink repository={repository}/>
         {' '}
-        {configName(branch)}
+        <small>{configType(branch)}</small>
       </h3>
 
       <div>
-        <label for="build">Build</label>
-        <input name="build" type='checkbox' checked={config.build || false} onChange={onCheck('build', branch)} />
+        <label>Build</label>
+        <input name="build" type='checkbox' checked={config.build || false} onChange={onCheck('build')} />
       </div>
 
       <div>
         <div>
           <label>Command</label>
         </div>
-        <textarea name="cmd" value={ config.cmd || ''} onChange={onChange('cmd', branch)} placeholder='Default'/>
+        <textarea name="cmd" value={ config.cmd || ''} onChange={onChange('cmd')} placeholder='Default'/>
       </div>
 
       <div>
         <div>
           <label>Environment Variables</label>
         </div>
-        <textarea name="env" value={ config.env || ''} onChange={onChange('env', branch)} placeholder='Default'/>
+        <textarea name="env" value={ config.env || ''} onChange={onChange('env')} placeholder='Default'/>
       </div>
 
+      {showBranches(location, branch, config.branches)}
+
+      {branch ? undefined : <div>
+          <label>New Branch</label>
+          <input type="text" onChange={onChange('newBranch')}></input>
+        </div>
+      }
+
+      {showRemoveBranch(branch, onDeleteBranch(projectId, branch))}
       <button type="button" onClick={onSave(projectId, branch)}>Save</button>
     </div>
   ) : (
@@ -59,7 +88,7 @@ ProjectConfig.propTypes = {
   onSave: T.func.isRequired,
   onChange: T.func.isRequired,
   onCheck: T.func.isRequired,
-  addBranchConfig: T.func.isRequired
+  onDeleteBranch: T.func.isRequired
 }
 
 const mapStateToProps = ({projects: {selected: {repository}}, config: {editing}}) =>
@@ -71,9 +100,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateConfigField(prop, target[targetProperty]))
    return {
     onSave: (projectId, branch) => () => dispatch(saveConfig(projectId, branch)),
-    onChange: (prop, branch) => onChange(prop),
-    onCheck: (prop, branch) => onChange(prop, 'checked'),
-    addBranchConfig: () => dispatch(addBranchConfig())
+    onChange: (prop) => onChange(prop),
+    onCheck: (prop) => onChange(prop, 'checked'),
+    onDeleteBranch: (projectId, branch) => () => dispatch(deleteBranch(projectId, branch))
     }
 }
 

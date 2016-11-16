@@ -15,5 +15,9 @@ export default (projectId, branch) =>
 
     const editedConfig = {...editing, env: parsedEnv}
     const projectConfig = branch ? {...value, branches: {...value.branches, [branch]: editedConfig}} : Object.assign({}, value, editedConfig)
+    const newBranch = editing.newBranch && editing.newBranch.trim().length > 0 ? editing.newBranch.trim() : undefined
+    if(newBranch){
+      projectConfig.branches[newBranch] = {}
+    }
     putAction(dispatch, SAVE_CONFIG, `/projects/${encode(projectId)}/config`, projectConfig)
   }

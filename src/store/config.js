@@ -12,7 +12,7 @@ export default (state = initialState, action) => {
           return {...state, error: action.error}
         case 'done':
           const {result} = action
-          const editing = result.branch ? result.branches ? result.branches[result.branch] : {} : result
+          const editing = result.branch ? result.branches ? result.branches[result.branch] || {} : {} : result
           const env = Object.keys(editing.env || {}).sort().map((key)=>`${key}=${editing.env[key]}`).join('\n')
           return {...state, value: action.result, editing: {...editing, env: env}}
         default:
