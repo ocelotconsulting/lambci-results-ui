@@ -20,8 +20,9 @@ export default (projectId, branch) =>
       }
     } : {
       ...value,
-      editedConfig
+      ...editedConfig
     }
+
     const newBranch = editing.newBranch && editing.newBranch.trim().length > 0 ? editing.newBranch.trim() : undefined
     if(newBranch){
       projectConfig.branches = projectConfig.branches || {}

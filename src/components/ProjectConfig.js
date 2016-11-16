@@ -6,16 +6,7 @@ import RepositoryLink from './RepositoryLink'
 import updateConfigField from '../actions/updateConfigField'
 import saveConfig from '../actions/saveConfig'
 import deleteBranch from '../actions/deleteBranch'
-
-const showBreadcrumbs = (segments) => {
-  const encodedSegments = segments.map((segment) => encodeURIComponent(segment))
-  const components = segments.map((segment, i) =>
-    segments.length === i + 1 ? <li key="crumb-terminal" className="active">{segment}</li> :
-    <li key={`crumb-${i}`}>
-      <Link to={'/' + encodedSegments.slice(0, i + 1).join('/')}>{segment}</Link>
-    </li>)
-  return <ol className="breadcrumb">{components}</ol>
-}
+import Breadcrumb from './Breadcrumb'
 
 const showBranches = (location, branch, branches) => branch ? undefined : typeof branches === 'undefined' || Object.keys(branches).length === 0 ?
   <label>Branch Configurtions: None</label> :
@@ -31,7 +22,7 @@ const showBranches = (location, branch, branches) => branch ? undefined : typeof
   </div>
 
 const showRemoveBranch = (branch, onClick) => branch ?
-  <button type="button" className="danger" onClick={onClick}>Remove</button> : undefined
+  <button type="button" className="btn btn-warning" onClick={onClick}>Remove</button> : undefined
 
 const showAddBranch = (branch, onChange) => branch ? undefined : <div>
     <label>New Branch</label>
@@ -50,7 +41,13 @@ const configType = (branch) => branch ? `Branch Configuration '${branch}'` : 'Pr
 const ProjectConfig = ({repository, config, onChange, onCheck, params: {projectId, branch}, onSave, location, onDeleteBranch}) => {
   return config ? (
     <div className='container config'>
-      {branch ? showBreadcrumbs(['projects', projectId, 'config', branch]) : showBreadcrumbs(['projects', projectId, 'config'])}
+      {<Breadcrumb path={[
+            {segment: 'projects', content: 'Projects'},
+            {segment: projectId, content: projectId, hidden: true},
+            {segment: 'config', content: `${projectId}`, active: branch ? false : true, image: 'fa fa-cog'},
+            {segment: branch, content: branch, active: branch ? true : false, hidden: branch ? false : true}
+          ]} />
+      }
 
       <h3>
         <RepositoryLink repository={repository}/>
@@ -73,7 +70,7 @@ const ProjectConfig = ({repository, config, onChange, onCheck, params: {projectI
 
       {showRemoveBranch(branch, onDeleteBranch(projectId, branch))}
 
-      <button type="button" onClick={onSave(projectId, branch)}>Save</button>
+      <button type='button' className='btn btn-primary' onClick={onSave(projectId, branch)}>Save</button>
     </div>
   ) : (
     <Spinner/>
