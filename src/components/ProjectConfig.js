@@ -18,7 +18,7 @@ const showBreadcrumbs = (segments) => {
 }
 
 const showBranches = (location, branch, branches) => branch ? undefined : typeof branches === 'undefined' || Object.keys(branches).length === 0 ?
-  <div>No Branches are defined</div> :
+  <label>Branch Configurtions: None</label> :
   <div>
     <label>Branch Configurations</label>
     <ul>
@@ -32,6 +32,18 @@ const showBranches = (location, branch, branches) => branch ? undefined : typeof
 
 const showRemoveBranch = (branch, onClick) => branch ?
   <button type="button" className="danger" onClick={onClick}>Remove</button> : undefined
+
+const showAddBranch = (branch, onChange) => branch ? undefined : <div>
+    <label>New Branch</label>
+    <input type="text" onChange={onChange}></input>
+  </div>
+
+const showTextArea = (name, value, onChange) => <div>
+    <div>
+      <label>{name}</label>
+    </div>
+    <textarea name={name} value={ value || ''} onChange={onChange} placeholder='Default'/>
+  </div>
 
 const configType = (branch) => branch ? `Branch Configuration '${branch}'` : 'Project Configuration'
 
@@ -51,29 +63,16 @@ const ProjectConfig = ({repository, config, onChange, onCheck, params: {projectI
         <input name="build" type='checkbox' checked={config.build || false} onChange={onCheck('build')} />
       </div>
 
-      <div>
-        <div>
-          <label>Command</label>
-        </div>
-        <textarea name="cmd" value={ config.cmd || ''} onChange={onChange('cmd')} placeholder='Default'/>
-      </div>
+      {showTextArea('Command', config.cmd, onChange('cmd'))}
 
-      <div>
-        <div>
-          <label>Environment Variables</label>
-        </div>
-        <textarea name="env" value={ config.env || ''} onChange={onChange('env')} placeholder='Default'/>
-      </div>
+      {showTextArea('Environment Variables', config.env, onChange('env'))}
 
       {showBranches(location, branch, config.branches)}
 
-      {branch ? undefined : <div>
-          <label>New Branch</label>
-          <input type="text" onChange={onChange('newBranch')}></input>
-        </div>
-      }
+      {showAddBranch(branch, onChange('newBranch'))}
 
       {showRemoveBranch(branch, onDeleteBranch(projectId, branch))}
+
       <button type="button" onClick={onSave(projectId, branch)}>Save</button>
     </div>
   ) : (

@@ -7,5 +7,5 @@ export default (projectId, branch) =>
     const {value} = getState().config
     const projectConfig = {...value}
     delete projectConfig.branches[branch]
-    putAction(dispatch, SAVE_CONFIG, `/projects/${encode(projectId)}/config`, projectConfig)
+    putAction(dispatch, SAVE_CONFIG, `/api/projects/${encode(projectId)}/config`, projectConfig)
   }
