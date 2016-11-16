@@ -27,11 +27,27 @@ describe('SleepOverlay', () => {
 
   it('updates state every interval', (done) => {
     render()
+    const maxTries = 20
+    let tries = 0
 
-    setTimeout(() => {
-      wrapper.state('ticks').should.be.greaterThan(2)
-      done()
-    }, 50)
+    const fail = () => done(new Error('timed out'))
+
+    let next
+
+    const checkTicks = () => {
+      const ticks = wrapper.state('ticks')
+      if (ticks < 2) {
+        tries++
+        if (tries === maxTries)
+          fail()
+        else
+          next()
+      } else done()
+    }
+
+    next = () => setTimeout(checkTicks, 10)
+
+    next()
   })
 
   describe('link', () => {

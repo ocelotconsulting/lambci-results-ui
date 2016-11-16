@@ -1,10 +1,10 @@
 import React, {PropTypes as T} from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router'
 import Spinner from './Spinner'
 import BuildTable from './BuildTable'
 import RepositoryLink from './RepositoryLink'
 import SleepOverlay from './SleepOverlay'
+import Breadcrumb from './Breadcrumb'
 import wakeBuildRefresh from '../actions/wakeBuildRefresh'
 
 export const Builds = ({repository, builds, sleeping, lastTimestamp, onWakeUp, params: {projectId}}) => builds ? (
@@ -12,14 +12,10 @@ export const Builds = ({repository, builds, sleeping, lastTimestamp, onWakeUp, p
     {
       sleeping ? (<SleepOverlay lastTimestamp={lastTimestamp} onWakeUp={onWakeUp}/>) : undefined
     }
-    <ol className="breadcrumb">
-      <li>
-        <Link to='/projects'>Projects</Link>
-      </li>
-      <li className="active">
-        {`${projectId}`}
-      </li>
-    </ol>
+    <Breadcrumb path={[
+      {segment: 'projects', content: 'Projects'},
+      {segment: projectId, content: projectId, active: true}
+    ]}/>
     <h3>
       <RepositoryLink repository={repository}/>
       {' '}
