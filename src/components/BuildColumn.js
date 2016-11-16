@@ -1,12 +1,11 @@
 import React, {PropTypes as T} from 'react'
 import endsWith from 'underscore.string/endsWith'
-import encode from '../encode'
 import {apiBaseUrl} from '../config'
 
 const BuildColumn = ({projectId, buildNum, files}) => {
   const fileName = files.find(f => endsWith(f, '.html'))
 
-  const url = fileName && `${apiBaseUrl}/projects/${encode(projectId)}/builds/${buildNum}/${fileName}`
+  const url = fileName && `${apiBaseUrl}/projects/${encodeURIComponent(projectId)}/builds/${buildNum}/${fileName}`
 
   const label = `#${buildNum}`
 

@@ -1,7 +1,6 @@
 import maxBy from 'lodash/maxBy'
 import map from 'lodash/map'
 import {REFRESH_BUILDS} from './types'
-import encode from '../encode'
 import agent from '../agent'
 import queryString from 'query-string'
 import {apiBaseUrl} from '../config'
@@ -26,7 +25,7 @@ export default (refreshBuildsLater, projectId) =>
       buildNums: buildNums || undefined
     }
 
-    agent.get(`${apiBaseUrl}/projects/${encode(projectId)}/build-updates?${queryString.stringify(query)}`)
+    agent.get(`${apiBaseUrl}/projects/${encodeURIComponent(projectId)}/build-updates?${queryString.stringify(query)}`)
     .then(({body}) => {
       if (isEnabled()) {
         dispatch({type: REFRESH_BUILDS, result: body})

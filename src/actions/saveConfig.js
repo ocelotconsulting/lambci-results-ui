@@ -1,6 +1,5 @@
 import {SAVE_CONFIG} from './types'
 import putAction from './putAction'
-import encode from '../encode'
 import getConfig from './getConfig'
 
 export default (projectId, branch) =>
@@ -28,7 +27,7 @@ export default (projectId, branch) =>
       projectConfig.branches = projectConfig.branches || {}
       projectConfig.branches[newBranch] = {}
     }
-    putAction(dispatch, SAVE_CONFIG, `/api/projects/${encode(projectId)}/config`, projectConfig).then(() =>
-      dispatch(getConfig(projectId, branch)))
+    putAction(dispatch, SAVE_CONFIG, `/api/projects/${encodeURIComponent(projectId)}/config`, projectConfig)
+    .then(() => dispatch(getConfig(projectId, branch)))
 
   }

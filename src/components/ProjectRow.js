@@ -2,12 +2,11 @@ import React, {PropTypes as T} from 'react'
 import {Link} from 'react-router'
 import moment from 'moment'
 import RepositoryLink from './RepositoryLink'
-import encode from '../encode'
 
 const ProjectRow = ({project: {id, lastTimestamp, repository}}) => (
   <tr>
     <td className='id'>
-      <Link to={`/projects/${encode(id)}/builds`}>
+      <Link to={`/projects/${encodeURIComponent(id)}/builds`}>
         {id}
       </Link>
     </td>
@@ -18,7 +17,7 @@ const ProjectRow = ({project: {id, lastTimestamp, repository}}) => (
       <RepositoryLink repository={repository}/>
     </td>
     <td className='config'>
-      <Link to={`/projects/${encode(id)}/config`}>
+      <Link to={`/projects/${encodeURIComponent(id)}/config`}>
         <i className='fa fa-cog'/>
         {' configure'}
       </Link>

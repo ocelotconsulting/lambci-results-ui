@@ -3,8 +3,6 @@ import moment from 'moment'
 import {shallow} from 'enzyme'
 import ProjectRow from '../../src/components/ProjectRow'
 import {expectedProjectTableColumnCount} from './expectedColumnCounts'
-import encode from '../../src/encode'
-
 
 describe('ProjectRow', () => {
   let project
@@ -37,7 +35,7 @@ describe('ProjectRow', () => {
         onlyActiveOnIndex: false,
         style: {},
         children: project.id,
-        to: `/projects/${encode(project.id)}/builds`
+        to: `/projects/${encodeURIComponent(project.id)}/builds`
       })
     })
   })
@@ -73,7 +71,7 @@ describe('ProjectRow', () => {
     })
 
     it('renders link to config page', () => {
-      configColumn.find('Link').prop('to').should.equal(`/projects/${encode(project.id)}/config`)
+      configColumn.find('Link').prop('to').should.equal(`/projects/${encodeURIComponent(project.id)}/config`)
     })
 
 
