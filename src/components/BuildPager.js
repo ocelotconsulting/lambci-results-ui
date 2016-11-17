@@ -1,5 +1,4 @@
 import React, {PropTypes as T} from 'react'
-import {browserHistory} from 'react-router'
 
 const withPreventDefault = callback =>
   e => {

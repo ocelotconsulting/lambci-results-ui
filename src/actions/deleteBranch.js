@@ -1,6 +1,6 @@
-import {browserHistory} from 'react-router'
 import {SAVE_CONFIG} from './types'
 import putAction from './putAction'
+import history from '../history'
 
 export default (projectId, branch) =>
   (dispatch, getState) => {
@@ -8,5 +8,5 @@ export default (projectId, branch) =>
     const projectConfig = {...value}
     delete projectConfig.branches[branch]
     putAction(dispatch, SAVE_CONFIG, `projects/${encodeURIComponent(projectId)}/config`, projectConfig)
-    .then(() => browserHistory.push(`/projects/${encodeURIComponent(projectId)}/config`))
+    .then(() => history.push(`/projects/${encodeURIComponent(projectId)}/config`))
   }
