@@ -4,20 +4,22 @@ import {shallow} from 'enzyme'
 
 describe('Builds', () => {
   describe('component', () => {
-    let repository, builds, projectId, sleeping, lastTimestamp, onWakeUp
+    let paging, repository, builds, projectId, sleeping, lastTimestamp, onWakeUp, onPageChanged
 
     const render = () => shallow(
-      <Builds builds={builds} repository={repository} lastTimestamp={lastTimestamp}
-              params={{projectId}} sleeping={sleeping} onWakeUp={onWakeUp}/>
+      <Builds paging={paging} builds={builds} repository={repository} lastTimestamp={lastTimestamp}
+              params={{projectId}} sleeping={sleeping} onWakeUp={onWakeUp} onPageChanged={onPageChanged}/>
     )
 
     beforeEach(() => {
       repository = {}
+      paging = {page: 1}
       projectId = 'foo bar'
       builds = [{id: 1}]
       sleeping = false
       lastTimestamp = Date.now()
       onWakeUp = sinon.stub()
+      onPageChanged = sinon.stub()
     })
 
     describe('when builds is missing', () => {
@@ -27,24 +29,11 @@ describe('Builds', () => {
 
       it('displays spinner', () => {
         const wrapper = render()
-        wrapper.find('.builds').length.should.equal(0)
         wrapper.find('Spinner').length.should.equal(1)
       })
     })
 
-    describe('when no builds are found', () => {
-      beforeEach(() => {
-        builds = []
-      })
-
-      it('displays no builds found message', () => {
-        const wrapper = render()
-        wrapper.find('table').length.should.equal(0)
-        wrapper.find('.no-builds').length.should.equal(1)
-      })
-    })
-
-    describe('when builds are non-empty', () => {
+    describe('when builds.value is defined', () => {
       it('renders table', () => {
         const wrapper = render()
         wrapper.find('BuildTable').length.should.equal(1)
@@ -80,6 +69,9 @@ describe('Builds', () => {
           }
         },
         builds: {
+          paging: {
+            page: 1
+          },
           value: [1, 2],
           refresh: {
             sleepCount: 1,
@@ -96,6 +88,7 @@ describe('Builds', () => {
       apply().should.eql({
         repository: state.projects.selected.repository,
         builds: state.builds.value,
+        paging: state.builds.paging,
         lastTimestamp: state.builds.refresh.lastTimestamp,
         sleeping: false
       })

@@ -5,9 +5,13 @@ import BuildTable from './BuildTable'
 import RepositoryLink from './RepositoryLink'
 import SleepOverlay from './SleepOverlay'
 import Breadcrumb from './Breadcrumb'
+import BuildPager from './BuildPager'
 import wakeBuildRefresh from '../actions/wakeBuildRefresh'
+import selectNewPage from '../actions/selectNewPage'
 
-export const Builds = ({repository, builds, sleeping, lastTimestamp, onWakeUp, params: {projectId}}) => builds ? (
+export const Builds = ({
+  repository, paging, builds, sleeping, lastTimestamp, onWakeUp, params: {projectId}, onPageChanged
+}) => (
   <div className='container builds'>
     {
       sleeping ? (<SleepOverlay lastTimestamp={lastTimestamp} onWakeUp={onWakeUp}/>) : undefined
@@ -21,33 +25,36 @@ export const Builds = ({repository, builds, sleeping, lastTimestamp, onWakeUp, p
       {' '}
       <small>builds</small>
     </h3>
-    {builds.length ? (
-      <BuildTable projectId={projectId} builds={builds} repository={repository}/>
-    ) : (
-      <div className='no-builds'>no builds found</div>
+    {!builds && (<Spinner/>)}
+    {builds && (
+      <BuildPager page={paging.page} nextEnabled={paging.nextEnabled} previousEnabled={paging.previousEnabled}
+                  onPrevious={() => onPageChanged(-1)} onNext={() => onPageChanged(1)}/>
     )}
+    {builds && (<BuildTable projectId={projectId} builds={builds} repository={repository}/>)}
   </div>
-) : (
-  <Spinner/>
 )
 
 Builds.propTypes = {
   repository: T.object.isRequired,
   sleeping: T.bool.isRequired,
   lastTimestamp: T.number.isRequired,
+  paging: T.object.isRequired,
+  builds: T.arrayOf(T.object),
   onWakeUp: T.func.isRequired,
-  builds: T.arrayOf(T.object)
+  onPageChanged: T.func.isRequired
 }
 
-export const mapStateToProps = ({projects: {selected: {repository}}, builds: {value, refresh}}) => ({
+export const mapStateToProps = ({projects: {selected: {repository}}, builds: {value, refresh, paging}}) => ({
   repository,
   builds: value,
+  paging,
   sleeping: refresh.sleepCount >= refresh.sleepThreshold,
   lastTimestamp: refresh.lastTimestamp
 })
 
 export const mapDispatchToProps = dispatch => ({
-  onWakeUp: () => dispatch(wakeBuildRefresh())
+  onWakeUp: () => dispatch(wakeBuildRefresh()),
+  onPageChanged: delta => dispatch(selectNewPage(delta))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Builds)

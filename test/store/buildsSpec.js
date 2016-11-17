@@ -4,6 +4,7 @@ import {
   SET_BUILD_REFRESH_ENABLED,
   REFRESH_BUILDS,
   SET_BUILD_REFRESH_TIMEOUT_ID,
+  SET_BUILD_PAGE,
   WAKE_BUILD_REFRESH
 } from '../../src/actions/types'
 
@@ -14,10 +15,10 @@ describe('builds reducer', () => {
 
   const update = values => state = {...state, ...values}
 
-  const updateRefresh = values => update({
-    refresh: {
-      ...state.refresh,
-      values
+  const updateSubProperty = (propertyName, values) => update({
+    [propertyName]: {
+      ...state[propertyName],
+      ...values
     }
   })
 
@@ -47,9 +48,20 @@ describe('builds reducer', () => {
       })
 
       it('resets sleep count', () => {
-        updateRefresh({sleepCount: 42})
+        updateSubProperty('refresh', {sleepCount: 42})
 
         dispatch().refresh.sleepCount.should.equal(0)
+      })
+
+      it('sets paging properties nextEnabled and previousEnabled to false', () => {
+        updateSubProperty('paging', {nextEnabled: true, previousEnabled: false})
+
+        dispatch().paging.should.eql({
+          pageSize: 20,
+          page: 1,
+          nextEnabled: false,
+          previousEnabled: false
+        })
       })
     })
 
@@ -65,15 +77,36 @@ describe('builds reducer', () => {
     })
 
     describe('done', () => {
+
       beforeEach(() => {
         action.status = 'done'
-        action.result = [1, 2, 3]
+        action.result = [{buildNum: 4}, {buildNum: 3}, {buildNum: 2}]
+        updateSubProperty('paging', {pageSize: 3})
       })
 
       it('sets error', () => {
         dispatch().value.should.equal(action.result)
       })
 
+      it('enables nextPage when oldest build num > 1 and count is page size', () => {
+        dispatch().paging.nextEnabled.should.be.true
+      })
+
+      it('disables nextPage when oldest build num is 1', () => {
+        action.result[2].buildNum = 1
+
+        dispatch().paging.nextEnabled.should.be.false
+      })
+
+      it('disables previousPage when page # is 1', () => {
+        dispatch().paging.previousEnabled.should.be.false
+      })
+
+      it('enables previousPage when page # is > 1', () => {
+        updateSubProperty('paging', {page: 2})
+
+        dispatch().paging.previousEnabled.should.be.true
+      })
     })
   })
 
@@ -84,7 +117,7 @@ describe('builds reducer', () => {
     })
 
     it('clears timeout id', () => {
-      updateRefresh({timeoutId: 42})
+      updateSubProperty('refresh', {timeoutId: 42})
       should.not.exist(dispatch().refresh.timeoutId)
     })
 
@@ -116,7 +149,7 @@ describe('builds reducer', () => {
       })
 
       it('resets sleepCount to 0', () => {
-        updateRefresh({sleepCount: 99})
+        updateSubProperty('refresh', {sleepCount: 99})
         dispatch().refresh.sleepCount.should.equal(0)
       })
 
@@ -130,6 +163,23 @@ describe('builds reducer', () => {
       it('updates existing build', () => {
         action.result[0].buildNum = 1
         dispatch().value.should.eql([{buildNum: 1, user: 'bob', status: 'success'}])
+      })
+
+      it('retains page size by discarding old builds if needed', () => {
+        updateSubProperty('paging', {pageSize: 1})
+        dispatch().value.should.eql([
+          {buildNum: 2, status: 'success'},
+        ])
+      })
+
+      it('sets nextEnabled and previousEnabled', () => {
+        updateSubProperty('paging', {page: 2, pageSize: 1, nextEnabled: false, previousEnabled: false})
+        dispatch().paging.should.eql({
+          page: 2,
+          pageSize: 1,
+          nextEnabled: true,
+          previousEnabled: true
+        })
       })
     })
   })
@@ -149,13 +199,19 @@ describe('builds reducer', () => {
   describe('WAKE_BUILD_REFRESH', () => {
     beforeEach(() => {
       action.type = WAKE_BUILD_REFRESH
-      updateRefresh({sleepCount: 10})
+      updateSubProperty('refresh', {sleepCount: 10})
     })
 
     it('resets sleep count', () => {
       dispatch().refresh.sleepCount.should.equal(0)
     })
 
+  })
+
+  describe('SET_BUILD_PAGE', () => {
+    beforeEach(() => {
+      action.type = SET_BUILD_PAGE
+    })
   })
 
 
