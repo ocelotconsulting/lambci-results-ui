@@ -7,6 +7,6 @@ export default (projectId, branch) =>
     const {value} = getState().config
     const projectConfig = {...value}
     delete projectConfig.branches[branch]
-    putAction(dispatch, SAVE_CONFIG, `/api/projects/${encodeURIComponent(projectId)}/config`, projectConfig)
-    .then(() => browserHistory.push(`projects/${encodeURIComponent(projectId)}/config`))
+    putAction(dispatch, SAVE_CONFIG, `projects/${encodeURIComponent(projectId)}/config`, projectConfig)
+    .then(() => browserHistory.push(`/projects/${encodeURIComponent(projectId)}/config`))
   }

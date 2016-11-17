@@ -28,7 +28,7 @@ export default (projectId, branch) =>
       projectConfig.branches = projectConfig.branches || {}
       projectConfig.branches[newBranch] = {}
     }
-    putAction(dispatch, SAVE_CONFIG, `/api/projects/${encodeURIComponent(projectId)}/config`, projectConfig)
+    putAction(dispatch, SAVE_CONFIG, `projects/${encodeURIComponent(projectId)}/config`, projectConfig)
     .then(() => dispatch(getConfig(projectId, branch)))
 
   }
