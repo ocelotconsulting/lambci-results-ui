@@ -1,6 +1,6 @@
 import queryString from 'query-string'
 import {SET_BUILD_PAGE, GET_BUILDS} from './types'
-import getAction from './getAction'
+import http from './http'
 import maybeRefresh from './maybeRefresh'
 const maxBy = require('lodash/maxBy')
 const minBy = require('lodash/minBy')
@@ -23,7 +23,7 @@ export default delta =>
     const projectId = selected.id
 
     const query = newPage === 1 ? '' : buildQuery(builds, pageSize, delta)
-    getAction(dispatch, GET_BUILDS, `projects/${encodeURIComponent(projectId)}/builds${query}`)
+    http.get(dispatch, GET_BUILDS, `projects/${encodeURIComponent(projectId)}/builds${query}`)
     .then(() => {
       maybeRefresh({projectId, state: getState(), dispatch})
     })

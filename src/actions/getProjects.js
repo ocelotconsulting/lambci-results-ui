@@ -1,5 +1,5 @@
 import {GET_PROJECTS} from './types'
-import getAction from './getAction'
+import http from './http'
 import getRepository from '../store/getRepository'
 
 const withRepositories = projects => projects.map(p => {
@@ -9,4 +9,4 @@ const withRepositories = projects => projects.map(p => {
 
 export default () =>
   dispatch =>
-    getAction(dispatch, GET_PROJECTS, 'projects', withRepositories)
+    http.get(dispatch, GET_PROJECTS, 'projects', withRepositories)

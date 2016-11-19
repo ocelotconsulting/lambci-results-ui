@@ -1,5 +1,5 @@
 import {SAVE_CONFIG} from './types'
-import putAction from './putAction'
+import http from './http'
 import history from '../history'
 
 export default (projectId, branch) =>
@@ -7,6 +7,6 @@ export default (projectId, branch) =>
     const {value} = getState().config
     const projectConfig = {...value}
     delete projectConfig.branches[branch]
-    putAction(dispatch, SAVE_CONFIG, `projects/${encodeURIComponent(projectId)}/config`, projectConfig)
+    http.put(dispatch, SAVE_CONFIG, `projects/${encodeURIComponent(projectId)}/config`, projectConfig)
     .then(() => history.push(`/projects/${encodeURIComponent(projectId)}/config`))
   }

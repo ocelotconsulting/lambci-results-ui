@@ -8,7 +8,7 @@ describe('SleepOverlay', () => {
 
   beforeEach(() => {
     tickDuration = 1
-    lastTimestamp = moment().subtract(25, 'days')
+    lastTimestamp = moment().subtract(25, 'days').valueOf()
     onWakeUp = sinon.stub()
   })
 
