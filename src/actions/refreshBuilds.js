@@ -5,14 +5,12 @@ import agent from '../agent'
 import queryString from 'query-string'
 import {apiBaseUrl} from '../config'
 
-export default (refreshBuildsLater, projectId) =>
+export default (projectId, next) =>
   (dispatch, getState) => {
     const isEnabled = () => {
       const {builds, projects} = getState()
       return builds.refresh.enabled && builds.value && projectId === projects.selected.id
     }
-
-    const next = () => dispatch(refreshBuildsLater())
 
     const builds = getState().builds.value
 
@@ -25,7 +23,7 @@ export default (refreshBuildsLater, projectId) =>
       buildNums: buildNums || undefined
     }
 
-    agent.get(`${apiBaseUrl}/projects/${encodeURIComponent(projectId)}/build-updates?${queryString.stringify(query)}`)
+    return agent.get(`${apiBaseUrl}/projects/${encodeURIComponent(projectId)}/build-updates?${queryString.stringify(query)}`)
     .then(({body}) => {
       if (isEnabled()) {
         dispatch({type: REFRESH_BUILDS, result: body})

@@ -5,10 +5,10 @@ import maybeRefresh from './maybeRefresh'
 export default projectId =>
   (dispatch, getState) => {
     dispatch({type: SELECT_PROJECT, projectId})
-    http.get(dispatch, GET_BUILDS, `projects/${encodeURIComponent(projectId)}/builds`)
+    return http.get(dispatch, GET_BUILDS, `projects/${encodeURIComponent(projectId)}/builds`)
     .then(() => maybeRefresh({
-      projectId: projectId,
-      state: getState(),
-      dispatch
+      projectId,
+      dispatch,
+      state: getState()
     }))
   }

@@ -10,7 +10,7 @@ const refreshBuildsLater = () =>
 
     if (sleepCount < sleepThreshold) {
       const onTimerEvent = () =>
-        dispatch(refreshBuilds(refreshBuildsLater, selectedProject))
+        dispatch(refreshBuilds(selectedProject, () => dispatch(refreshBuildsLater())))
 
       dispatch({
         type: SET_BUILD_REFRESH_TIMEOUT_ID,
