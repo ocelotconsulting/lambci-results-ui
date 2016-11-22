@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf public && rm -rf dist && mkdir public",
-    "dev": "NODE_ENV=development supervisor -w server.js,index.html,enableDevMode.js,api node server",
+    "dev": "supervisor -w server.js,index.html,enableDevMode.js,api node server",
     "build:copy-images": "cp -r images public/images",
     "build:copy-html": "cp index.html public/index.html",
     "build:less": "lessc --clean-css src/styles.less public/styles.css",
