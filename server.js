@@ -5,7 +5,7 @@ const app = express()
 app.use('/api', require('./api/express'))
 
 if (process.env.NODE_ENV !== 'production') {
-  require('./enableDevMode')(app)
+  require('./dev')(app)
 }
 
 app.use('/', express.static('public'))

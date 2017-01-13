@@ -16,5 +16,5 @@ console.log('DEV mode')
 module.exports = app => {
   app.use('/images', express.static('images'))
   app.use(devMiddleware(webpack(webpackDevConfig), middlewareOptions))
-  app.use(lessMiddleware('src', {dest: 'public'}))
+  app.use(lessMiddleware('css', {dest: 'public'}))
 }
