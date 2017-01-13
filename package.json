@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf public && rm -rf dist && mkdir public",
-    "dev": "supervisor -w server.js,index.html,enableDevMode.js,api node server",
+    "dev": "NODE_ENV=development supervisor -w server.js,index.html,dev.js,api node server",
     "build:copy-images": "cp -r images public/images",
     "build:copy-html": "cp index.html public/index.html",
     "build:less": "lessc --clean-css css/styles.less public/styles.css",
-    "build:webpack": "NODE_ENV=productiofn webpack",
+    "build:webpack": "NODE_ENV=production webpack",
     "build": "npm run clean && npm-run-all build:*",
     "build-lambda": "webpack --config webpack.lambda.config.js",
     "deploy-lambda": "rm -rf dist && npm run build-lambda && node build/deployLambda.js",
