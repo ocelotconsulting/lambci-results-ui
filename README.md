@@ -12,7 +12,6 @@ This is a brand new project.  Some enhancements we hope to add:
 
 ## Requirements
 
-+ hello, world
 + [Node](https://nodejs.org/en/) 6.7.x or later.
 + An [AWS](https://aws.amazon.com) account or login plus the necessary permissions to perform the steps outlined below.
 + An existing [lambci](https://github.com/lambci/lambci) CloudFormation stack.
