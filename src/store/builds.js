@@ -4,7 +4,8 @@ import {
   REFRESH_BUILDS,
   SET_BUILD_REFRESH_TIMEOUT_ID,
   WAKE_BUILD_REFRESH,
-  SET_BUILD_PAGE
+  SET_BUILD_PAGE,
+  SELECT_BUILD
 } from '../actions/types'
 import sortBy from 'lodash/sortBy'
 import values from 'lodash/values'
@@ -102,6 +103,12 @@ export default (state = initialState, action = {}) => {
         ...state,
         paging: update('paging', {page: action.value}),
         refresh: update('refresh', {timeoutId: undefined}) // any timeout is now invalid
+      }
+    }
+    case SELECT_BUILD: {
+      return {
+        ...state,
+        selected: action.buildNum
       }
     }
     default:

@@ -26,7 +26,6 @@ describe('BuildRow', () => {
       startedAt: moment(endedAt).subtract(3, 's'),
       status: 'success',
       checkoutBranch: 'master',
-      files: ['foo.html'],
       commit: '123',
       user: 'user1'
     }
@@ -39,11 +38,10 @@ describe('BuildRow', () => {
   })
 
   describe('BuildColumn', () => {
-    it('includes project id, buildNum, and files', () => {
+    it('includes project id and buildNum', () => {
       render().find('BuildColumn').props().should.eql({
         projectId,
-        buildNum: build.buildNum,
-        files: build.files
+        buildNum: build.buildNum
       })
     })
   })

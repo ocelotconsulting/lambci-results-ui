@@ -1,17 +1,13 @@
-const s3 = require('./s3')
 const getS3File = require('./getS3File')
 const getResultsBucket = require('./getResultsBucket')
 
-module.exports = ({params: {projectId, buildNumber, fileName}}, res, next) =>
+module.exports = (projectId, buildNumber, fileName) =>
   getResultsBucket()
   .then(bucket =>
     getS3File(bucket, `${projectId}/builds/${buildNumber}/${fileName}`)
-    .then(({body, contentType}) => res.type(contentType).send(body))
-    .catch(error => {
-      if (error.statusCode === 404) {
-        res.status(404).send(`file ${fileName} not found`)
-      } else {
-        throw error
-      }
-    })
-  ).catch(next)
+    .then(result => ({result}))
+    .catch(error =>
+      error.statusCode === 404 ? {status: 400, message: `file ${fileName} not found`} : Promise.reject(error)
+    )
+  )
+

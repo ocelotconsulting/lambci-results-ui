@@ -2,13 +2,13 @@ import React from 'react'
 import {render} from 'react-dom'
 import {Provider} from 'react-redux'
 import createStore from './store/createStore'
-import App from './components/App'
+import AppContainer from './components/AppContainer'
 
 const store = createStore()
 
 render(
   <Provider store={store}>
-    <App/>
+    <AppContainer/>
   </Provider>,
   document.getElementById('main')
 )

@@ -12,5 +12,15 @@ export default {
   disable() {
     mockery.deregisterAll()
     mockery.disable()
+  },
+  response() {
+    const res = {}
+    return Object.assign(res, {
+      type: sinon.stub().returns(res),
+      status: sinon.stub().returns(res),
+      json: sinon.stub(),
+      send: sinon.stub()
+    })
   }
 }
+

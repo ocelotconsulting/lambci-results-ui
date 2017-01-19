@@ -3,7 +3,7 @@ import {shallow} from 'enzyme'
 import ProjectTable from '../../src/components/ProjectTable'
 import {expectedProjectTableColumnCount} from './expectedColumnCounts'
 
-describe('Projects', () => {
+describe('ProjectTable', () => {
   let projects
 
   const render = () => shallow(<ProjectTable projects={projects}/>)

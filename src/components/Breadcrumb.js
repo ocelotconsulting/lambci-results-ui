@@ -1,8 +1,11 @@
+import flatten from 'lodash/flatten'
 import React, {PropTypes as T} from 'react'
 import {Link} from 'react-router'
 
+const allSegments = path => flatten(path.map(({segment}) => segment))
+
 const getPath = (path, i) =>
-  `/${path.slice(0, i + 1).map(({segment}) => encodeURIComponent(segment)).join('/')}`
+  `/${allSegments(path.slice(0, i + 1)).map(encodeURIComponent).join('/')}`
 
 const getImage = (image) => image ? <i className={image} /> : undefined
 

@@ -33,22 +33,23 @@ const renderTime = (startedAt, endedAt) => {
   }
 }
 
-const BuildRow = ({projectId, repository, build: {
-  buildNum, endedAt, startedAt, status, checkoutBranch, files, commit, user
-}}) => (
-  <tr>
-    <BuildColumn projectId={projectId} buildNum={buildNum} files={files}/>
-    <StatusColumn status={status}/>
-    <td className='branch'>
-      {checkoutBranch}
-    </td>
-    <td className='time'>
-      {renderTime(startedAt, endedAt)}
-    </td>
-    <CommitColumn repository={repository} commit={commit}/>
-    <UserColumn user={user} repository={repository}/>
-  </tr>
-)
+const BuildRow = ({projectId, repository, build}) => {
+  const {buildNum, endedAt, startedAt, status, checkoutBranch, commit, user} = build
+  return (
+    <tr>
+      <BuildColumn projectId={projectId} buildNum={buildNum}/>
+      <StatusColumn status={status}/>
+      <td className='branch'>
+        {checkoutBranch}
+      </td>
+      <td className='time'>
+        {renderTime(startedAt, endedAt)}
+      </td>
+      <CommitColumn repository={repository} commit={commit}/>
+      <UserColumn user={user} repository={repository}/>
+    </tr>
+  )
+}
 
 BuildRow.displayName = 'BuildRow'
 

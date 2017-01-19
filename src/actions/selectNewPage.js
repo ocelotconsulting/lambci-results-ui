@@ -1,9 +1,9 @@
 import queryString from 'query-string'
+import maxBy from 'lodash/maxBy'
+import minBy from 'lodash/minBy'
 import {SET_BUILD_PAGE, GET_BUILDS} from './types'
 import http from './http'
 import maybeRefresh from './maybeRefresh'
-const maxBy = require('lodash/maxBy')
-const minBy = require('lodash/minBy')
 
 const buildQuery = (builds, pageSize, delta) => {
   const lastBuildNum = delta < 0 ? maxBy(builds, 'buildNum').buildNum + pageSize + 1 : minBy(builds, 'buildNum').buildNum

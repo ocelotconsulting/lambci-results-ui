@@ -26,7 +26,7 @@ const showRemoveBranch = (branch, onClick) => branch ?
 
 const showAddBranch = (branch, onChange) => branch ? undefined : <div>
     <label>New Branch</label>
-    <input type="text" onChange={onChange}></input>
+    <input type="text" onChange={onChange}/>
   </div>
 
 const showTextArea = (name, value, onChange) => <div>
@@ -42,10 +42,10 @@ const ProjectConfig = ({repository, config, onChange, onCheck, params: {projectI
   return config ? (
     <div className='container config'>
       {<Breadcrumb path={[
-            {segment: 'projects', content: 'Projects'},
+            {segment: 'projects', content: 'ProjectsContainer'},
             {segment: projectId, content: projectId, hidden: true},
-            {segment: 'config', content: `${projectId}`, active: branch ? false : true, image: 'fa fa-cog'},
-            {segment: branch, content: branch, active: branch ? true : false, hidden: branch ? false : true}
+            {segment: 'config', content: `${projectId}`, active: !branch, image: 'fa fa-cog'},
+            {segment: branch, content: branch, active: Boolean(branch), hidden: !branch}
           ]} />
       }
 

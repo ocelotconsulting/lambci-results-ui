@@ -1,24 +1,26 @@
 import React from 'react'
-import {App, mapDispatchToProps} from '../../src/components/App'
-import Projects from '../../src/components/Projects'
-import ProjectConfig from '../../src/components/ProjectConfig'
-import Builds from '../../src/components/Builds'
+import {App, mapDispatchToProps} from '../../src/components/AppContainer'
+import ProjectsContainer from '../../src/components/ProjectsContainer'
+import ConfigContainer from '../../src/components/ConfigContainer'
+import BuildsContainer from '../../src/components/BuildsContainer'
+import BuildContainer from '../../src/components/BuildContainer'
 import {shallow} from 'enzyme'
 
-describe('App', () => {
-  let onProjectSelected, onConfigSelected, onLoadProjects, onLeaveBuildPage
+describe('AppContainer', () => {
+  let onProjectSelected, onConfigSelected, onLoadProjects, onLeaveBuildsPage, onBuildSelected
 
-  describe('component', () => {
+  describe('App', () => {
     beforeEach(() => {
       onProjectSelected = sinon.stub()
       onConfigSelected = sinon.stub()
       onLoadProjects = sinon.stub()
-      onLeaveBuildPage = sinon.stub()
+      onLeaveBuildsPage = sinon.stub()
+      onBuildSelected = sinon.stub()
     })
 
     const render = () => shallow(
-      <App onProjectSelected={onProjectSelected} onLeaveBuildPage={onLeaveBuildPage} onConfigSelected={onConfigSelected}
-           onLoadProjects={onLoadProjects}/>
+      <App onProjectSelected={onProjectSelected} onLeaveBuildsPage={onLeaveBuildsPage}
+           onConfigSelected={onConfigSelected} onLoadProjects={onLoadProjects} onBuildSelected={onBuildSelected}/>
     )
 
     const findRoute = path => {
@@ -38,7 +40,8 @@ describe('App', () => {
       projects: '/projects',
       config: '/projects/:projectId/config',
       configBranch: '/projects/:projectId/config/:branch',
-      builds: '/projects/:projectId/builds'
+      builds: '/projects/:projectId/builds',
+      buildReport: '/projects/:projectId/builds/:buildNum'
     }
 
 
@@ -55,7 +58,7 @@ describe('App', () => {
         onLoadProjects.should.have.been.calledWithExactly({params: {}})
       })
 
-      addComponentTest(paths.projects, Projects)
+      addComponentTest(paths.projects, ProjectsContainer)
     })
 
     describe(`${paths.config} route`, () => {
@@ -66,7 +69,7 @@ describe('App', () => {
         onConfigSelected.should.have.been.calledWithExactly(projectId)
       })
 
-      addComponentTest(paths.config, ProjectConfig)
+      addComponentTest(paths.config, ConfigContainer)
     })
 
     describe(`${paths.configBranch} route`, () => {
@@ -78,7 +81,7 @@ describe('App', () => {
         onConfigSelected.should.have.been.calledWithExactly(projectId, branch)
       })
 
-      addComponentTest(paths.configBranch, ProjectConfig)
+      addComponentTest(paths.configBranch, ConfigContainer)
     })
 
     describe(`${paths.builds} route`, () => {
@@ -89,15 +92,26 @@ describe('App', () => {
         onProjectSelected.should.have.been.calledWithExactly(projectId)
       })
 
-      it('invokes onLeaveBuildPage on leave', () => {
+      it('invokes onLeaveBuildsPage on leave', () => {
         invokeEventHandler(paths.builds, 'onLeave')
 
-        onLeaveBuildPage.should.have.been.calledWithExactly({params: {}})
+        onLeaveBuildsPage.should.have.been.calledWithExactly({params: {}})
       })
 
-      addComponentTest(paths.builds, Builds)
+      addComponentTest(paths.builds, BuildsContainer)
     })
 
+    describe(`${paths.buildReport} route`, () => {
+      it('invokes onBuildSelected on enter', () => {
+        const projectId = 'project x'
+        const buildNum = '42'
+        invokeOnEnter(paths.buildReport, {projectId, buildNum})
+
+        onBuildSelected.should.have.been.calledWithExactly(projectId, buildNum)
+      })
+
+      addComponentTest(paths.buildReport, BuildContainer)
+    })
   })
 
   describe('mapDispatchToProps', () => {
@@ -109,7 +123,7 @@ describe('App', () => {
     })
 
     it('defines all props', () => {
-      Object.keys({onLoadProjects, onConfigSelected, onProjectSelected, onLeaveBuildPage}).forEach(
+      Object.keys({onLoadProjects, onConfigSelected, onProjectSelected, onLeaveBuildsPage}).forEach(
         fnName => (typeof props[fnName]).should.equal('function')
       )
     })

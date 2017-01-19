@@ -1,6 +1,6 @@
 import React from 'react'
 import {shallow} from 'enzyme'
-import {Projects, mapStateToProps} from '../../src/components/Projects'
+import {Projects, mapStateToProps} from '../../src/components/ProjectsContainer'
 
 describe('Projects', () => {
   describe('component', () => {

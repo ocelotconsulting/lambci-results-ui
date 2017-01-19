@@ -34,6 +34,8 @@ export const Builds = ({
   </div>
 )
 
+Builds.displayName = 'Builds'
+
 Builds.propTypes = {
   repository: T.object.isRequired,
   sleeping: T.bool.isRequired,

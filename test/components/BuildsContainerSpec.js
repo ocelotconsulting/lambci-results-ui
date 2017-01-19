@@ -1,9 +1,9 @@
 import React from 'react'
-import {Builds, mapStateToProps, mapDispatchToProps} from '../../src/components/Builds'
+import {Builds, mapStateToProps, mapDispatchToProps} from '../../src/components/BuildsContainer'
 import {shallow} from 'enzyme'
 
-describe('Builds', () => {
-  describe('component', () => {
+describe('BuildsContainer', () => {
+  describe('Builds', () => {
     let paging, repository, builds, projectId, sleeping, lastTimestamp, onWakeUp, onPageChanged
 
     const render = () => shallow(
@@ -13,7 +13,7 @@ describe('Builds', () => {
 
     beforeEach(() => {
       repository = {}
-      paging = {page: 1}
+      paging = {page: 1, nextEnabled: true, previousEnabled: false}
       projectId = 'foo bar'
       builds = [{id: 1}]
       sleeping = false
