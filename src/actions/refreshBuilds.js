@@ -1,7 +1,7 @@
 import maxBy from 'lodash/maxBy'
 import map from 'lodash/map'
 import {REFRESH_BUILDS} from './types'
-import agent from '../agent'
+import agent from 'superagent'
 import queryString from 'query-string'
 import {apiBaseUrl} from '../config'
 

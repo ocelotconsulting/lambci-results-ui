@@ -1,6 +1,6 @@
 import refreshBuilds from '../../src/actions/refreshBuilds'
 import {REFRESH_BUILDS} from '../../src/actions/types'
-import agent from '../../src/agent'
+import agent from 'superagent'
 import {apiBaseUrl} from '../../src/config'
 
 describe('refreshBuilds', () => {

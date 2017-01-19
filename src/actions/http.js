@@ -1,4 +1,4 @@
-import agent from '../agent'
+import agent from 'superagent'
 import {apiBaseUrl} from '../config'
 import identity from 'lodash/identity'
 

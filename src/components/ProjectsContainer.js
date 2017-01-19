@@ -11,9 +11,9 @@ export const Projects = ({projects}) => projects ? (
     </h3>
     <ProjectTable projects={projects}/>
     <div className='ocelot-notice'>
-      {'designed and developed by '}
+      {'UI created by '}
       <a href='http://www.ocelotconsulting.com'>
-        Ocelot Consulting LLC
+        Ocelot Consulting
       </a>
     </div>
   </div>

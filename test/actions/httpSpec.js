@@ -1,4 +1,4 @@
-import agent from '../../src/agent'
+import agent from 'superagent'
 import http from '../../src/actions/http'
 import {apiBaseUrl} from '../../src/config'
 

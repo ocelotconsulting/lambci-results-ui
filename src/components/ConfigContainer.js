@@ -42,7 +42,7 @@ const ProjectConfig = ({repository, config, onChange, onCheck, params: {projectI
   return config ? (
     <div className='container config'>
       {<Breadcrumb path={[
-            {segment: 'projects', content: 'ProjectsContainer'},
+            {segment: 'projects', content: 'Projects'},
             {segment: projectId, content: projectId, hidden: true},
             {segment: 'config', content: `${projectId}`, active: !branch, image: 'fa fa-cog'},
             {segment: branch, content: branch, active: Boolean(branch), hidden: !branch}
