@@ -8,7 +8,7 @@ module.exports = Object.assign({}, require('./webpack.config'), {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '"production"'
+        NODE_ENV: '"development"'
       }
     })
   ]
