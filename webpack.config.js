@@ -1,4 +1,14 @@
 const webpack = require('webpack')
+const fs = require('fs')
+
+const defaultBabelConfig = JSON.parse(fs.readFileSync('.babelrc', {encoding: 'utf8'}))
+
+// webpack 2 should not resolve es2015 imports
+const presets = [
+  ['es2015', {modules: false}]
+].concat(defaultBabelConfig.presets.filter(v => v !== 'es2015'))
+
+const babelConfig = Object.assign({}, defaultBabelConfig, {babelrc: false, presets})
 
 module.exports = {
   entry: ['babel-polyfill', './src/index.js'],
@@ -7,25 +17,22 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        query: babelConfig
       }
     ]
   },
-  resolve: {
-    extensions: ['', '.js', '.json']
-  },
-  devtool: '#source-map',
+  devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '"production"',
-        API_BASE_URL: `"${process.env.API_BASE_URL || '/api'}"`
+        NODE_ENV: '"production"'
       }
     }),
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin({sourceMap: true})
   ]
 }
