@@ -8,7 +8,7 @@ describe('maybeRefresh', () => {
     mocks.enable({
       './refreshBuildsLater': refreshBuildsLater
     })
-    maybeRefresh = require('../../src/actions/maybeRefresh').default
+    maybeRefresh = mocks.require('src/actions/maybeRefresh').default
     dispatch = sinon.stub()
     projectId = 'project1'
     state = {
@@ -26,9 +26,7 @@ describe('maybeRefresh', () => {
     }
   })
 
-  afterEach(() => {
-    mocks.disable()
-  })
+  afterEach(mocks.disable)
 
   const apply = () => {
     maybeRefresh({projectId, state, dispatch})

@@ -23,7 +23,7 @@ describe('getBuildReport', () => {
       './querySingleBuild': querySingleBuild,
       './getBuildFile': getBuildFile
     })
-    getBuildReport = require('../../../api/handlers/getBuildReport')
+    getBuildReport = mocks.require('api/handlers/getBuildReport')
   })
 
   afterEach(mocks.disable)
@@ -38,7 +38,7 @@ describe('getBuildReport', () => {
   }
 
   describe('with valid build and buildFile', () => {
-    beforeEach(() => defaultApply())
+    beforeEach(defaultApply)
 
     it('sends html file', () => {
       res.type.should.have.been.calledWithExactly(buildFile.contentType)

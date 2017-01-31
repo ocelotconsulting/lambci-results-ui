@@ -10,7 +10,7 @@ describe('refreshBuildsLater', () => {
     mocks.enable({
       './refreshBuilds': refreshBuilds
     })
-    refreshBuildsLater = require('../../src/actions/refreshBuildsLater').default
+    refreshBuildsLater = mocks.require('src/actions/refreshBuildsLater').default
     state = {
       builds: {
         refresh: {
@@ -25,7 +25,7 @@ describe('refreshBuildsLater', () => {
     }
   })
 
-  afterEach(() => mocks.disable())
+  afterEach(mocks.disable)
 
   const apply = () => refreshBuildsLater()(dispatch, () => state)
 

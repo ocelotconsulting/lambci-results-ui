@@ -28,14 +28,12 @@ describe('saveConfig', () => {
       './getConfig': getConfig,
       './http': http
     })
-    saveConfig = require('../../src/actions/saveConfig').default
+    saveConfig = mocks.require('src/actions/saveConfig').default
     url = undefined
     body = undefined
   })
 
-  afterEach(() => {
-    mocks.disable()
-  })
+  afterEach(mocks.disable)
 
   const apply = () => {
     const thunk = saveConfig(projectId, branch)

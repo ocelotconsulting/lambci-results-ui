@@ -1,10 +1,21 @@
 import mockery from 'mockery'
+import decache from 'decache'
+
+const responseMethods = [
+  'type',
+  'json',
+  'status',
+  'send',
+  'cookie',
+  'redirect'
+]
 
 // mockery requires too much freakin' boilerplate to use
 export default {
   enable(mocks = {}) {
-    mockery.enable({useCleanCache: true})
-    mockery.warnOnUnregistered(false)
+    mockery.enable({
+      warnOnUnregistered: false
+    })
     for (let path in mocks) {
       mockery.registerMock(path, mocks[path])
     }
@@ -13,14 +24,14 @@ export default {
     mockery.deregisterAll()
     mockery.disable()
   },
+  require(path) {
+    const module = `../${path}`
+    decache(module)
+    return require(module)
+  },
   response() {
     const res = {}
-    return Object.assign(res, {
-      type: sinon.stub().returns(res),
-      status: sinon.stub().returns(res),
-      json: sinon.stub(),
-      send: sinon.stub()
-    })
+    responseMethods.forEach(method => res[method] = sinon.stub().returns(res))
+    return res
   }
 }
-

@@ -16,15 +16,12 @@ describe('getBuilds', () => {
     dispatch = sinon.stub()
     projectId = 'project 1'
     state = {x: 1}
-    getBuilds = require('../../src/actions/getBuilds').default
+    getBuilds = mocks.require('src/actions/getBuilds').default
     const thunk = getBuilds(projectId)
     return thunk(dispatch, () => state)
   })
 
-  afterEach(() => {
-    mocks.disable()
-  })
-
+  afterEach(mocks.disable)
 
   it('selects project', () =>
     dispatch.should.have.been.calledWithExactly({type: SELECT_PROJECT, projectId})
