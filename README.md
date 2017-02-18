@@ -1,7 +1,5 @@
 # Lambda CI UI
 
-(test)
-
 A UI and API to display the results of Lambda CI builds and configure projects on your lambci stack. The API runs as a lambda function but can also be run using [express](http://expressjs.com).
 
 ## Status / Roadmap as of November 2016
