@@ -13,7 +13,7 @@
     "build": "npm run clean && npm-run-all build:*",
     "build-lambda": "webpack --config webpack.lambda.config.js",
     "deploy-lambda": "rm -rf dist && npm run build-lambda && node build/deployLambda.js",
-    "deploy-ui": "npm run build && node build/deployUI.js",
+    "deploy-ui": "NODE_ENV=production npm run build && node build/deployUI.js",
     "start": "NODE_ENV=production node server",
     "test": "mocha",
     "test:dev": "mocha -w"

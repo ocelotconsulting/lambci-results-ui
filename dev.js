@@ -4,6 +4,8 @@ const hotMiddleware = require('webpack-hot-middleware')
 const lessMiddleware = require('less-middleware')
 const webpack = require('webpack')
 
+const apiBaseUrl = process.env.API_URL
+
 const config = Object.assign({}, require('./webpack.config.js'), {
   entry: [
     'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true',
@@ -19,9 +21,7 @@ const config = Object.assign({}, require('./webpack.config.js'), {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"development"'
-      }
+      API_URL: JSON.stringify(apiBaseUrl || '/api')
     })
   ]
 })
@@ -29,6 +29,8 @@ const config = Object.assign({}, require('./webpack.config.js'), {
 const compiler = webpack(config)
 
 console.log('DEV mode')
+
+if (apiBaseUrl) console.log(`WARNING: api URL overridden to ${apiBaseUrl}`)
 
 module.exports = app => {
   app.use('/images', express.static('images'))

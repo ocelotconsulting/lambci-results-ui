@@ -9,3 +9,4 @@ chai.use(chaiAsPromised)
 chai.use(sinonChai)
 
 global.sinon = sinon
+global.API_URL = '/api'

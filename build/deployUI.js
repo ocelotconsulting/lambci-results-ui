@@ -6,12 +6,17 @@ const flatten = require('lodash/flatten')
 const reject = require('lodash/reject')
 const mimeTypes = require('mime-types')
 
-const bucket = process.env.LAMBCI_UI_BUCKET
-
-if (!bucket) {
-  console.error('Missing LAMBCI_UI_BUCKET environment variable')
-  process.exit(1)
+const requireEnv = (name) => {
+  const value = process.env[name]
+  if (value) {
+    return value
+  } else {
+    console.error(`Missing ${name} environment variable`)
+    process.exit(1)
+  }
 }
+const bucket = requireEnv('LAMBCI_UI_BUCKET')
+requireEnv('API_URL')
 
 const contentTypeHeaders = mimeType => {
   const charset = mimeTypes.charset(mimeType)

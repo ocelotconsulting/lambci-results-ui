@@ -41,7 +41,7 @@ This is a brand new project.  Some enhancements we hope to add:
 + Deploy the UI - use the API url for the environment variable:
  
 ```
-export API_BASE_URL=https://xxxxxxx.execute-api.us-east-1.amazonaws.com/prod
+export API_URL=https://xxxxxxx.execute-api.us-east-1.amazonaws.com/prod
 npm install # if needed
 npm run deploy-ui
 ``` 
