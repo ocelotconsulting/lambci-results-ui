@@ -1,4 +1,5 @@
-import mocks from '../../mocks'
+import proxyquire from '../../proxyquire'
+import mockResponse from '../../mockResponse'
 
 describe('getBuildReport', () => {
   let querySingleBuild, getBuildFile, getBuildReport
@@ -14,26 +15,23 @@ describe('getBuildReport', () => {
       contentType: 'text/html',
       body: 'html'
     }
-    res = mocks.response()
+    res = mockResponse()
     next = sinon.stub()
 
     querySingleBuild = sinon.stub()
     getBuildFile = sinon.stub()
-    mocks.enable({
+    getBuildReport = proxyquire('api/handlers/getBuildReport', {
       './querySingleBuild': querySingleBuild,
       './getBuildFile': getBuildFile
     })
-    getBuildReport = mocks.require('api/handlers/getBuildReport')
   })
 
-  afterEach(mocks.disable)
-
   const apply = () =>
-    getBuildReport({params: {projectId, buildNum}}, res, next)
+    getBuildReport({ params: { projectId, buildNum } }, res, next)
 
   const defaultApply = () => {
-    querySingleBuild.resolves({build: {files}})
-    getBuildFile.resolves({result: buildFile})
+    querySingleBuild.resolves({ build: { files } })
+    getBuildFile.resolves({ result: buildFile })
     return apply()
   }
 
@@ -78,7 +76,7 @@ describe('getBuildReport', () => {
     const message = 'not found'
 
     beforeEach(() => {
-      querySingleBuild.resolves({status: 404, message})
+      querySingleBuild.resolves({ status: 404, message })
       return apply()
     })
 
@@ -92,8 +90,8 @@ describe('getBuildReport', () => {
     const message = 'whoops'
 
     beforeEach(() => {
-      querySingleBuild.resolves({build: {files}})
-      getBuildFile.resolves({status, message})
+      querySingleBuild.resolves({ build: { files } })
+      getBuildFile.resolves({ status, message })
       return apply()
     })
 
@@ -103,7 +101,7 @@ describe('getBuildReport', () => {
   })
 
   describe('when an unexpected error occurs', () => {
-    const error = new Error
+    const error = new Error()
 
     beforeEach(() => {
       querySingleBuild.rejects(error)
@@ -113,6 +111,5 @@ describe('getBuildReport', () => {
     it('invokes next', () =>
       next.should.have.been.calledWithExactly(error)
     )
-
   })
 })

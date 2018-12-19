@@ -1,4 +1,4 @@
-const {stackName} = require('../config')
+const { stackName } = require('../config')
 const dynamoClient = require('./dynamoClient')
 const projectExists = require('./projectExists')
 const projectNotFound = require('./projectNotFound')
@@ -21,11 +21,11 @@ const getConfig = projectId =>
       }
     }
   }).promise()
-  .then(({Items: [item]}) =>
-    (item && toConfig(item)) || projectExists(projectId).then(exists => exists && ({project: projectId}))
+  .then(({ Items: [item] }) =>
+    (item && toConfig(item)) || projectExists(projectId).then(exists => exists && ({ project: projectId }))
   )
 
-module.exports = ({params: {projectId}}, res, next) =>
+module.exports = ({ params: { projectId } }, res, next) =>
   getConfig(projectId)
   .then(config => config ? res.json(config) : projectNotFound(res, projectId))
   .catch(next)

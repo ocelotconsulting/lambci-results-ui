@@ -16,11 +16,11 @@ const getParams = (projectId, buildNum) => ({
 module.exports = (projectId, buildNum) => {
   const parsedBuildNum = parseInt(buildNum, 10)
   if (parsedBuildNum > 0) {
-    return queryBuilds({parameters: getParams(projectId, parsedBuildNum)})
+    return queryBuilds({ parameters: getParams(projectId, parsedBuildNum) })
     .then(([build]) =>
-      build ?
-        {build} :
-        {
+      build
+        ? { build }
+        : {
           status: 404,
           message: `Project '${projectId}' build #${buildNum} was not found`
         }

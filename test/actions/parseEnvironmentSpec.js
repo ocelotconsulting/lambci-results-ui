@@ -15,7 +15,7 @@ describe('parseEnvironment', () => {
   it('ignores line when RHS is empty', () => {
     parseEnvironment(' = foo').should.eql({})
   })
-  
+
   it('includes all of RHS including equal signs', () => {
     parseEnvironment('foo = bar=barbar').should.eql({
       foo: 'bar=barbar'

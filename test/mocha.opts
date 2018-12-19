@@ -1,4 +1,4 @@
---compilers js:babel-core/register
+--require test/register
 --require test/setup
 --recursive
 --colors

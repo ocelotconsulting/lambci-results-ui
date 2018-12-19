@@ -1,32 +1,33 @@
-import React, {PropTypes as T} from 'react'
+import React from 'react'
+import T from 'prop-types'
 import moment from 'moment'
 
 class SleepOverlay extends React.Component {
-  constructor(...args) {
+  constructor (...args) {
     super(...args)
-    this.state = {ticks: 0}
+    this.state = { ticks: 0 }
     this.tick = this.tick.bind(this)
   }
 
-  tick() {
-    this.setState({ticks: this.state.ticks + 1})
+  tick () {
+    this.setState({ ticks: this.state.ticks + 1 })
     this.tickLater()
   }
 
-  tickLater() {
+  tickLater () {
     this.timeoutId = setTimeout(this.tick, this.props.tickDuration)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.tickLater()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     clearTimeout(this.timeoutId)
   }
 
-  render() {
-    const {lastTimestamp, onWakeUp} = this.props
+  render () {
+    const { lastTimestamp, onWakeUp } = this.props
 
     return (
       <div className='sleep-overlay'>
@@ -37,7 +38,7 @@ class SleepOverlay extends React.Component {
               {`last updated ${moment(lastTimestamp || Date.now()).fromNow()}` }
             </div>
             <div className='actions'>
-              <a href='#' onClick={e => {e.preventDefault(); onWakeUp()}}>update now</a>
+              <a href='#' onClick={e => { e.preventDefault(); onWakeUp() }}>update now</a>
             </div>
           </div>
         </div>

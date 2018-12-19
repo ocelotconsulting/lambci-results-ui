@@ -1,4 +1,4 @@
-const {handler} = require('../../../api/lambda')
+const { handler } = require('../../../api/lambda')
 const routes = require('../../../api/routes')
 
 describe('lambda', () => {
@@ -11,10 +11,8 @@ describe('lambda', () => {
     event = {
       httpMethod: 'GET',
       path: '/projects',
-      headers: {
-      },
-      queryStringParameters: {
-      }
+      headers: {},
+      queryStringParameters: {}
     }
     // {httpMethod, path, body, headers, queryStringParameters}
     context = {}
@@ -25,7 +23,6 @@ describe('lambda', () => {
   afterEach(() => {
     stub && stub.restore()
   })
-
 
   const stubRoute = (path, method) => {
     const route = routes.find(r => r.path.id === path)
@@ -48,8 +45,12 @@ describe('lambda', () => {
       invoke()
       const next = stub.lastCall.args[2]
       const errorMessage = 'ouch'
-      next(new Error(errorMessage))
-
+      const errorStub = sinon.stub(console, 'error')
+      try {
+        next(new Error(errorMessage))
+      } finally {
+        console.error.restore()
+      }
       callback.should.have.been.calledWithExactly(null, {
         statusCode: '500',
         body: 'An unexpected error occurred: ouch',
@@ -58,6 +59,7 @@ describe('lambda', () => {
           'Content-Type': 'text/plain'
         }
       })
+      errorStub.should.have.been.called
     })
   })
 
@@ -69,7 +71,7 @@ describe('lambda', () => {
     beforeEach(() => {
       event.path = '/projects/foo-bar/config'
       event.httpMethod = 'PUT'
-      body = {foo: 42}
+      body = { foo: 42 }
       event.body = JSON.stringify(body)
       stub = stubRoute(putConfigPath, 'put')
     })
@@ -112,5 +114,4 @@ describe('lambda', () => {
       })
     })
   })
-
 })

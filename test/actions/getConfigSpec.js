@@ -1,5 +1,5 @@
 import getConfig from '../../src/actions/getConfig'
-import {SELECT_PROJECT, GET_CONFIG} from '../../src/actions/types'
+import { SELECT_PROJECT, GET_CONFIG } from '../../src/actions/types'
 import http from '../../src/actions/http'
 
 describe('getConfig', () => {
@@ -8,7 +8,7 @@ describe('getConfig', () => {
   beforeEach(() => {
     sinon.stub(http, 'get')
     projectId = 'project 1'
-    branch = {id: 2}
+    branch = { id: 2 }
     dispatch = sinon.stub()
     const thunk = getConfig(projectId, branch)
     return thunk(dispatch)
@@ -19,7 +19,7 @@ describe('getConfig', () => {
   })
 
   it('selects project', () =>
-    dispatch.should.have.been.calledWithExactly({type: SELECT_PROJECT, projectId})
+    dispatch.should.have.been.calledWithExactly({ type: SELECT_PROJECT, projectId })
   )
 
   it('gets config', () =>
@@ -27,9 +27,9 @@ describe('getConfig', () => {
   )
 
   it('provides transformer to include branch', () => {
-    const {args} = http.get.lastCall
+    const { args } = http.get.lastCall
     args.length.should.equal(4)
     const transform = args[3]
-    transform({id: 1}).should.eql({id: 1, branch})
+    transform({ id: 1 }).should.eql({ id: 1, branch })
   })
 })

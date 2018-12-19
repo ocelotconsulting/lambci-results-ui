@@ -1,30 +1,27 @@
-import mocks from '../mocks'
-import {SELECT_PROJECT, GET_BUILDS} from '../../src/actions/types'
+import proxyquire from '../proxyquire'
+import { SELECT_PROJECT, GET_BUILDS } from '../../src/actions/types'
 
 describe('getBuilds', () => {
   let maybeRefresh, http, projectId, dispatch, state, getBuilds
 
-  beforeEach(() => {
+  beforeEach(async () => {
     maybeRefresh = sinon.stub()
     http = {
       get: sinon.stub().resolves()
     }
-    mocks.enable({
-      './maybeRefresh': maybeRefresh,
-      './http': http
-    })
     dispatch = sinon.stub()
     projectId = 'project 1'
-    state = {x: 1}
-    getBuilds = mocks.require('src/actions/getBuilds').default
+    state = { x: 1 }
+    getBuilds = proxyquire('src/actions/getBuilds', {
+      './maybeRefresh': maybeRefresh,
+      './http': http
+    }).default
     const thunk = getBuilds(projectId)
-    return thunk(dispatch, () => state)
+    await thunk(dispatch, () => state)
   })
 
-  afterEach(mocks.disable)
-
   it('selects project', () =>
-    dispatch.should.have.been.calledWithExactly({type: SELECT_PROJECT, projectId})
+    dispatch.should.have.been.calledWithExactly({ type: SELECT_PROJECT, projectId })
   )
 
   it('gets projects using project path', () =>
@@ -34,6 +31,6 @@ describe('getBuilds', () => {
   )
 
   it('delegates to maybeRefresh', () => {
-    maybeRefresh.should.have.been.calledWithExactly({projectId, state, dispatch})
+    maybeRefresh.should.have.been.calledWithExactly({ projectId, state, dispatch })
   })
 })

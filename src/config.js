@@ -1,2 +1,1 @@
-//noinspection JSUnresolvedVariable
-export const apiBaseUrl = API_URL
+export const apiBaseUrl = process.env.API_URL

@@ -1,8 +1,8 @@
 import React from 'react'
 import moment from 'moment'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 import ProjectRow from '../../src/components/ProjectRow'
-import {expectedProjectTableColumnCount} from './expectedColumnCounts'
+import { expectedProjectTableColumnCount } from './expectedColumnCounts'
 
 describe('ProjectRow', () => {
   let project
@@ -55,7 +55,7 @@ describe('ProjectRow', () => {
 
   describe('repository column', () => {
     it('renders link', () => {
-      render().find('td.repository RepositoryLink').props().should.eql({repository: project.repository})
+      render().find('td.repository RepositoryLink').props().should.eql({ repository: project.repository })
     })
   })
 
@@ -73,7 +73,6 @@ describe('ProjectRow', () => {
     it('renders link to config page', () => {
       configColumn.find('Link').prop('to').should.equal(`/projects/${encodeURIComponent(project.id)}/config`)
     })
-
 
     it('renders configure text', () => {
       configColumn.find('Link').children().last().text().should.equal(' configure')

@@ -1,4 +1,4 @@
-import {GET_PROJECTS, SELECT_PROJECT} from '../actions/types'
+import { GET_PROJECTS, SELECT_PROJECT } from '../actions/types'
 import getRepository from './getRepository'
 
 const initialState = {
@@ -12,11 +12,11 @@ export default (state = initialState, action = {}) => {
     case GET_PROJECTS:
       switch (action.status) {
         case 'start':
-          return {...state, all: undefined, error: undefined}
+          return { ...state, all: undefined, error: undefined }
         case 'error':
-          return {...state, error: action.error}
+          return { ...state, error: action.error }
         case 'done':
-          return {...state, all: action.result}
+          return { ...state, all: action.result }
         default:
           return state
       }

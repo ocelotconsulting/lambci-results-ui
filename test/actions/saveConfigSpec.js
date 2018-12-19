@@ -1,5 +1,5 @@
-import {SAVE_CONFIG} from '../../src/actions/types'
-import mocks from '../mocks'
+import { SAVE_CONFIG } from '../../src/actions/types'
+import proxyquire from '../proxyquire'
 
 describe('saveConfig', () => {
   let projectId, branch, dispatch, state, getConfig, http, saveConfig, url, body
@@ -24,16 +24,13 @@ describe('saveConfig', () => {
       put: sinon.stub().resolves()
     }
 
-    mocks.enable({
+    saveConfig = proxyquire('src/actions/saveConfig', {
       './getConfig': getConfig,
       './http': http
-    })
-    saveConfig = mocks.require('src/actions/saveConfig').default
+    }).default
     url = undefined
     body = undefined
   })
-
-  afterEach(mocks.disable)
 
   const apply = () => {
     const thunk = saveConfig(projectId, branch)
@@ -54,7 +51,7 @@ describe('saveConfig', () => {
     )
 
     it('parses environment', () =>
-      body.env.should.eql({foo: 'bar'})
+      body.env.should.eql({ foo: 'bar' })
     )
 
     it('includes properties from edited config in body', () =>
@@ -69,13 +66,13 @@ describe('saveConfig', () => {
 
     it('adds branches property if needed', () =>
       apply()
-      .then(() => body.branches.should.eql({foo: {}}))
+      .then(() => body.branches.should.eql({ foo: {} }))
     )
 
     it('adds branch config to existing branches', () => {
-      state.config.editing.branches = {bar: {}}
+      state.config.editing.branches = { bar: {} }
       return apply()
-      .then(() => body.branches.should.eql({foo: {}, bar: {}}))
+      .then(() => body.branches.should.eql({ foo: {}, bar: {} }))
     })
   })
 
@@ -86,7 +83,7 @@ describe('saveConfig', () => {
     })
 
     it('updates config for branch', () =>
-      body.branches.foo.env.should.eql({foo: 'bar'})
+      body.branches.foo.env.should.eql({ foo: 'bar' })
     )
   })
 
@@ -100,7 +97,5 @@ describe('saveConfig', () => {
       getConfig.should.have.been.calledWithExactly(projectId, branch)
       dispatch.should.have.been.calledWithExactly('mockAction')
     })
-
   })
-
 })

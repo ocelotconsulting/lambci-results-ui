@@ -1,6 +1,6 @@
 import React from 'react'
 import UserColumn from '../../src/components/UserColumn'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 
 describe('UserColumn', () => {
   let user, repository
@@ -11,7 +11,7 @@ describe('UserColumn', () => {
 
   beforeEach(() => {
     user = 'user23'
-    repository = {type: 'github'}
+    repository = { type: 'github' }
   })
 
   it('renders with user class', () => {
@@ -19,6 +19,6 @@ describe('UserColumn', () => {
   })
 
   it('renders link', () => {
-    render().find('RepositoryLink').props().should.eql({repository, path: user})
+    render().find('RepositoryLink').props().should.eql({ repository, path: user })
   })
 })

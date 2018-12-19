@@ -20,7 +20,7 @@ const newBuildsParams = (projectId, lastBuildNum) => defaultBuildParams(projectI
 const updateAttributes = ['buildNum', 'endedAt', 'status']
 
 const updateBuildParams = (projectId, buildNum) =>
-  Object.assign({AttributesToGet: updateAttributes}, defaultBuildParams(projectId, buildNum))
+  Object.assign({ AttributesToGet: updateAttributes }, defaultBuildParams(projectId, buildNum))
 
 const parseQuery = query => {
   const lastBuildNum = parseInt(query.lastBuildNum, 10)
@@ -35,7 +35,7 @@ const parseQuery = query => {
       error: `Optional query parameter 'buildNums' must be a CSV of positive integers; was ${query.buildNums}`
     }
   } else {
-    return {lastBuildNum, buildNums}
+    return { lastBuildNum, buildNums }
   }
 }
 
@@ -52,10 +52,10 @@ const getUpdates = (projectId, buildNums) =>
   ).then(compact) // builds should not be deleted but it seems standard to tolerate query params that don't exist
 
 const getNewBuilds = (projectId, lastBuildNum) =>
-  queryBuilds({parameters: newBuildsParams(projectId, lastBuildNum)})
+  queryBuilds({ parameters: newBuildsParams(projectId, lastBuildNum) })
 
-module.exports = ({query, params: {projectId}}, res, next) => {
-  const {error, lastBuildNum, buildNums} = parseQuery(query)
+module.exports = ({ query, params: { projectId } }, res, next) => {
+  const { error, lastBuildNum, buildNums } = parseQuery(query)
   if (error) {
     res.status(400).send(error)
   } else {
@@ -64,7 +64,7 @@ module.exports = ({query, params: {projectId}}, res, next) => {
       getNewBuilds(projectId, lastBuildNum)
     ])
     .then(([updates, newBuilds]) =>
-      res.json(sortBy(updates.concat(newBuilds), ({buildNum}) => -1 * buildNum))
+      res.json(sortBy(updates.concat(newBuilds), ({ buildNum }) => -1 * buildNum))
     )
     .catch(next)
   }

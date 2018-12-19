@@ -1,6 +1,6 @@
 import React from 'react'
 import BuildColumn from '../../src/components/BuildColumn'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 
 describe('BuildColumn', () => {
   let projectId, buildNum, component

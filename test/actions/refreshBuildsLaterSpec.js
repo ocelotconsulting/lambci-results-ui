@@ -1,16 +1,17 @@
-import {SET_BUILD_REFRESH_TIMEOUT_ID} from '../../src/actions/types'
-import mocks from '../mocks'
+import { SET_BUILD_REFRESH_TIMEOUT_ID } from '../../src/actions/types'
+import proxyquire from '../proxyquire'
 
 describe('refreshBuildsLater', () => {
-  let dispatch, state, refreshBuilds, refreshBuildsLater
+  let dispatch, state, refreshBuilds, refreshBuildsLater, cleanup
 
   beforeEach(() => {
     dispatch = sinon.stub()
     refreshBuilds = sinon.stub().returns('mockAction')
-    mocks.enable({
+    const mod = proxyquire('src/actions/refreshBuildsLater', {
       './refreshBuilds': refreshBuilds
     })
-    refreshBuildsLater = mocks.require('src/actions/refreshBuildsLater').default
+    cleanup = mod.cleanup
+    refreshBuildsLater = mod.default
     state = {
       builds: {
         refresh: {
@@ -20,12 +21,14 @@ describe('refreshBuildsLater', () => {
         }
       },
       projects: {
-        selected: {id: 'project1'}
+        selected: { id: 'project1' }
       }
     }
   })
 
-  afterEach(mocks.disable)
+  afterEach(() => {
+    cleanup()
+  })
 
   const apply = () => refreshBuildsLater()(dispatch, () => state)
 

@@ -2,8 +2,6 @@ const fs = require('fs')
 const express = require('express')
 const app = express()
 
-//commit4
-
 app.use('/api', require('./api/express'))
 
 if (process.env.NODE_ENV !== 'production') {
@@ -12,7 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use('/', express.static('public'))
 
-const html = fs.readFileSync('index.html', {encoding: 'utf8'})
+const html = fs.readFileSync('index.html', { encoding: 'utf8' })
 
 app.get('/*', (req, res) => {
   res.cookie('lambci-ui-express', 'true')

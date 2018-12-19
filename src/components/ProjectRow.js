@@ -1,9 +1,10 @@
-import React, {PropTypes as T} from 'react'
-import {Link} from 'react-router'
+import React from 'react'
+import T from 'prop-types'
+import { Link } from 'react-router'
 import moment from 'moment'
 import RepositoryLink from './RepositoryLink'
 
-const ProjectRow = ({project: {id, lastTimestamp, repository}}) => (
+const ProjectRow = ({ project: { id, lastTimestamp, repository } }) => (
   <tr>
     <td className='id'>
       <Link to={`/projects/${encodeURIComponent(id)}/builds`}>

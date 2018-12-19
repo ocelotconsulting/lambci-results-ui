@@ -1,11 +1,10 @@
-const compact = require('lodash/compact')
 const routes = require('../routes')
 const createRequest = require('./createRequest')
 const createResponse = require('./createResponse')
 
 const findRoute = (httpMethod, path) => {
-  let params = undefined
-  let handler = undefined
+  let params
+  let handler
 
   routes.find(route => {
     const routeHandler = route[httpMethod.toLowerCase()]
@@ -16,13 +15,14 @@ const findRoute = (httpMethod, path) => {
       return true
     }
   })
-  return params && {params, handler}
+  // noinspection JSUnusedAssignment
+  return params && { params, handler }
 }
 
 exports.handler = (event, context, callback) => {
   try {
-    const {httpMethod, path} = event
-    const {params, handler} = findRoute(httpMethod, path) || {}
+    const { httpMethod, path } = event
+    const { params, handler } = findRoute(httpMethod, path) || {}
 
     const res = createResponse(callback)
 

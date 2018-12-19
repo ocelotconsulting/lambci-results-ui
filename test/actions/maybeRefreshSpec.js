@@ -1,14 +1,13 @@
-import mocks from '../mocks'
+import proxyquire from '../proxyquire'
 
 describe('maybeRefresh', () => {
   let refreshBuildsLater, maybeRefresh, projectId, state, dispatch
 
   beforeEach(() => {
-    refreshBuildsLater = sinon.stub().returns({type: 'refreshBuildsLater'})
-    mocks.enable({
+    refreshBuildsLater = sinon.stub().returns({ type: 'refreshBuildsLater' })
+    maybeRefresh = proxyquire('src/actions/maybeRefresh', {
       './refreshBuildsLater': refreshBuildsLater
-    })
-    maybeRefresh = mocks.require('src/actions/maybeRefresh').default
+    }).default
     dispatch = sinon.stub()
     projectId = 'project1'
     state = {
@@ -26,12 +25,10 @@ describe('maybeRefresh', () => {
     }
   })
 
-  afterEach(mocks.disable)
-
   const apply = () => {
-    maybeRefresh({projectId, state, dispatch})
-    if (dispatch.callCount == 0) {
-      return false;
+    maybeRefresh({ projectId, state, dispatch })
+    if (dispatch.callCount === 0) {
+      return false
     } else {
       dispatch.should.have.been.calledWithExactly(refreshBuildsLater())
       return true

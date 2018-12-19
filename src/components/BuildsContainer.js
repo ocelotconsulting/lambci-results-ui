@@ -1,5 +1,6 @@
-import React, {PropTypes as T} from 'react'
-import {connect} from 'react-redux'
+import React from 'react'
+import T from 'prop-types'
+import { connect } from 'react-redux'
 import Spinner from './Spinner'
 import BuildTable from './BuildTable'
 import RepositoryLink from './RepositoryLink'
@@ -10,15 +11,15 @@ import wakeBuildRefresh from '../actions/wakeBuildRefresh'
 import selectNewPage from '../actions/selectNewPage'
 
 export const Builds = ({
-  repository, paging, builds, sleeping, lastTimestamp, onWakeUp, params: {projectId}, onPageChanged
+  repository, paging, builds, sleeping, lastTimestamp, onWakeUp, params: { projectId }, onPageChanged
 }) => (
   <div className='container builds'>
     {
       sleeping ? (<SleepOverlay lastTimestamp={lastTimestamp} onWakeUp={onWakeUp}/>) : undefined
     }
     <Breadcrumb path={[
-      {segment: 'projects', content: 'Projects'},
-      {segment: projectId, content: projectId, active: true}
+      { segment: 'projects', content: 'Projects' },
+      { segment: projectId, content: projectId, active: true }
     ]}/>
     <h3>
       <RepositoryLink repository={repository}/>
@@ -46,7 +47,7 @@ Builds.propTypes = {
   onPageChanged: T.func.isRequired
 }
 
-export const mapStateToProps = ({projects: {selected: {repository}}, builds: {value, refresh, paging}}) => ({
+export const mapStateToProps = ({ projects: { selected: { repository } }, builds: { value, refresh, paging } }) => ({
   repository,
   builds: value,
   paging,

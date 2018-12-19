@@ -7,20 +7,20 @@ module.exports = callback => {
     'Access-Control-Allow-Origin': '*'
   }
 
-  let body = undefined
+  let body
 
-  const end = () => callback(null, {statusCode, body, headers})
+  const end = () => callback(null, { statusCode, body, headers })
 
   return {
-    type(mimeType) {
+    type (mimeType) {
       headers['Content-Type'] = mimeType
       return this
     },
-    status(code) {
+    status (code) {
       statusCode = String(code)
       return this
     },
-    set(headerName, headerValue) {
+    set (headerName, headerValue) {
       if (typeof headerName === 'string') {
         headers[headerName] = headerValue
       } else {
@@ -28,12 +28,12 @@ module.exports = callback => {
       }
       return this
     },
-    json(object) {
+    json (object) {
       body = JSON.stringify(object)
       headers['Content-Type'] = 'application/json'
       end()
     },
-    send(textBody = '') {
+    send (textBody = '') {
       body = textBody
       end()
     }

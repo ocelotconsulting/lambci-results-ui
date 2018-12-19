@@ -1,7 +1,8 @@
-import React, {PropTypes as T} from 'react'
+import React from 'react'
+import T from 'prop-types'
 import RepositoryLink from './RepositoryLink'
 
-const UserColumn = ({user, repository}) => (
+const UserColumn = ({ user, repository }) => (
   <td className='user'>
     <RepositoryLink repository={repository} path={user}/>
   </td>

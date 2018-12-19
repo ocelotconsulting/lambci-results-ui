@@ -1,13 +1,13 @@
-import {SAVE_CONFIG} from './types'
+import { SAVE_CONFIG } from './types'
 import http from './http'
 import getConfig from './getConfig'
 import parseEnvironment from './parseEnvironment'
 
 export default (projectId, branch) =>
   (dispatch, getState) => {
-    const {value, editing} = getState().config
+    const { value, editing } = getState().config
 
-    const editedConfig = {...editing, env: parseEnvironment(editing.env)}
+    const editedConfig = { ...editing, env: parseEnvironment(editing.env) }
 
     const projectConfig = branch ? {
       ...value,

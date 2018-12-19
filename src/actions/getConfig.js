@@ -1,13 +1,13 @@
-import {SELECT_PROJECT, GET_CONFIG} from './types'
+import { SELECT_PROJECT, GET_CONFIG } from './types'
 import http from './http'
 
 export default (projectId, branch) =>
   dispatch => {
-    dispatch({type: SELECT_PROJECT, projectId})
+    dispatch({ type: SELECT_PROJECT, projectId })
     return http.get(
       dispatch,
       GET_CONFIG,
       `projects/${encodeURIComponent(projectId)}/config`,
-      res => ({...res, branch})
+      res => ({ ...res, branch })
     )
   }

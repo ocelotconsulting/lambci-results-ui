@@ -1,4 +1,5 @@
-import React, {PropTypes as T} from 'react'
+import React from 'react'
+import T from 'prop-types'
 
 const withPreventDefault = callback =>
   e => {
@@ -6,7 +7,7 @@ const withPreventDefault = callback =>
     callback()
   }
 
-export const BuildPagerLink = ({onClick, disabled, children}) =>
+export const BuildPagerLink = ({ onClick, disabled, children }) =>
   disabled ? (
     <span className='disabled'>{children}</span>
   ) : (
@@ -22,7 +23,7 @@ BuildPagerLink.propTypes = {
 
 BuildPagerLink.displayName = 'BuildPagerLink'
 
-const BuildPager = ({page, nextEnabled, previousEnabled, onPrevious, onNext}) => (
+const BuildPager = ({ page, nextEnabled, previousEnabled, onPrevious, onNext }) => (
   <div className='build-pager'>
     <BuildPagerLink disabled={!previousEnabled} onClick={onPrevious}>
       <i className='fa fa-chevron-left'/>

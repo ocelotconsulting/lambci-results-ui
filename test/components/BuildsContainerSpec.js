@@ -1,6 +1,6 @@
 import React from 'react'
-import {Builds, mapStateToProps, mapDispatchToProps} from '../../src/components/BuildsContainer'
-import {shallow} from 'enzyme'
+import { Builds, mapStateToProps, mapDispatchToProps } from '../../src/components/BuildsContainer'
+import { shallow } from 'enzyme'
 
 describe('BuildsContainer', () => {
   describe('Builds', () => {
@@ -8,14 +8,14 @@ describe('BuildsContainer', () => {
 
     const render = () => shallow(
       <Builds paging={paging} builds={builds} repository={repository} lastTimestamp={lastTimestamp}
-              params={{projectId}} sleeping={sleeping} onWakeUp={onWakeUp} onPageChanged={onPageChanged}/>
+              params={{ projectId }} sleeping={sleeping} onWakeUp={onWakeUp} onPageChanged={onPageChanged}/>
     )
 
     beforeEach(() => {
       repository = {}
-      paging = {page: 1, nextEnabled: true, previousEnabled: false}
+      paging = { page: 1, nextEnabled: true, previousEnabled: false }
       projectId = 'foo bar'
-      builds = [{id: 1}]
+      builds = [{ id: 1 }]
       sleeping = false
       lastTimestamp = Date.now()
       onWakeUp = sinon.stub()
@@ -53,7 +53,7 @@ describe('BuildsContainer', () => {
       })
 
       it('passes onWakeUp and lastTimestamp props to overlay', () => {
-        overlay.props().should.eql({onWakeUp, lastTimestamp, tickDuration: 5000})
+        overlay.props().should.eql({ onWakeUp, lastTimestamp, tickDuration: 5000 })
       })
     })
   })
@@ -65,7 +65,7 @@ describe('BuildsContainer', () => {
       state = {
         projects: {
           selected: {
-            repository: {type: 'foo'}
+            repository: { type: 'foo' }
           }
         },
         builds: {
@@ -98,7 +98,6 @@ describe('BuildsContainer', () => {
       state.builds.refresh.sleepCount = state.builds.refresh.sleepThreshold
       apply().sleeping.should.be.true
     })
-
   })
 
   describe('mapDispatchToProps', () => {

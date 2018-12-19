@@ -20,7 +20,7 @@ requireEnv('API_URL')
 
 const contentTypeHeaders = mimeType => {
   const charset = mimeTypes.charset(mimeType)
-  return Object.assign({ContentType: mimeType}, charset ? {ContentEncoding: charset} : undefined)
+  return Object.assign({ ContentType: mimeType }, charset ? { ContentEncoding: charset } : undefined)
 }
 
 const fileName = (relativePath) => path.join(...(['public'].concat(relativePath)))
@@ -35,7 +35,6 @@ const uploadFile = key =>
   ).promise()
   .then(result => console.log(result))
 
-
 const readDirectory = parentPath => {
   const contents = fs.readdirSync(fileName(parentPath))
   const isDirectory = f => fs.lstatSync(fileName(parentPath.concat(f))).isDirectory()
@@ -46,7 +45,7 @@ const readDirectory = parentPath => {
 }
 
 const getAllKeys = (parentPath = []) => {
-  const {files, directories} = readDirectory(parentPath)
+  const { files, directories } = readDirectory(parentPath)
   const toKey = file => parentPath.concat(file).join('/')
   const toDirectoryKeys = directory => getAllKeys(parentPath.concat(directory))
 

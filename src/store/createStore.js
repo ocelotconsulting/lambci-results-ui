@@ -1,6 +1,6 @@
-import {createStore, applyMiddleware, combineReducers} from 'redux'
+import { applyMiddleware, combineReducers, createStore } from 'redux'
 import thunk from 'redux-thunk'
-import createLogger from 'redux-logger'
+import { createLogger } from 'redux-logger'
 import builds from './builds'
 import config from './config'
 import projects from './projects'
@@ -8,5 +8,4 @@ import projects from './projects'
 const logger = createLogger()
 
 export default () =>
-  createStore(combineReducers({builds, config, projects}), applyMiddleware(thunk, logger))
-
+  createStore(combineReducers({ builds, config, projects }), applyMiddleware(thunk, logger))

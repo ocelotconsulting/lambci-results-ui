@@ -1,5 +1,5 @@
 import React from 'react'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 import Breadcrumb from '../../src/components/Breadcrumb'
 
 describe('Breadcrumb', () => {
@@ -7,9 +7,9 @@ describe('Breadcrumb', () => {
 
   beforeEach(() => {
     path = [
-      {segment: 'foo', content: 'Foo'},
-      {segment: 'bar bar', content: 'Bar'},
-      {segment: 'baz', content: 'Baz', active: true}
+      { segment: 'foo', content: 'Foo' },
+      { segment: 'bar bar', content: 'Bar' },
+      { segment: 'baz', content: 'Baz', active: true }
     ]
   })
 

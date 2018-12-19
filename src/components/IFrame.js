@@ -1,18 +1,19 @@
-import React, {PropTypes as T} from 'react'
+import React from 'react'
+import T from 'prop-types'
 
 export default class IFrame extends React.Component {
-  addOnLoad(iframeNode) {
+  addOnLoad (iframeNode) {
     if (iframeNode && !this.iframeNode) {
       this.iframeNode = iframeNode
       iframeNode.addEventListener('load', this.props.onLoad)
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.iframeNode = undefined
   }
 
-  render() {
+  render () {
     return (
       <iframe src={this.props.src} className={this.props.className} ref={n => this.addOnLoad(n)}/>
     )

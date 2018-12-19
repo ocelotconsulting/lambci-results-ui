@@ -1,4 +1,5 @@
-import React, {PropTypes as T} from 'react'
+import React from 'react'
+import T from 'prop-types'
 import moment from 'moment'
 import BuildColumn from './BuildColumn'
 import StatusColumn from './StatusColumn'
@@ -7,7 +8,7 @@ import UserColumn from './UserColumn'
 import compact from 'lodash/compact'
 
 const dateTimeString = (endDate) => {
-  const midnightToday = moment().set({h: 0, m: 0, s: 0, ms: 0})
+  const midnightToday = moment().set({ h: 0, m: 0, s: 0, ms: 0 })
   const dateString = moment(endDate) < midnightToday && endDate.toLocaleDateString()
 
   return compact([dateString, endDate.toLocaleTimeString()]).join(' ')
@@ -33,8 +34,8 @@ const renderTime = (startedAt, endedAt) => {
   }
 }
 
-const BuildRow = ({projectId, repository, build}) => {
-  const {buildNum, endedAt, startedAt, status, checkoutBranch, commit, user} = build
+const BuildRow = ({ projectId, repository, build }) => {
+  const { buildNum, endedAt, startedAt, status, checkoutBranch, commit, user } = build
   return (
     <tr>
       <BuildColumn projectId={projectId} buildNum={buildNum}/>

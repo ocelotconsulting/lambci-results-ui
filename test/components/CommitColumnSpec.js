@@ -1,6 +1,6 @@
 import React from 'react'
 import CommitColumn from '../../src/components/CommitColumn'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 
 describe('CommitColumn', () => {
   let repository, commit
@@ -8,7 +8,7 @@ describe('CommitColumn', () => {
   const render = () => shallow(<CommitColumn repository={repository} commit={commit}/>)
 
   beforeEach(() => {
-    repository = {type: 'github'}
+    repository = { type: 'github' }
     commit = '123'
   })
 
@@ -19,7 +19,6 @@ describe('CommitColumn', () => {
   })
 
   it('renders RepositoryLink', () => {
-    render().find('RepositoryLink').props().should.eql({repository, commit})
+    render().find('RepositoryLink').props().should.eql({ repository, commit })
   })
-
 })

@@ -47,19 +47,19 @@ describe('createResponse', () => {
     it('sets header', () => {
       res.set('foo', 42).send()
 
-      callback.lastCall.args[1].headers.should.eql({...corsHeader, foo: 42})
+      callback.lastCall.args[1].headers.should.eql({ ...corsHeader, foo: 42 })
     })
   })
 
   describe('json', () => {
     it('sets body, headers, and responds', () => {
-      const body = {foo: 99}
+      const body = { foo: 99 }
       res.json(body)
 
       callback.should.have.been.calledWithExactly(null, {
         statusCode: '200',
         body: JSON.stringify(body),
-        headers: {...corsHeader, 'Content-Type': 'application/json'}
+        headers: { ...corsHeader, 'Content-Type': 'application/json' }
       })
     })
   })
@@ -76,5 +76,4 @@ describe('createResponse', () => {
       })
     })
   })
-
 })

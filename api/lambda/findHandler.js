@@ -5,7 +5,7 @@ module.exports = (method, requestPath) => {
     const handler = routes[method.toLowerCase()]
     if (handler) {
       const params = routes.path.parseParams(requestPath)
-      if (params) return {params, handler}
+      if (params) return { params, handler }
     }
   }
 }

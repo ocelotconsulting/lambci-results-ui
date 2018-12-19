@@ -1,27 +1,27 @@
+const path = require('path')
 const webpack = require('webpack')
-const {stackName} = require('./api/config')
+const { stackName } = require('./api/config')
 
 module.exports = {
+  mode: 'production',
   entry: './api/lambda/index.js',
   output: {
-    path: 'dist',
+    path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'commonjs2',
     filename: 'index.js'
   },
   target: 'node',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel',
-        query: {
-          presets: ['es2015']
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/env']
+          }
         }
-      },
-      {
-        test: /\.json$/,
-        loader: 'json',
       }
     ]
   },
@@ -31,6 +31,7 @@ module.exports = {
       'process.env': {
         LAMBCI_STACK_NAME: `"${stackName}"`
       }
-    })
+    }),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ]
 }

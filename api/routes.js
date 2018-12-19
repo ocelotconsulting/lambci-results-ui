@@ -28,6 +28,8 @@ const routes = [
   }
 ]
 
-routes.forEach(route => route.path = new Path(route.path))
+routes.forEach(route => {
+  route.path = new Path(route.path)
+})
 
 module.exports = routes

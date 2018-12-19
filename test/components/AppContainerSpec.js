@@ -1,10 +1,10 @@
 import React from 'react'
-import {App, mapDispatchToProps} from '../../src/components/AppContainer'
+import { App, mapDispatchToProps } from '../../src/components/AppContainer'
 import ProjectsContainer from '../../src/components/ProjectsContainer'
 import ConfigContainer from '../../src/components/ConfigContainer'
 import BuildsContainer from '../../src/components/BuildsContainer'
 import BuildContainer from '../../src/components/BuildContainer'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 
 describe('AppContainer', () => {
   let onProjectSelected, onConfigSelected, onLoadProjects, onLeaveBuildsPage, onBuildSelected
@@ -32,7 +32,7 @@ describe('AppContainer', () => {
       should.fail()
     }
 
-    const invokeEventHandler = (path, eventName, params = {}) => findRoute(path).prop(eventName)({params})
+    const invokeEventHandler = (path, eventName, params = {}) => findRoute(path).prop(eventName)({ params })
 
     const invokeOnEnter = (path, params = {}) => invokeEventHandler(path, 'onEnter', params)
 
@@ -44,7 +44,6 @@ describe('AppContainer', () => {
       buildReport: '/projects/:projectId/builds/:buildNum'
     }
 
-
     const addComponentTest = (path, Component) => {
       it(`renders ${Component.displayName} component`, () => {
         findRoute(path).prop('component').should.equal(Component)
@@ -55,7 +54,7 @@ describe('AppContainer', () => {
       it('invokes onLoadProjects  on enter', () => {
         invokeOnEnter(paths.projects)
 
-        onLoadProjects.should.have.been.calledWithExactly({params: {}})
+        onLoadProjects.should.have.been.calledWithExactly({ params: {} })
       })
 
       addComponentTest(paths.projects, ProjectsContainer)
@@ -64,7 +63,7 @@ describe('AppContainer', () => {
     describe(`${paths.config} route`, () => {
       it('invokes onConfigSelected on enter', () => {
         const projectId = '42'
-        invokeOnEnter(paths.config, {projectId})
+        invokeOnEnter(paths.config, { projectId })
 
         onConfigSelected.should.have.been.calledWithExactly(projectId)
       })
@@ -76,7 +75,7 @@ describe('AppContainer', () => {
       it('invokes onConfigSelected on enter', () => {
         const projectId = '42'
         const branch = 'branch'
-        invokeOnEnter(paths.configBranch, {projectId, branch})
+        invokeOnEnter(paths.configBranch, { projectId, branch })
 
         onConfigSelected.should.have.been.calledWithExactly(projectId, branch)
       })
@@ -87,7 +86,7 @@ describe('AppContainer', () => {
     describe(`${paths.builds} route`, () => {
       it('invokes onProjectSelected on enter', () => {
         const projectId = '42'
-        invokeOnEnter(paths.builds, {projectId})
+        invokeOnEnter(paths.builds, { projectId })
 
         onProjectSelected.should.have.been.calledWithExactly(projectId)
       })
@@ -95,7 +94,7 @@ describe('AppContainer', () => {
       it('invokes onLeaveBuildsPage on leave', () => {
         invokeEventHandler(paths.builds, 'onLeave')
 
-        onLeaveBuildsPage.should.have.been.calledWithExactly({params: {}})
+        onLeaveBuildsPage.should.have.been.calledWithExactly({ params: {} })
       })
 
       addComponentTest(paths.builds, BuildsContainer)
@@ -105,7 +104,7 @@ describe('AppContainer', () => {
       it('invokes onBuildSelected on enter', () => {
         const projectId = 'project x'
         const buildNum = '42'
-        invokeOnEnter(paths.buildReport, {projectId, buildNum})
+        invokeOnEnter(paths.buildReport, { projectId, buildNum })
 
         onBuildSelected.should.have.been.calledWithExactly(projectId, buildNum)
       })
@@ -119,14 +118,13 @@ describe('AppContainer', () => {
 
     beforeEach(() => {
       dispatch = sinon.stub()
-      props = mapDispatchToProps(props)
+      props = mapDispatchToProps(dispatch)
     })
 
     it('defines all props', () => {
-      Object.keys({onLoadProjects, onConfigSelected, onProjectSelected, onLeaveBuildsPage}).forEach(
+      Object.keys({ onLoadProjects, onConfigSelected, onProjectSelected, onLeaveBuildsPage }).forEach(
         fnName => (typeof props[fnName]).should.equal('function')
       )
     })
   })
 })
-

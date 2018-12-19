@@ -1,8 +1,9 @@
-import React, {PropTypes as T} from 'react'
+import React from 'react'
+import T from 'prop-types'
 import classnames from 'classnames'
 
-const StatusColumn = ({status}) => (
-  <td className={classnames('status', {success: status === 'success', danger: status === 'failure'})}>
+const StatusColumn = ({ status }) => (
+  <td className={classnames('status', { success: status === 'success', danger: status === 'failure' })}>
     {
       status === 'pending' ? (
         <i className='fa fa-spinner fa-spin'/>

@@ -1,5 +1,5 @@
 import http from '../../src/actions/http'
-import {SAVE_CONFIG} from '../../src/actions/types'
+import { SAVE_CONFIG } from '../../src/actions/types'
 import deleteBranch from '../../src/actions/deleteBranch'
 import history from '../../src/history'
 
@@ -37,7 +37,7 @@ describe('deleteBranch', () => {
   it('puts config with branch removed', () =>
     apply()
     .then(() =>
-      http.put.should.have.been.calledWithExactly(dispatch, SAVE_CONFIG, path, {branches: {}})
+      http.put.should.have.been.calledWithExactly(dispatch, SAVE_CONFIG, path, { branches: {} })
     )
   )
 
@@ -49,5 +49,4 @@ describe('deleteBranch', () => {
   it('navigates to main config page', () =>
     apply().then(() => history.push.should.have.been.calledWithExactly(`/${path}`))
   )
-
 })

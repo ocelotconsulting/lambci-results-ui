@@ -1,7 +1,8 @@
-import React, {PropTypes as T} from 'react'
-import {Link} from 'react-router'
+import React from 'react'
+import T from 'prop-types'
+import { Link } from 'react-router'
 
-const BuildColumn = ({projectId, buildNum}) => (
+const BuildColumn = ({ projectId, buildNum }) => (
   <td className='build-number-link'>
     <Link to={`/projects/${encodeURIComponent(projectId)}/builds/${buildNum}`}>
       {`#${buildNum}`}

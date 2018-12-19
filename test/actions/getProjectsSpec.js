@@ -1,5 +1,5 @@
 import getProjects from '../../src/actions/getProjects'
-import {GET_PROJECTS} from '../../src/actions/types'
+import { GET_PROJECTS } from '../../src/actions/types'
 import http from '../../src/actions/http'
 
 describe('getProjects', () => {
@@ -21,15 +21,15 @@ describe('getProjects', () => {
 
   it('provides transformer to include repository', () => {
     const projects = [
-      {id: 'gh/foo/bar'},
-      {id: 'not-gh/bar/baz'}
+      { id: 'gh/foo/bar' },
+      { id: 'not-gh/bar/baz' }
     ]
-    const {args} = http.get.lastCall
+    const { args } = http.get.lastCall
     args.length.should.equal(4)
     const transform = args[3]
     transform(projects).should.eql([
-      {id: projects[0].id, repository: {baseUrl: 'https://github.com', icon: 'github', project: 'foo/bar'}},
-      {id: projects[1].id, repository: {}}
+      { id: projects[0].id, repository: { baseUrl: 'https://github.com', icon: 'github', project: 'foo/bar' } },
+      { id: projects[1].id, repository: {} }
     ])
   })
 })

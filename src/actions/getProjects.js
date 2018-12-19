@@ -1,4 +1,4 @@
-import {GET_PROJECTS} from './types'
+import { GET_PROJECTS } from './types'
 import http from './http'
 import getRepository from '../store/getRepository'
 

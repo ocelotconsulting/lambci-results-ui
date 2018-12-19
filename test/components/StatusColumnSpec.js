@@ -1,9 +1,9 @@
 import React from 'react'
 import StatusColumn from '../../src/components/StatusColumn'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 
 describe('StatusColumn', () => {
-  let status = undefined
+  let status
 
   const render = () => shallow(
     <StatusColumn status={status}/>

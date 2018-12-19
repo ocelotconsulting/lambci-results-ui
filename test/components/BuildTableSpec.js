@@ -1,10 +1,10 @@
 import React from 'react'
 import BuildTable from '../../src/components/BuildTable'
-import {shallow} from 'enzyme'
-import {expectedBuildTableColumnCount} from './expectedColumnCounts'
+import { shallow } from 'enzyme'
+import { expectedBuildTableColumnCount } from './expectedColumnCounts'
 
 describe('BuildTable', () => {
-  let {projectId, repository, builds} = {}
+  let { projectId, repository, builds } = {}
 
   const render = () => shallow(
     <BuildTable projectId={projectId} repository={repository} builds={builds}/>
@@ -12,8 +12,8 @@ describe('BuildTable', () => {
 
   beforeEach(() => {
     projectId = 'my/project'
-    repository = {icon: 'github'}
-    builds = [{buildNum: 1}, {buildNum: 2}]
+    repository = { icon: 'github' }
+    builds = [{ buildNum: 1 }, { buildNum: 2 }]
   })
 
   it(`renders ${expectedBuildTableColumnCount} column headers`, () => {
@@ -25,7 +25,6 @@ describe('BuildTable', () => {
   })
 
   it('provides each row with project id and repository', () => {
-    render().find('BuildRow').first().props().should.eql({projectId, repository, build: builds[0]})
+    render().find('BuildRow').first().props().should.eql({ projectId, repository, build: builds[0] })
   })
-
 })

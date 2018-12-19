@@ -1,6 +1,7 @@
-import React, {PropTypes as T} from 'react'
+import React from 'react'
+import T from 'prop-types'
 
-const RepositoryLink = ({repository: {baseUrl, project, icon}, path, commit}) => {
+const RepositoryLink = ({ repository: { baseUrl, project, icon }, path, commit }) => {
   const pathOrProject = path || project
   const displayValue = commit ? commit.slice(0, 10) : pathOrProject
 

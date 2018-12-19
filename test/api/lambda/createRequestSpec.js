@@ -4,10 +4,10 @@ describe('createRequest', () => {
   let params, event
 
   beforeEach(() => {
-    params = {x: 1}
+    params = { x: 1 }
     event = {
-      headers: {header: '!'},
-      queryStringParameters: {q: 1}
+      headers: { header: '!' },
+      queryStringParameters: { q: 1 }
     }
   })
 
@@ -34,9 +34,8 @@ describe('createRequest', () => {
   })
 
   it('parses body as JSON if present', () => {
-    const body = {foo: 12}
+    const body = { foo: 12 }
     event.body = JSON.stringify(body)
     create().body.should.eql(body)
   })
-
 })

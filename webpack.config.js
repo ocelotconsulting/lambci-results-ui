@@ -1,39 +1,112 @@
+const { env } = process
+const path = require('path')
 const webpack = require('webpack')
-const fs = require('fs')
 
-const defaultBabelConfig = JSON.parse(fs.readFileSync('.babelrc', {encoding: 'utf8'}))
+const devApiUrl = env.DEV_API_URL
 
-// webpack 2 should not resolve es2015 imports
-const presets = [
-  ['es2015', {modules: false}]
-].concat(defaultBabelConfig.presets.filter(v => v !== 'es2015'))
+const apiUrl = devApiUrl || env.API_URL
 
-const babelConfig = Object.assign({}, defaultBabelConfig, {babelrc: false, presets})
+if (!apiUrl) {
+  console.error('missing DEV_API_URL || API_URL')
+}
+
+const rules = (() => {
+  const result = [
+    {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          cacheDirectory: true
+        }
+      }
+    },
+    {
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        'css-loader'
+      ]
+    },
+    {
+      test: /\.less/,
+      use: [
+        'style-loader',
+        'css-loader',
+        'less-loader'
+      ]
+    }
+  ]
+
+  const resources = {
+    eot: 'vnd.ms-fontobject',
+    ttf: 'application/font-sfnt',
+    woff: 'application/font-woff',
+    woff2: 'application/font-woff2',
+    svg: 'image/svg+xml',
+    jpg: 'image/jpg',
+    png: 'image/png',
+    gif: 'image/gif'
+  }
+
+  // anything smaller than 50K will be embedded as url(data:...)
+  // larger files will be emitted
+  const addUrlLoader = (extension, mimeType) => {
+    result.push({
+      test: new RegExp(`\\.${extension}$`, 'i'),
+      use: {
+        loader: 'url-loader',
+        options: {
+          mimetype: mimeType,
+          limit: 50000,
+          name: '[name].[ext]'
+        }
+      }
+    })
+  }
+
+  for (let extension in resources) {
+    addUrlLoader(extension, resources[extension])
+  }
+
+  return result
+})()
 
 module.exports = {
-  entry: ['babel-polyfill', './src/index.js'],
+  mode: 'development',
+  entry: {
+    bundle: ['@babel/polyfill', './src/index.js']
+  },
   output: {
-    path: './public',
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'public'),
+    filename: '[name].js'
   },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: babelConfig
-      }
-    ]
-  },
+  module: { rules },
   devtool: 'source-map',
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          chunks: 'initial'
+        },
+        vendor: {
+          test: /node_modules/,
+          chunks: 'initial',
+          name: 'vendor',
+          priority: 10,
+          enforce: true
+        }
+      }
+    }
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      },
-      API_URL: JSON.stringify(process.env.API_URL),
+        NODE_ENV: JSON.stringify(env.NODE_ENV || (devApiUrl ? 'development' : 'production')),
+        API_URL: JSON.stringify(apiUrl || '/api')
+      }
     }),
-    new webpack.optimize.UglifyJsPlugin({sourceMap: true})
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ]
 }

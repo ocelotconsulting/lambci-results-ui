@@ -1,7 +1,8 @@
-import React, {PropTypes as T} from 'react'
+import React from 'react'
+import T from 'prop-types'
 import RepositoryLink from './RepositoryLink'
 
-const CommitColumn = ({repository, commit}) => (
+const CommitColumn = ({ repository, commit }) => (
   <td className='commit'>
     <RepositoryLink repository={repository} commit={commit}/>
   </td>

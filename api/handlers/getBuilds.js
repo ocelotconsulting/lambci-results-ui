@@ -6,12 +6,12 @@ const defaultPageSize = 20
 
 const intParam = parameterValue => parameterValue && parseInt(parameterValue, 10)
 
-const parseQueryParams = ({lastBuildNum, pageSize}) => ({
+const parseQueryParams = ({ lastBuildNum, pageSize }) => ({
   lastBuildNum: intParam(lastBuildNum),
   pageSize: intParam(pageSize)
 })
 
-const getParams = (projectId, {lastBuildNum, pageSize}) => Object.assign(
+const getParams = (projectId, { lastBuildNum, pageSize }) => Object.assign(
   {
     KeyConditions: {
       project: {
@@ -42,10 +42,9 @@ const getBuilds = (projectId, query) =>
     builds.length ? builds : projectExists(projectId).then(exists => exists && [])
   )
 
-module.exports = ({params: {projectId}, query}, res, next) =>
+module.exports = ({ params: { projectId }, query }, res, next) =>
   getBuilds(projectId, query)
   .then(builds =>
     builds ? res.json(builds) : projectNotFound(res, projectId)
   )
   .catch(next)
-

@@ -1,4 +1,4 @@
-const {stackName} = require('../config')
+const { stackName } = require('../config')
 
 const dynamoClient = require('./dynamoClient')
 
@@ -12,7 +12,7 @@ module.exports = () =>
       }
     }
   }).promise()
-  .then(({Items: [item]}) => {
+  .then(({ Items: [item] }) => {
     const s3Bucket = item && item.s3Bucket
 
     if (s3Bucket) {
@@ -21,5 +21,3 @@ module.exports = () =>
       throw new Error(`Unable to find configuration for lambci stack ${stackName}`)
     }
   })
-
-

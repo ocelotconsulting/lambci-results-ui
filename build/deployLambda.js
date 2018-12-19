@@ -21,7 +21,7 @@ const createArchive = () => new Promise((resolve, reject) => {
   const zipfile = archiver('zip')
   zipfile.on('error', reject)
   zipfile.pipe(output)
-  zipfile.append(fs.createReadStream('dist/index.js'), {name: 'index.js'})
+  zipfile.append(fs.createReadStream('dist/index.js'), { name: 'index.js' })
   zipfile.finalize()
 })
 
@@ -49,5 +49,3 @@ createArchive()
   console.error(`lambda deployment failed! ${error.message}`)
   process.exit(1)
 })
-
-

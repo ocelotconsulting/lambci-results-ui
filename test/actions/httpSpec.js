@@ -1,6 +1,6 @@
 import agent from 'superagent'
 import http from '../../src/actions/http'
-import {apiBaseUrl} from '../../src/config'
+import { apiBaseUrl } from '../../src/config'
 
 describe('http', () => {
   let dispatch, actionId, path, transform, result
@@ -10,15 +10,15 @@ describe('http', () => {
     actionId = 'actionId'
     path = 'foo/bar'
     transform = undefined
-    result = {ok: true}
+    result = { ok: true }
   })
 
   const shouldHaveDispatched = (event) =>
-    dispatch.should.have.been.calledWithExactly({type: actionId, ...event})
+    dispatch.should.have.been.calledWithExactly({ type: actionId, ...event })
 
   describe('get', () => {
     beforeEach(() => {
-      sinon.stub(agent, 'get').resolves({body: result})
+      sinon.stub(agent, 'get').resolves({ body: result })
     })
 
     afterEach(() => {
@@ -27,17 +27,16 @@ describe('http', () => {
 
     const apply = () => http.get(dispatch, actionId, path, transform)
 
-
     it('dispatches start action', () => {
       const promise = apply()
-      shouldHaveDispatched({status: 'start'})
+      shouldHaveDispatched({ status: 'start' })
       return promise
     })
 
     it('dispatches done action on completion', () =>
       apply()
       .then(() => {
-        shouldHaveDispatched({status: 'done', result})
+        shouldHaveDispatched({ status: 'done', result })
       })
     )
 
@@ -47,20 +46,19 @@ describe('http', () => {
       return promise
     })
 
-
     it('dispatches error on error', () => {
       const error = new Error('!')
       agent.get.rejects(error)
       return apply()
-      .then(() => shouldHaveDispatched({status: 'error', error}))
+      .then(() => shouldHaveDispatched({ status: 'error', error }))
     })
 
     it('transforms body if specified', () => {
-      transform = sinon.stub().returns({ok: false})
+      transform = sinon.stub().returns({ ok: false })
       return apply()
       .then(() => {
-        shouldHaveDispatched({status: 'done', result: {ok: false}})
-        transform.should.have.been.calledWithExactly({ok: true})
+        shouldHaveDispatched({ status: 'done', result: { ok: false } })
+        transform.should.have.been.calledWithExactly({ ok: true })
       })
     })
   })
@@ -69,8 +67,8 @@ describe('http', () => {
     let requestBody
 
     beforeEach(() => {
-      sinon.stub(agent, 'put').resolves({body: result})
-      requestBody = {id: 42}
+      sinon.stub(agent, 'put').resolves({ body: result })
+      requestBody = { id: 42 }
     })
 
     const apply = () => http.put(dispatch, actionId, path, requestBody)
@@ -82,12 +80,9 @@ describe('http', () => {
     it('invokes agent.put with url', () =>
       apply()
       .then(() => {
-        shouldHaveDispatched({status: 'done', result})
+        shouldHaveDispatched({ status: 'done', result })
         agent.put.should.have.been.calledWithExactly(`${apiBaseUrl}/${path}`, requestBody)
       })
     )
   })
-
 })
-
-

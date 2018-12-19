@@ -1,7 +1,7 @@
 import refreshBuilds from '../../src/actions/refreshBuilds'
-import {REFRESH_BUILDS} from '../../src/actions/types'
+import { REFRESH_BUILDS } from '../../src/actions/types'
 import agent from 'superagent'
-import {apiBaseUrl} from '../../src/config'
+import { apiBaseUrl } from '../../src/config'
 
 describe('refreshBuilds', () => {
   let projectId, next, dispatch, state, result
@@ -16,17 +16,17 @@ describe('refreshBuilds', () => {
           enabled: true
         },
         value: [
-          {buildNum: 40},
-          {buildNum: 42},
-          {buildNum: 41, status: 'pending'}
+          { buildNum: 40 },
+          { buildNum: 42 },
+          { buildNum: 41, status: 'pending' }
         ]
       },
       projects: {
-        selected: {id: projectId}
+        selected: { id: projectId }
       }
     }
     result = 'placeholder' // no logic around this
-    sinon.stub(agent, 'get').resolves({body: result})
+    sinon.stub(agent, 'get').resolves({ body: result })
   })
 
   const apply = () => {
@@ -37,7 +37,6 @@ describe('refreshBuilds', () => {
   afterEach(() => {
     agent.get.restore()
   })
-
 
   const shouldGetWith = query => {
     const baseUrl = `${apiBaseUrl}/projects/${encodeURIComponent(projectId)}/build-updates`
@@ -52,7 +51,7 @@ describe('refreshBuilds', () => {
     )
 
     it('dispatches REFRESH_BUILDS with result', () => {
-      dispatch.should.have.been.calledWithExactly({type: REFRESH_BUILDS, result})
+      dispatch.should.have.been.calledWithExactly({ type: REFRESH_BUILDS, result })
     })
 
     it('invokes next', () => {
@@ -62,7 +61,7 @@ describe('refreshBuilds', () => {
 
   describe('with no pending builds', () => {
     beforeEach(() => {
-      state.builds.value = [{buildNum: 42}]
+      state.builds.value = [{ buildNum: 42 }]
       return apply()
     })
 
@@ -87,7 +86,7 @@ describe('refreshBuilds', () => {
       ...state,
       builds: {
         ...state.builds,
-        refresh: {enabled: false}
+        refresh: { enabled: false }
       }
     }
   }

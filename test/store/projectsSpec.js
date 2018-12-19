@@ -1,4 +1,4 @@
-import {GET_PROJECTS, SELECT_PROJECT} from '../../src/actions/types'
+import { GET_PROJECTS, SELECT_PROJECT } from '../../src/actions/types'
 import projects from '../../src/store/projects'
 
 describe('projects reducer', () => {
@@ -6,7 +6,9 @@ describe('projects reducer', () => {
 
   const dispatch = () => projects(state, action)
 
-  const update = values => state = {...state, ...values}
+  const update = values => {
+    state = { ...state, ...values }
+  }
 
   beforeEach(() => {
     state = projects()
@@ -24,12 +26,12 @@ describe('projects reducer', () => {
       })
 
       it('clears all', () => {
-        update({all: [1, 2]})
+        update({ all: [1, 2] })
         should.not.exist(dispatch().all)
       })
 
       it('clears error', () => {
-        update({error: '!'})
+        update({ error: '!' })
         should.not.exist(dispatch().error)
       })
     })
@@ -79,10 +81,5 @@ describe('projects reducer', () => {
       action.projectId = 'foo/bar'
       dispatch().selected.repository.should.eql({})
     })
-
-
-
   })
-
 })
-

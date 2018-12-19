@@ -1,7 +1,8 @@
-import React, {PropTypes as T} from 'react'
+import React from 'react'
+import T from 'prop-types'
 import ProjectRow from './ProjectRow'
 
-const ProjectTable = ({projects}) => (
+const ProjectTable = ({ projects }) => (
   <table className='table table-striped'>
     <thead>
     <tr>

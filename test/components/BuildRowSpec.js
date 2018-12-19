@@ -1,11 +1,11 @@
 import React from 'react'
 import BuildRow from '../../src/components/BuildRow'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 import moment from 'moment'
-import {expectedBuildTableColumnCount} from './expectedColumnCounts'
+import { expectedBuildTableColumnCount } from './expectedColumnCounts'
 
 describe('BuildRow', () => {
-  let {projectId, repository, build} = {}
+  let { projectId, repository, build } = {}
 
   const render = () => shallow(
     <BuildRow projectId={projectId} repository={repository} build={build}/>
@@ -13,7 +13,7 @@ describe('BuildRow', () => {
 
   beforeEach(() => {
     projectId = 'my/project'
-    repository = {icon: 'github'}
+    repository = { icon: 'github' }
     let endedAt = moment().set({
       h: 23,
       m: 59,
@@ -72,20 +72,20 @@ describe('BuildRow', () => {
     const subtract = spec => moment(build.endedAt).subtract(spec).toISOString()
 
     it('renders minutes when time is less than an hour', () => {
-      build.startedAt = subtract({m: 7, s: 1})
+      build.startedAt = subtract({ m: 7, s: 1 })
 
       rendered().should.equal(`${expectedTime()} (7 minutes, 1 second)`)
     })
 
     it('renders hours when time is greater than an hour', () => {
-      build.startedAt = subtract({h: 1})
+      build.startedAt = subtract({ h: 1 })
 
       rendered().should.equal(`${expectedTime()} (1 hour, 0 minutes, 0 seconds)`)
     })
 
     it('renders full date/time when build time is at least a day ago', () => {
       build.endedAt = moment(build.endedAt).subtract(1, 'd').toISOString()
-      build.startedAt = subtract({s: '3'})
+      build.startedAt = subtract({ s: '3' })
 
       rendered().should.equal(`${expectedDate()} ${expectedTime()} (3 seconds)`)
     })

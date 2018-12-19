@@ -6,11 +6,11 @@ const router = express.Router()
 router.use(bodyParser.json())
 
 routes.forEach(route => {
-  const {path} = route
+  const { path } = route
   const methods = Object.keys(route).filter(k => k !== 'path')
   methods.forEach(method => router[method](path.id, route[method]))
 })
 
-router.use('/*', ({method, originalUrl}, res) => res.status(404).send(`Cannot ${method} ${originalUrl}`))
+router.use('/*', ({ method, originalUrl }, res) => res.status(404).send(`Cannot ${method} ${originalUrl}`))
 
 module.exports = router

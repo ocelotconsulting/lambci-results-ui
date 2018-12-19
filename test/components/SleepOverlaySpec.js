@@ -1,10 +1,10 @@
 import React from 'react'
 import moment from 'moment'
 import SleepOverlay from '../../src/components/SleepOverlay'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 
 describe('SleepOverlay', () => {
-  let {tickDuration, lastTimestamp, onWakeUp, wrapper} = {}
+  let { tickDuration, lastTimestamp, onWakeUp, wrapper } = {}
 
   beforeEach(() => {
     tickDuration = 1
@@ -20,10 +20,8 @@ describe('SleepOverlay', () => {
     wrapper = shallow(
       <SleepOverlay lastTimestamp={lastTimestamp} onWakeUp={onWakeUp} tickDuration={tickDuration}/>
     )
-    wrapper.instance().componentDidMount()
     return wrapper
   }
-
 
   it('updates state every interval', (done) => {
     render()
@@ -38,10 +36,7 @@ describe('SleepOverlay', () => {
       const ticks = wrapper.state('ticks')
       if (ticks < 2) {
         tries++
-        if (tries === maxTries)
-          fail()
-        else
-          next()
+        if (tries === maxTries) { fail() } else { next() }
       } else done()
     }
 
@@ -57,7 +52,7 @@ describe('SleepOverlay', () => {
       preventDefault = sinon.stub()
     })
 
-    const click = () => render().find('.actions a').simulate('click', {preventDefault})
+    const click = () => render().find('.actions a').simulate('click', { preventDefault })
 
     it('invokes onWakeUp on click', () => {
       click()

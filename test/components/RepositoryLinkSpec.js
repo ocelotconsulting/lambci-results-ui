@@ -1,5 +1,5 @@
 import React from 'react'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 import RepositoryLink from '../../src/components/RepositoryLink'
 
 describe('RepositoryLink', () => {
@@ -72,7 +72,5 @@ describe('RepositoryLink', () => {
     it('simply renders value', () => {
       render().text().should.equal(repository.project)
     })
-
   })
-
 })

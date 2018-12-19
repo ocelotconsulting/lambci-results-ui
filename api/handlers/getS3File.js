@@ -6,7 +6,7 @@ module.exports = (bucket, key) =>
     Bucket: bucket,
     Key: key
   }).promise()
-  .then(({Body, ContentType}) => {
+  .then(({ Body, ContentType }) => {
     const encoding = mimeTypes.charset(ContentType)
     return {
       contentType: ContentType,
