@@ -83,6 +83,11 @@ module.exports = {
     filename: '[name].js'
   },
   module: { rules },
+  resolve: {
+    alias: {
+      superagent: path.join(__dirname, 'node_modules/superagent/superagent.js')
+    }
+  },
   devtool: 'source-map',
   optimization: {
     splitChunks: {

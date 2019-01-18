@@ -1,7 +1,7 @@
 import queryString from 'query-string'
 import maxBy from 'lodash/maxBy'
 import minBy from 'lodash/minBy'
-import { SET_BUILD_PAGE, GET_BUILDS } from './types'
+import { GET_BUILDS, SET_BUILD_PAGE } from './types'
 import http from './http'
 import maybeRefresh from './maybeRefresh'
 
@@ -11,7 +11,7 @@ const buildQuery = (builds, pageSize, delta) => {
 }
 
 export default delta =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     const { builds: { paging: { page, pageSize }, value: builds, refresh: { timeoutId } }, projects: { selected } } = getState()
 
     // if refreshing kill it
@@ -23,8 +23,6 @@ export default delta =>
     const projectId = selected.id
 
     const query = newPage === 1 ? '' : buildQuery(builds, pageSize, delta)
-    http.get(dispatch, GET_BUILDS, `projects/${encodeURIComponent(projectId)}/builds${query}`)
-    .then(() => {
-      maybeRefresh({ projectId, state: getState(), dispatch })
-    })
+    await http.get(dispatch, GET_BUILDS, `projects/${encodeURIComponent(projectId)}/builds${query}`)
+    maybeRefresh({ projectId, state: getState(), dispatch })
   }

@@ -37,15 +37,18 @@ const updateLambdaFunction = () => {
   }).promise()
 }
 
-createArchive()
-.then(updateLambdaFunction)
-.then(result => {
-  console.log(JSON.stringify(result))
-  console.log('successfully deployed lambda function')
-  process.exit(0)
-})
-.catch(error => {
-  if (error.stack) console.error(error.stack)
-  console.error(`lambda deployment failed! ${error.message}`)
-  process.exit(1)
-})
+const deploy = async () => {
+  try {
+    await createArchive()
+    const result = await updateLambdaFunction()
+    console.log(JSON.stringify(result))
+    console.log('successfully deployed lambda function')
+    process.exit(0)
+  } catch (error) {
+    if (error.stack) console.error(error.stack)
+    console.error(`lambda deployment failed! ${error.message}`)
+    process.exit(1)
+  }
+}
+
+deploy()

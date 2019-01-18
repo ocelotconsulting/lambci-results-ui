@@ -4,7 +4,7 @@ import getConfig from './getConfig'
 import parseEnvironment from './parseEnvironment'
 
 export default (projectId, branch) =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     const { value, editing } = getState().config
 
     const editedConfig = { ...editing, env: parseEnvironment(editing.env) }
@@ -25,6 +25,6 @@ export default (projectId, branch) =>
       projectConfig.branches = projectConfig.branches || {}
       projectConfig.branches[newBranch] = {}
     }
-    return http.put(dispatch, SAVE_CONFIG, `projects/${encodeURIComponent(projectId)}/config`, projectConfig)
-    .then(() => dispatch(getConfig(projectId, branch)))
+    await http.put(dispatch, SAVE_CONFIG, `projects/${encodeURIComponent(projectId)}/config`, projectConfig)
+    dispatch(getConfig(projectId, branch))
   }

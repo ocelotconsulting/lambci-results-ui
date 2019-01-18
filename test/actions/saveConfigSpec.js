@@ -32,31 +32,31 @@ describe('saveConfig', () => {
     body = undefined
   })
 
-  const apply = () => {
+  const apply = async () => {
     const thunk = saveConfig(projectId, branch)
-    return thunk(dispatch, () => state)
-    .then(() => {
-      http.put.callCount.should.equal(1)
-      http.put.should.have.been.calledWith(dispatch, SAVE_CONFIG)
-      url = http.put.lastCall.args[2]
-      body = http.put.lastCall.args[3]
-    })
+    await thunk(dispatch, () => state)
+    http.put.callCount.should.equal(1)
+    http.put.should.have.been.calledWith(dispatch, SAVE_CONFIG)
+    url = http.put.lastCall.args[2]
+    body = http.put.lastCall.args[3]
   }
 
   describe('without branch', () => {
-    beforeEach(apply)
+    beforeEach(async () => {
+      await apply()
+    })
 
-    it('invokes put with config URL', () =>
+    it('invokes put with config URL', () => {
       url.should.equal(`projects/${encodeURIComponent(projectId)}/config`)
-    )
+    })
 
-    it('parses environment', () =>
+    it('parses environment', () => {
       body.env.should.eql({ foo: 'bar' })
-    )
+    })
 
-    it('includes properties from edited config in body', () =>
+    it('includes properties from edited config in body', () => {
       body.id.should.equal(state.config.editing.id)
-    )
+    })
   })
 
   describe('when creating new branch', () => {
@@ -64,15 +64,16 @@ describe('saveConfig', () => {
       state.config.editing.newBranch = 'foo'
     })
 
-    it('adds branches property if needed', () =>
-      apply()
-      .then(() => body.branches.should.eql({ foo: {} }))
-    )
+    it('adds branches property if needed', async () => {
+      await apply()
+      body.branches.should.eql({ foo: {} })
+    })
 
-    it('adds branch config to existing branches', () => {
+    it('adds branch config to existing branches', async () => {
       state.config.editing.branches = { bar: {} }
-      return apply()
-      .then(() => body.branches.should.eql({ foo: {}, bar: {} }))
+      await apply()
+
+      body.branches.should.eql({ foo: {}, bar: {} })
     })
   })
 

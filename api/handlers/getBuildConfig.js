@@ -2,6 +2,7 @@ const { stackName } = require('../config')
 const dynamoClient = require('./dynamoClient')
 const projectExists = require('./projectExists')
 const projectNotFound = require('./projectNotFound')
+const createHandler = require('./createHandler')
 
 const fields = ['branches', 'build', 'cmd', 'env', 'notifications', 'project', 's3Bucket']
 
@@ -11,8 +12,8 @@ const toConfig = item =>
     return p
   }, {})
 
-const getConfig = projectId =>
-  dynamoClient.query({
+const getConfig = async projectId => {
+  const { Items: [item] } = await dynamoClient.query({
     TableName: `${stackName}-config`,
     KeyConditions: {
       project: {
@@ -21,11 +22,22 @@ const getConfig = projectId =>
       }
     }
   }).promise()
-  .then(({ Items: [item] }) =>
-    (item && toConfig(item)) || projectExists(projectId).then(exists => exists && ({ project: projectId }))
-  )
+  const config = item && toConfig(item)
+  if (config) {
+    return config
+  } else {
+    const exists = await projectExists(projectId)
+    return exists ? { project: projectId } : undefined
+  }
+}
 
-module.exports = ({ params: { projectId } }, res, next) =>
-  getConfig(projectId)
-  .then(config => config ? res.json(config) : projectNotFound(res, projectId))
-  .catch(next)
+module.exports = createHandler(
+  async ({ params: { projectId } }, res) => {
+    const config = await getConfig(projectId)
+    if (config) {
+      res.json(config)
+    } else {
+      projectNotFound(res, projectId)
+    }
+  }
+)

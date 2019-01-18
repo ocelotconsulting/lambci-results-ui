@@ -13,22 +13,15 @@ const getParams = (projectId, buildNum) => ({
   }
 })
 
-module.exports = (projectId, buildNum) => {
+module.exports = async (projectId, buildNum) => {
   const parsedBuildNum = parseInt(buildNum, 10)
   if (parsedBuildNum > 0) {
-    return queryBuilds({ parameters: getParams(projectId, parsedBuildNum) })
-    .then(([build]) =>
-      build
-        ? { build }
-        : {
-          status: 404,
-          message: `Project '${projectId}' build #${buildNum} was not found`
-        }
-    )
+    const [build] = await queryBuilds({ parameters: getParams(projectId, parsedBuildNum) })
+    return build ? { build } : { status: 404, message: `Project '${projectId}' build #${buildNum} was not found` }
   } else {
-    return Promise.resolve({
+    return {
       status: 400,
       message: `Invalid build number: ${buildNum}`
-    })
+    }
   }
 }

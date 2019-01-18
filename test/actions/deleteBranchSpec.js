@@ -34,19 +34,21 @@ describe('deleteBranch', () => {
     return thunk(dispatch, () => state)
   }
 
-  it('puts config with branch removed', () =>
-    apply()
-    .then(() =>
-      http.put.should.have.been.calledWithExactly(dispatch, SAVE_CONFIG, path, { branches: {} })
-    )
-  )
+  it('puts config with branch removed', async () => {
+    await apply()
 
-  it('does not modify original state', () =>
-    apply()
-    .then(() => should.exist(state.config.value.branches[branch]))
-  )
+    http.put.should.have.been.calledWithExactly(dispatch, SAVE_CONFIG, path, { branches: {} })
+  })
 
-  it('navigates to main config page', () =>
-    apply().then(() => history.push.should.have.been.calledWithExactly(`/${path}`))
-  )
+  it('does not modify original state', async () => {
+    await apply()
+
+    should.exist(state.config.value.branches[branch])
+  })
+
+  it('navigates to main config page', async () => {
+    await apply()
+
+    history.push.should.have.been.calledWithExactly(`/${path}`)
+  })
 })

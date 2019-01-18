@@ -2,14 +2,15 @@ import agent from 'superagent'
 import { apiBaseUrl } from '../config'
 import identity from 'lodash/identity'
 
-const apply = ({ method, dispatch, actionId, path, requestBody, transform = identity }) => {
+const apply = async ({ method, dispatch, actionId, path, requestBody, transform = identity }) => {
   dispatch({ type: actionId, status: 'start' })
 
-  return agent[method](`${apiBaseUrl}/${path}`, requestBody)
-  .then(({ body }) => {
+  try {
+    const { body } = await agent[method](`${apiBaseUrl}/${path}`, requestBody)
     dispatch({ type: actionId, status: 'done', result: transform(body) })
-  })
-  .catch(error => dispatch({ type: actionId, status: 'error', error }))
+  } catch (error) {
+    dispatch({ type: actionId, status: 'error', error })
+  }
 }
 
 export default {

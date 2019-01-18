@@ -1,6 +1,6 @@
-const queryBuilds = require('./queryBuilds')
 const sortBy = require('lodash/sortBy')
-const compact = require('lodash/compact')
+const createHandler = require('./createHandler')
+const queryBuilds = require('./queryBuilds')
 
 const defaultBuildParams = (projectId, buildNum, operator = 'EQ') => ({
   KeyConditions: {
@@ -41,31 +41,34 @@ const parseQuery = query => {
 
 // we could do a single query with BETWEEN
 // but typically a single build is running at one time and this algorithm is a lot simpler
-const getUpdates = (projectId, buildNums) =>
-  Promise.all(buildNums.map(buildNum =>
-      queryBuilds({
+const getUpdates = async (projectId, buildNums) => {
+  const updates = await Promise.all(
+    buildNums.map(async buildNum => {
+      const [build] = await queryBuilds({
         parameters: updateBuildParams(projectId, buildNum),
         includeFiles: false
       })
-      .then(([build]) => build)
-    )
-  ).then(compact) // builds should not be deleted but it seems standard to tolerate query params that don't exist
+      return build
+    })
+  )
+  // builds should not be deleted but it seems standard to tolerate query params that don't exist
+  return updates.filter(Boolean)
+}
 
 const getNewBuilds = (projectId, lastBuildNum) =>
   queryBuilds({ parameters: newBuildsParams(projectId, lastBuildNum) })
 
-module.exports = ({ query, params: { projectId } }, res, next) => {
-  const { error, lastBuildNum, buildNums } = parseQuery(query)
-  if (error) {
-    res.status(400).send(error)
-  } else {
-    Promise.all([
-      getUpdates(projectId, buildNums),
-      getNewBuilds(projectId, lastBuildNum)
-    ])
-    .then(([updates, newBuilds]) =>
+module.exports = createHandler(
+  async ({ query, params: { projectId } }, res) => {
+    const { error, lastBuildNum, buildNums } = parseQuery(query)
+    if (error) {
+      res.status(400).json({ message: error })
+    } else {
+      const [updates, newBuilds] = await Promise.all([
+        getUpdates(projectId, buildNums),
+        getNewBuilds(projectId, lastBuildNum)
+      ])
       res.json(sortBy(updates.concat(newBuilds), ({ buildNum }) => -1 * buildNum))
-    )
-    .catch(next)
+    }
   }
-}
+)

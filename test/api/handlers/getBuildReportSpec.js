@@ -36,40 +36,47 @@ describe('getBuildReport', () => {
   }
 
   describe('with valid build and buildFile', () => {
-    beforeEach(defaultApply)
+    it('sends html file', async () => {
+      await defaultApply()
 
-    it('sends html file', () => {
       res.type.should.have.been.calledWithExactly(buildFile.contentType)
       res.send.should.have.been.calledWithExactly(buildFile.body)
     })
 
-    it('gets build using projectId and buildNum', () =>
+    it('gets build using projectId and buildNum', async () => {
+      await defaultApply()
+
       querySingleBuild.should.have.been.calledWithExactly(projectId, buildNum)
-    )
+    })
 
-    it('gets build file using projectId, buildNum and fileName', () =>
+    it('gets build file using projectId, buildNum and fileName', async () => {
+      await defaultApply()
+
       getBuildFile.should.have.been.calledWithExactly(projectId, buildNum, files[0])
-    )
+    })
 
-    it('does not invoke next', () =>
+    it('does not invoke next', async () => {
+      await defaultApply()
+
       next.should.not.have.been.called
-    )
+    })
   })
 
   const shouldHaveSentResponse = (status, message) => {
     res.status.should.have.been.calledWithExactly(status)
-    res.send.should.have.been.calledWithExactly(message)
+    res.json.should.have.been.calledWithExactly({ message })
   }
 
   describe('when no html file exists', () => {
     beforeEach(() => {
       files = ['foo.txt']
-      return defaultApply()
     })
 
-    it('sends 404', () =>
+    it('sends 404', async () => {
+      await defaultApply()
+
       shouldHaveSentResponse(404, `build report missing for project ${projectId} build #${buildNum}`)
-    )
+    })
   })
 
   describe('when build is not found', () => {
@@ -77,12 +84,13 @@ describe('getBuildReport', () => {
 
     beforeEach(() => {
       querySingleBuild.resolves({ status: 404, message })
-      return apply()
     })
 
-    it('sends 404', () =>
+    it('sends 404', async () => {
+      await apply()
+
       shouldHaveSentResponse(404, message)
-    )
+    })
   })
 
   describe('when getBuildFile returns status/message', () => {
@@ -92,24 +100,12 @@ describe('getBuildReport', () => {
     beforeEach(() => {
       querySingleBuild.resolves({ build: { files } })
       getBuildFile.resolves({ status, message })
-      return apply()
     })
 
-    it('sends result', () =>
+    it('sends status/message response', async () => {
+      await apply()
+
       shouldHaveSentResponse(status, message)
-    )
-  })
-
-  describe('when an unexpected error occurs', () => {
-    const error = new Error()
-
-    beforeEach(() => {
-      querySingleBuild.rejects(error)
-      return apply()
     })
-
-    it('invokes next', () =>
-      next.should.have.been.calledWithExactly(error)
-    )
   })
 })

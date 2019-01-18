@@ -1,7 +1,7 @@
 const queryBuilds = require('./queryBuilds')
 
-module.exports = projectId =>
-  queryBuilds({
+module.exports = async projectId => {
+  const results = await queryBuilds({
     parameters: {
       AttributesToGet: ['project'],
       KeyConditions: {
@@ -17,4 +17,5 @@ module.exports = projectId =>
     },
     includeFiles: false
   })
-  .then(results => results.length > 0)
+  return results.length > 0
+}

@@ -33,33 +33,32 @@ describe('http', () => {
       return promise
     })
 
-    it('dispatches done action on completion', () =>
-      apply()
-      .then(() => {
-        shouldHaveDispatched({ status: 'done', result })
-      })
-    )
+    it('dispatches done action on completion', async () => {
+      await apply()
 
-    it('invokes get with full URL', () => {
-      const promise = apply()
-      agent.get.should.have.been.calledWithExactly(`${apiBaseUrl}/${path}`, undefined)
-      return promise
+      shouldHaveDispatched({ status: 'done', result })
     })
 
-    it('dispatches error on error', () => {
+    it('invokes get with full URL', async () => {
+      await apply()
+
+      agent.get.should.have.been.calledWithExactly(`${apiBaseUrl}/${path}`, undefined)
+    })
+
+    it('dispatches error on error', async () => {
       const error = new Error('!')
       agent.get.rejects(error)
-      return apply()
-      .then(() => shouldHaveDispatched({ status: 'error', error }))
+      await apply()
+
+      shouldHaveDispatched({ status: 'error', error })
     })
 
-    it('transforms body if specified', () => {
+    it('transforms body if specified', async () => {
       transform = sinon.stub().returns({ ok: false })
-      return apply()
-      .then(() => {
-        shouldHaveDispatched({ status: 'done', result: { ok: false } })
-        transform.should.have.been.calledWithExactly({ ok: true })
-      })
+      await apply()
+
+      shouldHaveDispatched({ status: 'done', result: { ok: false } })
+      transform.should.have.been.calledWithExactly({ ok: true })
     })
   })
 
@@ -77,12 +76,11 @@ describe('http', () => {
       agent.put.restore()
     })
 
-    it('invokes agent.put with url', () =>
-      apply()
-      .then(() => {
-        shouldHaveDispatched({ status: 'done', result })
-        agent.put.should.have.been.calledWithExactly(`${apiBaseUrl}/${path}`, requestBody)
-      })
-    )
+    it('invokes agent.put with url', async () => {
+      await apply()
+
+      shouldHaveDispatched({ status: 'done', result })
+      agent.put.should.have.been.calledWithExactly(`${apiBaseUrl}/${path}`, requestBody)
+    })
   })
 })

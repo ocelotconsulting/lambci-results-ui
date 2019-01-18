@@ -98,17 +98,20 @@ describe('refreshBuilds', () => {
       promise = apply()
     })
 
-    const shouldNotRefresh = () => promise.then(() => {
+    const shouldNotRefresh = async () => {
+      await promise
+
       dispatch.should.not.have.been.called
       next.should.not.have.been.called
-    })
+    }
 
-    it('does not dispatch result when refresh is disabled', () => {
+    it('does not dispatch result when refresh is disabled', async () => {
       disableRefresh()
-      return shouldNotRefresh()
+
+      await shouldNotRefresh()
     })
 
-    it('does not dispatch result when selected project changes', () => {
+    it('does not dispatch result when selected project changes', async () => {
       state = {
         ...state,
         projects: {
@@ -117,10 +120,11 @@ describe('refreshBuilds', () => {
           }
         }
       }
-      return shouldNotRefresh()
+
+      await shouldNotRefresh()
     })
 
-    it('does not dispatch result when no builds are present', () => {
+    it('does not dispatch result when no builds are present', async () => {
       state = {
         ...state,
         builds: {
@@ -128,7 +132,8 @@ describe('refreshBuilds', () => {
           value: undefined
         }
       }
-      return shouldNotRefresh()
+
+      await shouldNotRefresh()
     })
   })
 
@@ -140,13 +145,17 @@ describe('refreshBuilds', () => {
       promise = apply()
     })
 
-    it('ignores and invokes next when context has not changed', () =>
-      promise.then(() => next.should.have.been.calledWithExactly())
-    )
+    it('ignores and invokes next when context has not changed', async () => {
+      await promise
 
-    it('does nothing when context has changed', () => {
+      next.should.have.been.calledWithExactly()
+    })
+
+    it('does nothing when context has changed', async () => {
       disableRefresh()
-      return promise.then(() => next.should.not.have.been.called)
+      await promise
+
+      next.should.not.have.been.called
     })
   })
 })

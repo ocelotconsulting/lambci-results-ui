@@ -1,14 +1,14 @@
-import { SELECT_PROJECT, GET_BUILDS } from './types'
+import { GET_BUILDS, SELECT_PROJECT } from './types'
 import http from './http'
 import maybeRefresh from './maybeRefresh'
 
 export default projectId =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     dispatch({ type: SELECT_PROJECT, projectId })
-    return http.get(dispatch, GET_BUILDS, `projects/${encodeURIComponent(projectId)}/builds`)
-    .then(() => maybeRefresh({
+    await http.get(dispatch, GET_BUILDS, `projects/${encodeURIComponent(projectId)}/builds`)
+    maybeRefresh({
       projectId,
       dispatch,
       state: getState()
-    }))
+    })
   }

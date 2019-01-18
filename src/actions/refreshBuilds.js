@@ -6,7 +6,7 @@ import queryString from 'query-string'
 import { apiBaseUrl } from '../config'
 
 export default (projectId, next) =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     const isEnabled = () => {
       const { builds, projects } = getState()
       return builds.refresh.enabled && builds.value && projectId === projects.selected.id
@@ -23,12 +23,18 @@ export default (projectId, next) =>
       buildNums: buildNums || undefined
     }
 
-    return agent.get(`${apiBaseUrl}/projects/${encodeURIComponent(projectId)}/build-updates?${queryString.stringify(query)}`)
-    .then(({ body }) => {
+    try {
+      const { body } = await agent.get(
+        `${apiBaseUrl}/projects/${encodeURIComponent(projectId)}/build-updates?${queryString.stringify(query)}`
+      )
       if (isEnabled()) {
         dispatch({ type: REFRESH_BUILDS, result: body })
         next()
       }
-    })
-    .catch(() => isEnabled() && next()) // ignore the error and retry if appropriate
+    } catch (_) {
+      // ignore the error and retry if appropriate
+      if (isEnabled()) {
+        next()
+      }
+    }
   }

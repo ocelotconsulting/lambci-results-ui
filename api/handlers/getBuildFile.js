@@ -1,12 +1,16 @@
 const getS3File = require('./getS3File')
 const getResultsBucket = require('./getResultsBucket')
 
-module.exports = (projectId, buildNumber, fileName) =>
-  getResultsBucket()
-  .then(bucket =>
-    getS3File(bucket, `${projectId}/builds/${buildNumber}/${fileName}`)
-    .then(result => ({ result }))
-    .catch(error =>
-      error.statusCode === 404 ? { status: 400, message: `file ${fileName} not found` } : Promise.reject(error)
-    )
-  )
+module.exports = async (projectId, buildNumber, fileName) => {
+  try {
+    const bucket = await getResultsBucket()
+    const result = await getS3File(bucket, `${projectId}/builds/${buildNumber}/${fileName}`)
+    return { result }
+  } catch (error) {
+    if (error.statusCode === 404) {
+      return { status: 400, message: `file ${fileName} not found` }
+    } else {
+      throw error
+    }
+  }
+}

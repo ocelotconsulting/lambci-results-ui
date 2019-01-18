@@ -11,20 +11,8 @@ module.exports = {
     filename: 'index.js'
   },
   target: 'node',
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/env']
-          }
-        }
-      }
-    ]
-  },
+  module: {},
+  devtool: 'source-map',
   externals: ['aws-sdk'],
   plugins: [
     new webpack.DefinePlugin({

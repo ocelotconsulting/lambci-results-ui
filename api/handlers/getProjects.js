@@ -2,18 +2,20 @@ const sortBy = require('lodash/sortBy')
 const flatten = require('lodash/flatten')
 const nth = require('lodash/nth')
 const s3 = require('./s3')
+const createHandler = require('./createHandler')
 const mostRecent = require('./mostRecent')
 const listS3Folder = require('./listS3Folder')
 const getResultsBucket = require('./getResultsBucket')
 
-const findProjects = (bucket, parentFolder, remainingDepth = 2) =>
-  listS3Folder(bucket, parentFolder)
-  .then(({ folders }) => {
-    const ids = parentFolder ? folders.map(folder => `${parentFolder}/${folder}`) : folders
-    return remainingDepth === 0
-      ? ids.map(id => ({ id }))
-      : Promise.all(ids.map(id => findProjects(bucket, id, remainingDepth - 1))).then(flatten)
-  })
+const findProjects = async (bucket, parentFolder, remainingDepth = 2) => {
+  const { folders } = await listS3Folder(bucket, parentFolder)
+  const ids = parentFolder ? folders.map(folder => `${parentFolder}/${folder}`) : folders
+  if (remainingDepth === 0) {
+    return ids.map(id => ({ id }))
+  } else {
+    return flatten(await Promise.all(ids.map(id => findProjects(bucket, id, remainingDepth - 1))))
+  }
+}
 
 const getBuildNumber = key => parseInt(nth(key.split('/'), -2), 10)
 
@@ -32,19 +34,22 @@ const addMetadata = (project, objects) => {
   return Object.assign(project, { lastBuildNumber, lastTimestamp })
 }
 
-const sortProjects = projects => sortBy(projects, mostRecent('lastTimestamp'))
+const findAll = async bucket => {
+  const withMetadata = async project => {
+    const { Contents } = await s3.listObjectsV2({ Bucket: bucket, Prefix: `${project.id}/builds/` }).promise()
+    return addMetadata(project, Contents)
+  }
 
-const findAll = bucket => {
-  const withMetadata = project =>
-    s3.listObjectsV2({ Bucket: bucket, Prefix: `${project.id}/builds/` }).promise()
-    .then(({ Contents }) => addMetadata(project, Contents))
+  const rawProjects = await findProjects(bucket)
+  const projects = await Promise.all(rawProjects.map(withMetadata))
 
-  return findProjects(bucket)
-  .then(projects => Promise.all(projects.map(withMetadata)).then(sortProjects))
+  return sortBy(projects, mostRecent('lastTimestamp'))
 }
 
-module.exports = (req, res, next) =>
-  getResultsBucket()
-  .then(findAll)
-  .then(projects => res.json(projects))
-  .catch(next)
+module.exports = createHandler(
+  async (req, res) => {
+    const bucket = await getResultsBucket()
+    const projects = await findAll(bucket)
+    res.json(projects)
+  }
+)

@@ -25,15 +25,16 @@ const contentTypeHeaders = mimeType => {
 
 const fileName = (relativePath) => path.join(...(['public'].concat(relativePath)))
 
-const uploadFile = key =>
-  s3.putObject(
+const uploadFile = async key => {
+  const result = await s3.putObject(
     Object.assign({
       Bucket: bucket,
       Key: key,
       Body: fs.readFileSync(fileName(key.split('/')))
     }, contentTypeHeaders(mimeTypes.lookup(key)))
   ).promise()
-  .then(result => console.log(result))
+  console.log(result)
+}
 
 const readDirectory = parentPath => {
   const contents = fs.readdirSync(fileName(parentPath))
@@ -54,14 +55,17 @@ const getAllKeys = (parentPath = []) => {
 
 const allKeys = getAllKeys()
 
-Promise.all(allKeys.map(uploadFile))
-.then(() => {
-  console.log(`Uploaded ${allKeys.length} files to S3`)
-  process.exit(0)
-})
-.catch(error => {
-  if (error.stack) console.error(error.stack)
-  console.error(error.message || JSON.stringify(error))
-  console.log('S3 upload failed!')
-  process.exit(1)
-})
+const deploy = async () => {
+  try {
+    await Promise.all(allKeys.map(uploadFile))
+    console.log(`Uploaded ${allKeys.length} files to S3`)
+    process.exit(0)
+  } catch (error) {
+    if (error.stack) console.error(error.stack)
+    console.error(error.message || JSON.stringify(error))
+    console.log('S3 upload failed!')
+    process.exit(1)
+  }
+}
+
+deploy()
